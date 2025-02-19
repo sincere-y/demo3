@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.module.mapper.GunMapper">
+    <insert id="insert"
+            parameterType="com.example.demo3.module.entity.Gun">
+        insert into gun (title,author,images,content,create_time,update_time,is_deleted)
+        values (#{gun.title},#{gun.author},#{gun.images},#{gun.content},#{gun.create_time},#{gun.update_time},#{gun.is_deleted})
+    </insert>
+    <update id="update"
+            parameterType="com.example.demo3.module.entity.Gun">
+        update gun set  title = #{gun.title},
+                            author = #{gun.author},
+                            images = #{gun.images},
+                            content = #{gun.content},
+                            update_time = #{gun.update_time}
+        where id = #{gun.gunId}
+
+    </update>
+
+
+
+</mapper>
