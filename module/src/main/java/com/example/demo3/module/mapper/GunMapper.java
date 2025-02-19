@@ -24,7 +24,7 @@ public interface GunMapper {
     int insert(@Param("gun") Gun gun);
     int update(@Param("gun") Gun gun);
 
-    @Update("update gun set is_deleted=1 where id=#{id} limit 1")
+    @Update("update gun set is_deleted=1,update_time=#{gun.getUpdateTime} where id=#{id} limit 1")
     int delete(@Param("id") BigInteger id);
 
 

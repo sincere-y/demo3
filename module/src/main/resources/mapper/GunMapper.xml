@@ -4,7 +4,7 @@
     <insert id="insert"
             parameterType="com.example.demo3.module.entity.Gun">
         insert into gun (title,author,images,content,create_time,update_time,is_deleted)
-        values (#{gun.title},#{gun.author},#{gun.images},#{gun.content},#{gun.create_time},#{gun.update_time},#{gun.is_deleted})
+        values (#{gun.title},#{gun.author},#{gun.images},#{gun.content},#{gun.createTime},#{gun.updateTime},#{gun.isDeleted})
     </insert>
     <update id="update"
             parameterType="com.example.demo3.module.entity.Gun">
@@ -12,7 +12,7 @@
                             author = #{gun.author},
                             images = #{gun.images},
                             content = #{gun.content},
-                            update_time = #{gun.update_time}
+                            update_time = #{gun.updateTime}
         where id = #{gun.gunId}
 
     </update>

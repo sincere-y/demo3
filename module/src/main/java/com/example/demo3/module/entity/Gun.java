@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigInteger;
-import java.util.List;
+
 
 
 @Data
@@ -15,9 +15,9 @@ public class Gun {
     private String author;
     private String images;
     private String content;
-    private Integer create_time;
-    private Integer update_time;
-    private Integer is_deleted;
+    private Integer createTime;
+    private Integer updateTime;
+    private Integer isDeleted;
 
 
 }

@@ -7,6 +7,8 @@ import com.example.demo3.module.mapper.GunMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,7 +25,7 @@ public class GunService {
     public int createGun(String title,String author,String images,String content){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
-        gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreate_time(timestamp).setUpdate_time(timestamp).setIs_deleted(0);
+        gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
 
         return mapper.insert(gun);
     }
@@ -31,13 +33,26 @@ public class GunService {
     public int updateGun(BigInteger id,String title,String author,String images,String content){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
-       gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdate_time(timestamp);
+       gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
 
         return mapper.update(gun);
     }
 
-    public int deleteGun(BigInteger gunId){return mapper.delete(gunId);}
+    public int deleteGun(BigInteger gunId){
+        int timestamp=(int)(System.currentTimeMillis()/1000);
+        Gun gun=new Gun();
+        gun.setUpdateTime(timestamp);
+        return mapper.delete(gunId);
+    }
 
+
+    //时间格式转换
+    public String timeText(){
+        Date date=new Date();
+        long timestamp=date.getTime();
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
+        return format.format(timestamp);
+    }
 
 
 
