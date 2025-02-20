@@ -17,12 +17,5 @@
 
     </update>
 
-    <update id="delete"
-            parameterType="com.example.demo3.module.entity.Gun">
-        update gun set is_deleted=#{gun.isDeleted},
-                       update_time = #{gun.updateTime}
-        where id=#{gun.id} limit 1
-
-    </update>
 
 </mapper>

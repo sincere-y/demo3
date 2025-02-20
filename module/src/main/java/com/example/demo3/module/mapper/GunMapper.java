@@ -23,7 +23,7 @@ public interface GunMapper {
 
     int update(@Param("gun") Gun gun);
 
-//    @Update("update gun set is_deleted=1,update_time = #{gun.updateTime} where id=#{id} limit 1")
-    int delete(@Param("gun") Gun gun );
+    @Update("update gun set is_deleted=1,update_time = #{updateTime} where id=#{id} limit 1")
+    int delete(@Param("id") BigInteger id ,@Param("updateTime") Integer updateTime);
 
 }

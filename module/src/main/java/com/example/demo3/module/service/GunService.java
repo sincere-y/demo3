@@ -41,10 +41,8 @@ public class GunService {
     public int deleteGun(BigInteger gunId){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
-        gun.setId(gunId);
         gun.setUpdateTime(timestamp);
-        gun.setIsDeleted(1);
-        return mapper.delete(gun);
+        return mapper.delete(gunId,timestamp);
     }
 
 

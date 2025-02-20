@@ -26,7 +26,7 @@ public class GunController {
     public GunListVo gunAllList() {
         List<Gun> guns =service.getAllGunInfo();
 
-        List<GunListCellVo> gunListCellVo = new ArrayList<>(guns.size());
+        List<GunListCellVo> gunListCellVo = new ArrayList<>();
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
             vo.setGunId(gun.getId());
