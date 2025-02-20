@@ -41,17 +41,21 @@ public class GunService {
     public int deleteGun(BigInteger gunId){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
+        gun.setId(gunId);
         gun.setUpdateTime(timestamp);
-        return mapper.delete(gunId);
+        gun.setIsDeleted(1);
+        return mapper.delete(gun);
     }
 
 
-    //时间格式转换
-    public String timeText(){
-        Date date=new Date();
-        long timestamp=date.getTime();
+    //创建时间格式转换
+    public String timeText(Integer createTime){
+
+        long timestamp = (long) createTime * 1000;
+        Date date=new Date(timestamp);
+
         SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
-        return format.format(timestamp);
+        return format.format(date);
     }
 
 

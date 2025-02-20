@@ -19,13 +19,11 @@ public interface GunMapper {
     @Select("select * from gun where is_deleted = 0")
     List<Gun> getAll();
 
-
-
     int insert(@Param("gun") Gun gun);
+
     int update(@Param("gun") Gun gun);
 
-    @Update("update gun set is_deleted=1,update_time=#{gun.getUpdateTime} where id=#{id} limit 1")
-    int delete(@Param("id") BigInteger id);
-
+//    @Update("update gun set is_deleted=1,update_time = #{gun.updateTime} where id=#{id} limit 1")
+    int delete(@Param("gun") Gun gun );
 
 }

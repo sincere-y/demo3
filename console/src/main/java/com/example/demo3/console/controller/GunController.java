@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 
 @RestController
-public class GunBackController {
+public class GunController {
 
     @Autowired
     private GunService service;
@@ -24,17 +24,17 @@ public class GunBackController {
     }
 
     @RequestMapping("/gun/update")
-    public String gunUpdate(@RequestParam(name = "id")BigInteger id,
+    public String gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
                             @RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
                             @RequestParam(name = "content")String content) {
-        int result = service.updateGun(id,title,author,images,content);
+        int result = service.updateGun(gunId,title,author,images,content);
         return 1 == result ? "成功":"失败";
     }
     @RequestMapping("/gun/delete")
-    public String gunDelete(@RequestParam(name = "id")BigInteger id) {
-        int result = service.deleteGun(id);
+    public String gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
+        int result = service.deleteGun(gunId);
         return 1 == result ? "成功":"失败";
     }
 }

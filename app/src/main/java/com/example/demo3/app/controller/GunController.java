@@ -1,8 +1,8 @@
 package com.example.demo3.app.controller;
 
-import com.example.demo3.app.domain.GunVo;
+import com.example.demo3.app.domain.GunInfoVo;
+import com.example.demo3.app.domain.GunListCellVo;
 import com.example.demo3.app.domain.GunListVo;
-import com.example.demo3.app.domain.ListVo;
 import com.example.demo3.module.entity.Gun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,32 +23,34 @@ public class GunController {
 
 
     @RequestMapping("/gun/list")
-    public ListVo gunAllList() {
+    public GunListVo gunAllList() {
         List<Gun> guns =service.getAllGunInfo();
 
-        List<GunListVo> gunListVo = new ArrayList<>(guns.size());
+        List<GunListCellVo> gunListCellVo = new ArrayList<>(guns.size());
         for (Gun gun : guns) {
-            GunListVo vo = new GunListVo();
+            GunListCellVo vo = new GunListCellVo();
             vo.setGunId(gun.getId());
             vo.setTitle(gun.getTitle());
-            vo.setCreateTime(service.timeText());
+            vo.setCreateTime(service.timeText(gun.getCreateTime()));
             vo.setImage(gun.getImages().split("\\$")[0]);
-            gunListVo.add(vo);
+            gunListCellVo.add(vo);
         }
-        return new ListVo(gunListVo);
+        GunListVo gunListVo = new GunListVo();
+        gunListVo.setList(gunListCellVo);
+        return gunListVo ;
 
     }
 
     @RequestMapping("/gun/info")
-    public GunVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
-        GunVo gunVo = new GunVo();
+    public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
+        GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = service.getGunInfoById(gunId);
-        gunVo.setTitle(gun.getTitle());
-        gunVo.setAuthor(gun.getAuthor());
-        gunVo.setContent(gun.getContent());
-        gunVo.setCreateTime(service.timeText());
-        gunVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
-        return gunVo;
+        gunInfoVo.setTitle(gun.getTitle());
+        gunInfoVo.setAuthor(gun.getAuthor());
+        gunInfoVo.setContent(gun.getContent());
+        gunInfoVo.setCreateTime(service.timeText(gun.getCreateTime()));
+        gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
+        return gunInfoVo;
     }
 
 

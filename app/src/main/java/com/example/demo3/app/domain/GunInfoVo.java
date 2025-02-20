@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GunVo {
+public class GunInfoVo {
 
     private List<String> images;
     private String title;

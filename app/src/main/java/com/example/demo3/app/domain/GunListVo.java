@@ -1,16 +1,12 @@
 package com.example.demo3.app.domain;
 
-
 import lombok.Data;
 
-import java.math.BigInteger;
+import java.util.List;
 @Data
 public class GunListVo {
 
-    private BigInteger gunId;
-    private String image;
-    private String title;
-    private String createTime;
+    private List<GunListCellVo> list;
 
 
 }
