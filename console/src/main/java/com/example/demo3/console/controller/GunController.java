@@ -19,7 +19,7 @@ public class GunController {
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images")String images,
                             @RequestParam(name = "content")String content) {
-        int result = service.createGun(title,author,images,content);
+        int result = service.createGun(title.trim(),author.trim(),images,content);
         return 1 == result ? "成功":"失败";
     }
 
@@ -29,7 +29,7 @@ public class GunController {
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
                             @RequestParam(name = "content")String content) {
-        int result = service.updateGun(gunId,title,author,images,content);
+        int result = service.updateGun(gunId,title.trim(),author.trim(),images,content);
         return 1 == result ? "成功":"失败";
     }
     @RequestMapping("/gun/delete")
