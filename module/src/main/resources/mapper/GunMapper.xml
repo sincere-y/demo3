@@ -21,7 +21,7 @@
     </insert>
     <update id="update" parameterType="com.example.demo3.module.entity.Gun">
         update gun
-        <set>
+        <set> id = #{gun.gunId}
             <if test="gun.title != null and gun.title !=''">,title = #{gun.title}</if>
             <if test="gun.author != null and gun.author != ''" >,author = #{gun.author}</if>
             <if test="gun.images != null and gun.images != ''" >,images = #{gun.images}</if>
