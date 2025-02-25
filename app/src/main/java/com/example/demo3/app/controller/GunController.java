@@ -23,10 +23,11 @@ public class GunController {
 
 
     @RequestMapping("/gun/list")
-    public GunListVo gunAllList() {
-        List<Gun> guns =service.getAllGunInfo();
-
+    public GunListVo gunAllList(@RequestParam(name = "page")Integer page) {
+        Integer pageSize=6;
+        List<Gun> guns =service.getInfoPage((page-1)*2,pageSize);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
+
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
             vo.setGunId(gun.getId());
@@ -36,6 +37,12 @@ public class GunController {
             gunListCellVo.add(vo);
         }
         GunListVo gunListVo = new GunListVo();
+        Integer presentpageSize = guns.size();
+
+        if(presentpageSize < pageSize){//当前页面大小 小于 分页大小
+            gunListVo.setIsEnd(true);
+        }
+        else gunListVo.setIsEnd(false);
         gunListVo.setList(gunListCellVo);
         return gunListVo ;
 

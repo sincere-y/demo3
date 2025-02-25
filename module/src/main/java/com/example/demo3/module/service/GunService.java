@@ -45,6 +45,14 @@ public class GunService {
         return mapper.delete(gunId,timestamp);
     }
 
+    public int getInfoTotal(){
+        return mapper.getTotal();
+    }
+
+    public List<Gun> getInfoPage(Integer strat,Integer pageSize){
+        return mapper.getPageSizeData(strat,pageSize);
+    }
+
 
     //创建时间格式转换
     public String timeText(Integer createTime){

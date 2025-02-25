@@ -1,4 +1,4 @@
-package com.example.demo3.app.domain;
+package com.example.demo3.console.domain;
 
 import lombok.Data;
 
@@ -7,6 +7,6 @@ import java.util.List;
 public class GunListVo {
 
     private List<GunListCellVo> list;
-    private Boolean isEnd;
-
+    private Integer total;
+    private Integer pageSize;
 }
