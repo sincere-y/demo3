@@ -29,6 +29,6 @@ public interface GunMapper {
     @Select("SELECT count(*) total FROM gun where is_deleted=0")
     int getTotal();
 
-    @Select("select * from gun where is_deleted=0 order by id asc limit #{strat},#{pageSize}")
-    List<Gun> getPageSizeData(@Param("strat") Integer strat,@Param("pageSize") Integer pageSize);
+    @Select("select * from gun where is_deleted=0 order by id asc limit #{start},#{pageSize}")
+    List<Gun> getPageSizeData(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
 }

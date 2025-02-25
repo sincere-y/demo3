@@ -25,7 +25,7 @@ public class GunController {
     @RequestMapping("/gun/list")
     public GunListVo gunAllList(@RequestParam(name = "page")Integer page) {
         Integer pageSize=6;
-        List<Gun> guns =service.getInfoPage((page-1)*2,pageSize);
+        List<Gun> guns =service.getInfoPage(service.getStratData(page,pageSize),pageSize);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
 
         for (Gun gun : guns) {
