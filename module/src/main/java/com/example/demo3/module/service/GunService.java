@@ -49,14 +49,11 @@ public class GunService {
         return mapper.getTotal();
     }
 
-    public List<Gun> getInfoPage(Integer start,Integer pageSize){
+    public List<Gun> getInfoPage(Integer page,Integer pageSize){
+        Integer start=(page-1)*pageSize;
         return mapper.getPageSizeData(start,pageSize);
     }
 
-    public Integer getStratData(Integer page,Integer pageSize){
-        return (page-1)*pageSize;
-
-    }
 
     //创建时间格式转换
     public String timeText(Integer createTime){
