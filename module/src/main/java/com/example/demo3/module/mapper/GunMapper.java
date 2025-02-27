@@ -29,8 +29,7 @@ public interface GunMapper {
     @Update("update gun set is_deleted=1,update_time = #{updateTime} where id=#{id} limit 1")
     int delete(@Param("id") BigInteger id ,@Param("updateTime") Integer updateTime);
 
-    @Select("SELECT count(*) total FROM gun where is_deleted=0")
-    int getTotal();
+    int getTotal(@Param("gunName") String gunName);
 
     List<Gun> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer pageSize, @Param("gunName")String gunName);
 }

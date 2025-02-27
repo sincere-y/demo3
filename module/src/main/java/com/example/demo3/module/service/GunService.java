@@ -34,8 +34,8 @@ public class GunService {
     public int delete(BigInteger gunId,int timestamp){
         return mapper.delete(gunId,timestamp);
     }
-    public int getTotal(){
-        return mapper.getTotal();
+    public int getTotal(String gunName){
+        return mapper.getTotal(gunName);
     }
 
     public int createGun(String title,String author,String images,String content){
@@ -56,8 +56,6 @@ public class GunService {
 
     public int deleteGun(BigInteger gunId){
         int timestamp=(int)(System.currentTimeMillis()/1000);
-        Gun gun=new Gun();
-        gun.setUpdateTime(timestamp);
         return delete(gunId,timestamp);
     }
 

@@ -61,7 +61,7 @@ public class GunController {
         }
         GunListVo gunListVo = new GunListVo();
         gunListVo.setList(gunListCellVo);
-        gunListVo.setTotal(service.getTotal());
+        gunListVo.setTotal(service.getTotal(gunName));
         gunListVo.setPageSize(pageSize);
 
         return gunListVo ;

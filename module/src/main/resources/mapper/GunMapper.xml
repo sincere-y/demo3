@@ -32,6 +32,16 @@
 
     </update>
 
+    <select id="getTotal" parameterType="com.example.demo3.module.entity.Gun" resultType="int">
+        select count(*) FROM gun
+        <where>
+            is_deleted=0
+            <if test="gunName != null and gunName != ''" >
+                and title like concat('%',#{gunName},'%')
+            </if>
+        </where>
+    </select>
+
     <select id="getInfoPage" parameterType="com.example.demo3.module.entity.Gun" resultType="com.example.demo3.module.entity.Gun">
         select * FROM gun
         <where>
