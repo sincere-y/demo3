@@ -46,9 +46,10 @@ public class GunController {
     }
 
     @RequestMapping("/gun/list")
-    public GunListVo gunAllList(@RequestParam(name = "page")Integer page) {
+    public GunListVo gunAllList(@RequestParam(name = "page")Integer page,
+                                @RequestParam(name ="gunName",required = false )String gunName) {
         Integer pageSize = 4;
-        List<Gun> guns =service.getInfoPage(page,pageSize);
+        List<Gun> guns =service.getInfoPage(page,pageSize,gunName);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
@@ -60,7 +61,7 @@ public class GunController {
         }
         GunListVo gunListVo = new GunListVo();
         gunListVo.setList(gunListCellVo);
-        gunListVo.setTotal(service.getInfoTotal());
+        gunListVo.setTotal(service.getTotal());
         gunListVo.setPageSize(pageSize);
 
         return gunListVo ;
@@ -70,7 +71,7 @@ public class GunController {
     @RequestMapping("/gun/info")
     public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
-        Gun gun = service.getGunInfoById(gunId);
+        Gun gun = service.getById(gunId);
         gunInfoVo.setTitle(gun.getTitle());
         gunInfoVo.setAuthor(gun.getAuthor());
         gunInfoVo.setContent(gun.getContent());

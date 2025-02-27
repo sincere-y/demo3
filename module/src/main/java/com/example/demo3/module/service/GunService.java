@@ -4,6 +4,7 @@ package com.example.demo3.module.service;
 
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.mapper.GunMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
@@ -15,19 +16,34 @@ import java.util.List;
 public class GunService {
     @Resource
     private GunMapper mapper;
-    public Gun getGunInfoById(BigInteger id){
+    public Gun getById(BigInteger id){
         return mapper.getById(id);
     }
-
-    public List<Gun> getAllGunInfo(){return mapper.getAll();}
-
+    public Gun extractById(BigInteger id){
+        return mapper.extractById(id);
+    };
+    public List<Gun> getAllInfo(){
+        return mapper.getAllInfo();
+    }
+    public int insert(Gun gun){
+        return mapper.insert(gun);
+    }
+    public int update(Gun gun){
+        return mapper.update(gun);
+    }
+    public int delete(BigInteger gunId,int timestamp){
+        return mapper.delete(gunId,timestamp);
+    }
+    public int getTotal(){
+        return mapper.getTotal();
+    }
 
     public int createGun(String title,String author,String images,String content){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
         gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
 
-        return mapper.insert(gun);
+        return insert(gun);
     }
 
     public int updateGun(BigInteger id,String title,String author,String images,String content){
@@ -35,25 +51,21 @@ public class GunService {
         Gun gun=new Gun();
        gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
 
-        return mapper.update(gun);
+        return update(gun);
     }
 
     public int deleteGun(BigInteger gunId){
         int timestamp=(int)(System.currentTimeMillis()/1000);
         Gun gun=new Gun();
         gun.setUpdateTime(timestamp);
-        return mapper.delete(gunId,timestamp);
+        return delete(gunId,timestamp);
     }
 
-    public int getInfoTotal(){
-        return mapper.getTotal();
-    }
+    public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
 
-    public List<Gun> getInfoPage(Integer page,Integer pageSize){
-        Integer start=(page-1)*pageSize;
-        return mapper.getPageSizeData(start,pageSize);
+            Integer start = (page - 1) * pageSize;
+            return mapper.getInfoPage(start,pageSize,gunName);
     }
-
 
     //创建时间格式转换
     public String timeText(Integer createTime){
@@ -64,7 +76,6 @@ public class GunService {
         SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
         return format.format(date);
     }
-
 
 
 }

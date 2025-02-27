@@ -16,8 +16,11 @@ public interface GunMapper {
     @Select("select * from gun WHERE id=#{id} and is_deleted=0")
     Gun getById(@Param("id") BigInteger id);
 
+    @Select("select * from gun where id=#{id}")
+    Gun extractById(@Param("id") BigInteger id);
+
     @Select("select * from gun where is_deleted = 0")
-    List<Gun> getAll();
+    List<Gun> getAllInfo();
 
     int insert(@Param("gun") Gun gun);
 
@@ -29,6 +32,5 @@ public interface GunMapper {
     @Select("SELECT count(*) total FROM gun where is_deleted=0")
     int getTotal();
 
-    @Select("select * from gun where is_deleted=0 order by id asc limit #{start},#{pageSize}")
-    List<Gun> getPageSizeData(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+    List<Gun> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer pageSize, @Param("gunName")String gunName);
 }
