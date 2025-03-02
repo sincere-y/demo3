@@ -2,6 +2,7 @@ package com.example.demo3.module.service;
 
 
 
+import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.mapper.GunMapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,11 +26,13 @@ public class GunService {
     public List<Gun> getAllInfo(){
         return mapper.getAllInfo();
     }
-    public int insert(Gun gun){
-        return mapper.insert(gun);
+    public BigInteger insert(Gun gun){
+        mapper.insert(gun);
+        return gun.getId();
     }
-    public int update(Gun gun){
-        return mapper.update(gun);
+    public BigInteger update(Gun gun){
+        mapper.update(gun);
+        return gun.getId();
     }
     public int delete(BigInteger gunId,int timestamp){
         return mapper.delete(gunId,timestamp);
@@ -38,41 +41,75 @@ public class GunService {
         return mapper.getTotal(gunName);
     }
 
-    public int createGun(String title,String author,String images,String content){
-        int timestamp=(int)(System.currentTimeMillis()/1000);
-        Gun gun=new Gun();
-        gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
+    public BigInteger edit(BigInteger id,String title,String author,String images,String content){
+        if(title!=null||author!=null||images!=null||content!=null){
+            if(id==null){
+                int timestamp = (int) (System.currentTimeMillis() / 1000);
+                Gun gun = new Gun();
+                gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
+                return insert(gun);
+            }
+            else {
+                if(mapper.countById(id)>0) {
+                    int timestamp = (int) (System.currentTimeMillis() / 1000);
+                    Gun gun = new Gun();
+                    gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
+                    return update(gun);
+                }
+                else {
+                    throw new RuntimeException("id不存在");
+                }
+            }
+        }
+        else {
+            throw new RuntimeException("参数内容为空");
+        }
 
-        return insert(gun);
     }
-
-    public int updateGun(BigInteger id,String title,String author,String images,String content){
-        int timestamp=(int)(System.currentTimeMillis()/1000);
-        Gun gun=new Gun();
-       gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
-
-        return update(gun);
-    }
+//    public int createGun(String title,String author,String images,String content){
+//        if(title!=null||author!=null||images!=null||content!=null) {
+//            int timestamp = (int) (System.currentTimeMillis() / 1000);
+//            Gun gun = new Gun();
+//            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
+//            return insert(gun);
+//        }
+//        else return 0;
+//    }
+//    public int updateGun(BigInteger id,String title,String author,String images,String content){
+//        if(id!=null||title!=null||author!=null||images!=null||content!=null) {
+//            int timestamp = (int) (System.currentTimeMillis() / 1000);
+//            Gun gun = new Gun();
+//            gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
+//            return update(gun);
+//        }
+//        else return 0;
+//    }
 
     public int deleteGun(BigInteger gunId){
-        int timestamp=(int)(System.currentTimeMillis()/1000);
-        return delete(gunId,timestamp);
+        if(gunId!=null) {
+            int timestamp = (int) (System.currentTimeMillis() / 1000);
+            return delete(gunId, timestamp);
+        }
+        else return 0;
     }
 
     public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
 
             Integer start = (page - 1) * pageSize;
-            return mapper.getInfoPage(start,pageSize,gunName);
+            return mapper.getInfoPage(start, pageSize, gunName);
+
     }
 
     //创建时间格式转换
-    public String timeText(Integer createTime){
+    public String timeText(Integer createTime) {
+        if (createTime != null) {
+            long timestamp = (long) createTime * 1000;
+            Date date = new Date(timestamp);
 
-        long timestamp = (long) createTime * 1000;
-        Date date=new Date(timestamp);
-
-        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
-        return format.format(date);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
+            return format.format(date);
+        }
+        return null;
     }
 
 

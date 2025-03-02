@@ -22,22 +22,35 @@ public class GunController {
     private GunService service;
 
     @RequestMapping("/gun/create")
-    public String gunCreate(@RequestParam(name = "title")String title,
+    public BigInteger gunCreate(@RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images")String images,
                             @RequestParam(name = "content")String content) {
-        int result = service.createGun(title.trim(),author.trim(),images,content);
-        return 1 == result ? "成功":"失败";
+        try {
+            BigInteger id = service.edit(null, title.trim(), author.trim(), images, content);
+
+            return id;
+        }catch (RuntimeException e){
+            System.out.println(e);
+        }
+
+        return null;
     }
 
     @RequestMapping("/gun/update")
-    public String gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
+    public BigInteger gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
                             @RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
                             @RequestParam(name = "content")String content) {
-        int result = service.updateGun(gunId,title.trim(),author.trim(),images,content);
-        return 1 == result ? "成功":"失败";
+        try{
+            BigInteger id = service.edit(gunId,title.trim(),author.trim(),images,content);
+            return id;
+        }
+        catch (RuntimeException e){
+            System.out.println(e);
+        }
+        return null;
     }
     @RequestMapping("/gun/delete")
     public String gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
@@ -53,10 +66,12 @@ public class GunController {
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-            vo.setGunId(gun.getId());
-            vo.setTitle(gun.getTitle());
-            vo.setCreateTime(service.timeText(gun.getCreateTime()));
-            vo.setImage(gun.getImages().split("\\$")[0]);
+            if(gun.getId()!=null ||gun.getTitle()!=null||gun.getCreateTime()!=null||gun.getImages()!=null) {
+                vo.setGunId(gun.getId());
+                vo.setTitle(gun.getTitle());
+                vo.setCreateTime(service.timeText(gun.getCreateTime()));
+                vo.setImage(gun.getImages().split("\\$")[0]);
+            }
             gunListCellVo.add(vo);
         }
         GunListVo gunListVo = new GunListVo();
@@ -72,12 +87,14 @@ public class GunController {
     public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = service.getById(gunId);
-        gunInfoVo.setTitle(gun.getTitle());
-        gunInfoVo.setAuthor(gun.getAuthor());
-        gunInfoVo.setContent(gun.getContent());
-        gunInfoVo.setCreateTime(service.timeText(gun.getCreateTime()));
-        gunInfoVo.setUpdateTime(service.timeText(gun.getUpdateTime()));
-        gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
+        if(gun.getTitle()!=null||gun.getAuthor()!=null||gun.getContent()!=null||gun.getCreateTime()!=null||gun.getUpdateTime()!=null||gun.getImages()!=null) {
+            gunInfoVo.setTitle(gun.getTitle());
+            gunInfoVo.setAuthor(gun.getAuthor());
+            gunInfoVo.setContent(gun.getContent());
+            gunInfoVo.setCreateTime(service.timeText(gun.getCreateTime()));
+            gunInfoVo.setUpdateTime(service.timeText(gun.getUpdateTime()));
+            gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
+        }
         return gunInfoVo;
     }
 

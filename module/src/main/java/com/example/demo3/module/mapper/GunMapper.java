@@ -1,7 +1,6 @@
 package com.example.demo3.module.mapper;
 
 
-//import com.example.demo3.module.app.domain.GunVo;
 import com.example.demo3.module.entity.Gun;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +31,8 @@ public interface GunMapper {
     int getTotal(@Param("gunName") String gunName);
 
     List<Gun> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer pageSize, @Param("gunName")String gunName);
+
+    int countById(@Param("id") BigInteger id);
+
+
 }

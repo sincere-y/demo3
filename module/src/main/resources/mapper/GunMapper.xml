@@ -55,5 +55,8 @@
 
     </select>
 
+    <select id="countById" parameterType="com.example.demo3.module.entity.Gun" resultType="int">
+        SELECT COUNT(*) FROM users WHERE username = #{username}
+    </select>
 
 </mapper>
