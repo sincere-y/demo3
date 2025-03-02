@@ -22,23 +22,22 @@ public class GunController {
     private GunService service;
 
     @RequestMapping("/gun/create")
-    public BigInteger gunCreate(@RequestParam(name = "title")String title,
+    public Object gunCreate(@RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images")String images,
                             @RequestParam(name = "content")String content) {
         try {
             BigInteger id = service.edit(null, title.trim(), author.trim(), images, content);
-
             return id;
         }catch (RuntimeException e){
             System.out.println(e);
-        }
+            return e.getMessage();
 
-        return null;
+        }
     }
 
     @RequestMapping("/gun/update")
-    public BigInteger gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
+    public Object gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
                             @RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
@@ -49,8 +48,9 @@ public class GunController {
         }
         catch (RuntimeException e){
             System.out.println(e);
+            return e.getMessage();
         }
-        return null;
+
     }
     @RequestMapping("/gun/delete")
     public String gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {

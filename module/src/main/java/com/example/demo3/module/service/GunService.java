@@ -26,13 +26,12 @@ public class GunService {
     public List<Gun> getAllInfo(){
         return mapper.getAllInfo();
     }
-    public BigInteger insert(Gun gun){
-        mapper.insert(gun);
-        return gun.getId();
+    public int insert(Gun gun){
+
+        return mapper.insert(gun);
     }
-    public BigInteger update(Gun gun){
-        mapper.update(gun);
-        return gun.getId();
+    public int update(Gun gun){
+        return mapper.update(gun);
     }
     public int delete(BigInteger gunId,int timestamp){
         return mapper.delete(gunId,timestamp);
@@ -43,18 +42,19 @@ public class GunService {
 
     public BigInteger edit(BigInteger id,String title,String author,String images,String content){
         if(title!=null||author!=null||images!=null||content!=null){
+            int timestamp = (int) (System.currentTimeMillis() / 1000);
+            Gun gun = new Gun();
+            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);;
             if(id==null){
-                int timestamp = (int) (System.currentTimeMillis() / 1000);
-                Gun gun = new Gun();
-                gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
-                return insert(gun);
+                gun.setCreateTime(timestamp).setIsDeleted(0);
+                insert(gun);
+                return gun.getId();
             }
             else {
                 if(mapper.countById(id)>0) {
-                    int timestamp = (int) (System.currentTimeMillis() / 1000);
-                    Gun gun = new Gun();
-                    gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
-                    return update(gun);
+                    gun.setId(id);
+                    update(gun);
+                    return gun.getId();
                 }
                 else {
                     throw new RuntimeException("id不存在");
