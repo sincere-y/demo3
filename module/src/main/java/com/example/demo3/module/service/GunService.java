@@ -51,7 +51,7 @@ public class GunService {
                 return gun.getId();
             }
             else {
-                if(mapper.countById(id)>0) {
+                if(mapper.getById(id)!=null) {
                     gun.setId(id);
                     update(gun);
                     return gun.getId();
