@@ -22,13 +22,13 @@ public class GunController {
     private GunService service;
 
     @RequestMapping("/gun/create")
-    public Object gunCreate(@RequestParam(name = "title")String title,
+    public String gunCreate(@RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images")String images,
                             @RequestParam(name = "content")String content) {
         try {
             BigInteger id = service.edit(null, title.trim(), author.trim(), images, content);
-            return id;
+            return id.toString();
         }catch (RuntimeException e){
             System.out.println(e);
             return e.getMessage();
@@ -66,12 +66,10 @@ public class GunController {
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-            if(gun!=null) {
-                vo.setGunId(gun.getId());
-                vo.setTitle(gun.getTitle());
-                vo.setCreateTime(service.timeText(gun.getCreateTime()));
-                vo.setImage(gun.getImages().split("\\$")[0]);
-            }
+            vo.setGunId(gun.getId());
+            vo.setTitle(gun.getTitle());
+            vo.setCreateTime(service.timeText(gun.getCreateTime()));
+            vo.setImage(gun.getImages().split("\\$")[0]);
             gunListCellVo.add(vo);
         }
         GunListVo gunListVo = new GunListVo();
