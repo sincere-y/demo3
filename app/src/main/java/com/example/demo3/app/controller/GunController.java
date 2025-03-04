@@ -32,12 +32,12 @@ public class GunController {
 
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-            if(gun.getId()!=null ||gun.getTitle()!=null||gun.getCreateTime()!=null||gun.getImages()!=null) {
+
                 vo.setGunId(gun.getId());
                 vo.setTitle(gun.getTitle());
                 vo.setCreateTime(service.timeText(gun.getCreateTime()));
                 vo.setImage(gun.getImages().split("\\$")[0]);
-            }
+
             gunListCellVo.add(vo);
         }
         GunListVo gunListVo = new GunListVo();
@@ -56,7 +56,7 @@ public class GunController {
     public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = service.getById(gunId);
-        if(gun.getId()!=null ||gun.getTitle()!=null||gun.getAuthor()!=null||gun.getContent()!=null||gun.getCreateTime()!=null||gun.getImages()!=null) {
+        if(gun!=null) {
             gunInfoVo.setTitle(gun.getTitle());
             gunInfoVo.setAuthor(gun.getAuthor());
             gunInfoVo.setContent(gun.getContent());
