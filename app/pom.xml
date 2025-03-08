@@ -20,6 +20,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>module</artifactId>
