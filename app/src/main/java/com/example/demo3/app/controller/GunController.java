@@ -58,7 +58,7 @@ public class GunController {
     public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = gunService.getById(gunId);
-        Category category = categoryService.getById(gunId);
+        Category category = categoryService.getById(gun.getCategoryId());
         if(gun!=null&&category!=null) {
             gunInfoVo.setTitle(gun.getTitle());
             gunInfoVo.setAuthor(gun.getAuthor());
