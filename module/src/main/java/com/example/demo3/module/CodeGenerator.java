@@ -15,17 +15,15 @@ public class CodeGenerator {
         FastAutoGenerator.create("jdbc:mysql://localhost:3306/1234?allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&useAffectedRows=true", "root", "123456")
                 .globalConfig(builder -> {
                     builder.author("Yang") // 设置作者
-                            .outputDir("src/main/java"); // 输出目录
+                            .outputDir("module/src/main/java" ); // 输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.example.demo") // 设置父包名
-
+                    builder.parent("com.example.demo3.module") // 设置父包名
                             .entity("entity") // 设置实体类包名
                             .mapper("mapper") // 设置 Mapper 接口包名
                             .service("service") // 设置 Service 实现类包名
-
                             .xml("mapper") // 设置 Mapper XML 文件包名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, "/src/main/resources/mapper")); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, "module/src/main/resources/mapper")); // 设置mapperXml生成路径
 
                 })
                 .strategyConfig(builder -> {

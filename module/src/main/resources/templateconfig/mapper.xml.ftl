@@ -12,7 +12,7 @@
         )
         values (
         <#list table.fields as field>
-            <if test="${field.propertyName} != null and ${table.name}.${field.propertyName} !=''"><#noparse>#{</#noparse>${table.name}.${field.propertyName}<#noparse>}</#noparse><#if field_has_next>,</#if></if>
+            <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''"><#noparse>#{</#noparse>${table.name}.${field.propertyName}<#noparse>}</#noparse><#if field_has_next>,</#if></if>
         </#list>
         )
     </insert>

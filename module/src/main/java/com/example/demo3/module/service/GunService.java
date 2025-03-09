@@ -40,18 +40,18 @@ public class GunService {
         return mapper.getTotal(gunName);
     }
 
-    public BigInteger edit(BigInteger id,String title,String author,String images,String content){
-        if(title!=null||author!=null||images!=null||content!=null){
+    public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
+        if(title!=null||author!=null||images!=null||content!=null||categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
-            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);;
+            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             if(id==null){
                 gun.setCreateTime(timestamp).setIsDeleted(0);
                 insert(gun);
                 return gun.getId();
             }
             else {
-                if(mapper.getById(id)!=null) {
+                if(mapper.getById(id)!=null||mapper.getByCategoryId(categoryId)!=null) {
                     gun.setId(id);
                     update(gun);
                     return gun.getId();

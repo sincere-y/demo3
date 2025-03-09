@@ -17,6 +17,7 @@ public class GunInfoVo {
     private String author;
     private String createTime;
     private String content;
-
+    private String categoryName;
+    private String categoryImage;
 
 }

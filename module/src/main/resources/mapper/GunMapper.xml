@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo3.module.mapper.GunMapper">
-    <insert id="insert" parameterType="com.example.demo3.module.entity.Gun">
+    <insert id="insert" parameterType="com.example.demo3.module.entity.Gun" useGeneratedKeys="true" keyProperty="id">
         insert into gun (
         <if test="gun.title != null and gun.title != ''" >title,</if>
         <if test="gun.author != null and gun.author != ''" >author,</if>
@@ -9,6 +9,7 @@
         <if test="gun.content != null and gun.content != ''" >content,</if>
         <if test="gun.createTime != null" >create_time,</if>
         <if test="gun.updateTime != null" >update_time,</if>
+        <if test="gun.categoryId != null" >category_id,</if>
         is_deleted)
         values (
         <if test="gun.title != null and gun.title !=''" >#{gun.title},</if>
@@ -17,6 +18,7 @@
         <if test="gun.content != null and gun.content != ''" >#{gun.content},</if>
         <if test="gun.createTime != null" >#{gun.createTime},</if>
         <if test="gun.updateTime != null" >#{gun.updateTime},</if>
+        <if test="gun.categoryId != null" >#{gun.categoryId},</if>
         #{gun.isDeleted})
     </insert>
     <update id="update" parameterType="com.example.demo3.module.entity.Gun">
@@ -27,6 +29,7 @@
             <if test="gun.images != null and gun.images != ''" >,images = #{gun.images}</if>
             <if test="gun.content != null and gun.content != ''">,content = #{gun.content}</if>
             <if test="gun.updateTime != null" >,update_time = #{gun.updateTime}</if>
+            <if test="gun.categoryId != null" >,categoryId = #{gun.categoryId},</if>
         </set>
         where id = #{gun.id}
 

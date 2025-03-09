@@ -3,8 +3,11 @@ package com.example.demo3.console.controller;
 import com.example.demo3.console.domain.GunInfoVo;
 import com.example.demo3.console.domain.GunListCellVo;
 import com.example.demo3.console.domain.GunListVo;
+import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
+import com.example.demo3.module.service.CategoryService;
 import com.example.demo3.module.service.GunService;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,14 +23,17 @@ public class GunController {
 
     @Autowired
     private GunService service;
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping("/gun/create")
     public String gunCreate(@RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images")String images,
-                            @RequestParam(name = "content")String content) {
+                            @RequestParam(name = "content")String content,
+                            @RequestParam(name = "categoryId")BigInteger categoryId) {
         try {
-            BigInteger id = service.edit(null, title.trim(), author.trim(), images, content);
+            BigInteger id = service.edit(null, title.trim(), author.trim(), images, content,categoryId);
             return id.toString();
         }catch (RuntimeException e){
             System.out.println(e);
@@ -41,9 +47,10 @@ public class GunController {
                             @RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
-                            @RequestParam(name = "content")String content) {
+                            @RequestParam(name = "content")String content,
+                            @RequestParam(name = "categoryId")BigInteger categoryId){
         try{
-            BigInteger id = service.edit(gunId,title.trim(),author.trim(),images,content);
+            BigInteger id = service.edit(gunId,title.trim(),author.trim(),images,content,categoryId);
             return id.toString();
         }
         catch (RuntimeException e){
