@@ -17,6 +17,9 @@ import java.util.List;
 public class GunService {
     @Resource
     private GunMapper mapper;
+    @Resource
+    private CategoryService categoryService;
+
     public Gun getById(BigInteger id){
         return mapper.getById(id);
     }
@@ -44,8 +47,8 @@ public class GunService {
         if(title!=null||author!=null||images!=null||content!=null||categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
-            Gun gunByCategoryId = mapper.getByCategoryId(categoryId);
-            if(gunByCategoryId != null){
+            Category category=categoryService.getById(categoryId);
+            if(category != null){
                 gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             }
             else {
