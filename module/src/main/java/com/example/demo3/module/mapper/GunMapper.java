@@ -16,7 +16,7 @@ public interface GunMapper {
     Gun getById(@Param("id") BigInteger id);
 
     @Select("select * from gun WHERE category_id=#{id} and is_deleted=0")
-    Gun getByCategoryId(@Param("id") BigInteger id);
+    List<Gun> getByCategoryId(@Param("id") BigInteger id);
 
 
     @Select("select * from gun where id=#{id}")

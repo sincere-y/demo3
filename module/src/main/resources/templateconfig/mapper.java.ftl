@@ -15,7 +15,7 @@ ${entity} getById(@Param("id")BigInteger id);
 @Select("SELECT * FROM ${table.name} WHERE id =  <#noparse>#{</#noparse>id<#noparse>}</#noparse>")
 ${entity} extractById(@Param("id")BigInteger id);
 
-int insert(@Param("category") ${entity} ${table.name});
+int insert(@Param("${table.name}") ${entity} ${table.name});
 
 int update(@Param("${table.name}") ${entity} ${table.name});
 

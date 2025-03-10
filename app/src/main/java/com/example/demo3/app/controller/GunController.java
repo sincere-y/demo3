@@ -32,17 +32,15 @@ public class GunController {
 
         for (Gun gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-
                 Category category=categoryService.getById(gun.getCategoryId());
-                vo.setCategoryName(category.getName());
-
-                vo.setGunId(gun.getId());
-                vo.setTitle(gun.getTitle());
-                vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
-                vo.setImage(gun.getImages().split("\\$")[0]);
-
-
-            gunListCellVo.add(vo);
+                if(category!=null) {
+                    vo.setCategoryName(category.getName());
+                    vo.setGunId(gun.getId());
+                    vo.setTitle(gun.getTitle());
+                    vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                    vo.setImage(gun.getImages().split("\\$")[0]);
+                    gunListCellVo.add(vo);
+                }
         }
         GunListVo gunListVo = new GunListVo();
         Integer presentpageSize = guns.size();
@@ -64,6 +62,7 @@ public class GunController {
         if(gun==null&&category==null) {
             return gunInfoVo;
         }
+        else {
             gunInfoVo.setTitle(gun.getTitle());
             gunInfoVo.setAuthor(gun.getAuthor());
             gunInfoVo.setContent(gun.getContent());
@@ -72,28 +71,10 @@ public class GunController {
             gunInfoVo.setCategoryName(category.getName());
             gunInfoVo.setCategoryImage(category.getImage());
 
-        return gunInfoVo;
-    }
-
-    @RequestMapping("/category/list")
-    public CategoryListVo gunAllList() {
-
-        List<Category> categories = categoryService.getAllInfo();
-        List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
-
-        for (Category category : categories) {
-            CategoryListCellVo vo = new CategoryListCellVo();
-
-            vo.setCategoryImage(category.getImage());
-            vo.setCategoryName(category.getName());
-
-            categoryListCellVo.add(vo);
+            return gunInfoVo;
         }
-        CategoryListVo categoryListVo = new CategoryListVo();
-
-        categoryListVo.setList(categoryListCellVo);
-        return categoryListVo ;
-
     }
+
+
 
 }

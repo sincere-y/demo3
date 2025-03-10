@@ -23,6 +23,7 @@ int update(@Param("category") Category category);
 @Update("UPDATE category SET updated_time = #{time} , is_deleted = 1 WHERE id = #{id}")
 int delete(@Param("id")BigInteger id,@Param("time") Integer time );
 
+@Select("select * FROM category where is_deleted=0 order by id asc limit #{start},#{pageSize}")
 List<Category> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer categorySize);
 
 @Select("select * from category where is_deleted = 0")

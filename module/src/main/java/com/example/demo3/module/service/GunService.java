@@ -60,7 +60,7 @@ public class GunService {
                 return gun.getId();
             }
             else {
-                if(mapper.getById(id)!=null&&mapper.getByCategoryId(categoryId)!=null) {
+                if(mapper.getById(id)!=null) {
                     gun.setId(id);
                     update(gun);
                     return gun.getId();
