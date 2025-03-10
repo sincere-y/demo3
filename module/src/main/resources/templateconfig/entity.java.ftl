@@ -7,7 +7,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ${entity} {
 <#list table.fields as field>
-
-    private ${field.propertyType} ${field.propertyName};
+    <#if field.propertyType == "Byte"|| field.propertyType == "Long">
+        private Integer ${field.propertyName};
+    <#else>
+        private ${field.propertyType} ${field.propertyName};
+    </#if>
 </#list>
 }

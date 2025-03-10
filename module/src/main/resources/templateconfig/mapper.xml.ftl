@@ -7,12 +7,23 @@
     <insert id="insert" parameterType="${package.Entity}.${entity}">
         insert into ${table.name} (
         <#list table.fields as field>
-            <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''">${field.name}<#if field_has_next>,</#if></if>
-        </#list>
+            <#if field.propertyType == "Integer"||field.propertyType == "Byte"||field.propertyType == "BigInteger"||field.propertyType == "Long">
+
+                <if test="${table.name}.${field.propertyName} != null ">${field.name}<#if field_has_next>,</#if></if>
+            <#else>
+                <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''">${field.name}<#if field_has_next>,</#if></if>
+
+            </#if>        </#list>
         )
         values (
         <#list table.fields as field>
-            <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''"><#noparse>#{</#noparse>${table.name}.${field.propertyName}<#noparse>}</#noparse><#if field_has_next>,</#if></if>
+            <#if field.propertyType == "Integer"||field.propertyType == "Byte"||field.propertyType == "BigInteger"||field.propertyType == "Long">
+
+                <if test="${table.name}.${field.propertyName} != null ">${field.name}<#if field_has_next>,</#if></if>
+            <#else>
+                <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''">${field.name}<#if field_has_next>,</#if></if>
+
+            </#if>
         </#list>
         )
     </insert>
@@ -22,7 +33,13 @@
         update ${table.name}
         <set>
         <#list table.fields as field>
-        <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''">${field.name} = <#noparse>#{</#noparse>${table.name}.${field.propertyName}<#noparse>}</#noparse><#if field_has_next>,</#if></if>
+            <#if field.propertyType == "Integer"||field.propertyType == "Byte"||field.propertyType == "BigInteger"||field.propertyType == "Long">
+
+                <if test="${table.name}.${field.propertyName} != null ">${field.name}<#if field_has_next>,</#if></if>
+            <#else>
+                <if test="${table.name}.${field.propertyName} != null and ${table.name}.${field.propertyName} !=''">${field.name}<#if field_has_next>,</#if></if>
+
+            </#if>
         </#list>
         </set>
         where id = <#noparse>#{</#noparse>${table.name}.id<#noparse>}</#noparse>

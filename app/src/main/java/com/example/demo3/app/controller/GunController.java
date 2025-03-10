@@ -58,20 +58,24 @@ public class GunController {
     public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = gunService.getById(gunId);
-        Category category = categoryService.getById(gun.getCategoryId());
-        if(gun==null&&category==null) {
+        if(gun==null) {
             return gunInfoVo;
         }
         else {
-            gunInfoVo.setTitle(gun.getTitle());
-            gunInfoVo.setAuthor(gun.getAuthor());
-            gunInfoVo.setContent(gun.getContent());
-            gunInfoVo.setCreateTime(gunService.timeText(gun.getCreateTime()));
-            gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
-            gunInfoVo.setCategoryName(category.getName());
-            gunInfoVo.setCategoryImage(category.getImage());
+            Category category = categoryService.getById(gun.getCategoryId());
+            if (category == null) {
+                return gunInfoVo;
+            } else {
+                gunInfoVo.setTitle(gun.getTitle());
+                gunInfoVo.setAuthor(gun.getAuthor());
+                gunInfoVo.setContent(gun.getContent());
+                gunInfoVo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
+                gunInfoVo.setCategoryName(category.getName());
+                gunInfoVo.setCategoryImage(category.getImage());
 
-            return gunInfoVo;
+                return gunInfoVo;
+            }
         }
     }
 
