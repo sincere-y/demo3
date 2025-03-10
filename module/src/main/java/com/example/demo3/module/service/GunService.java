@@ -44,7 +44,7 @@ public class GunService {
     }
 
     public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
-        if(title!=null||author!=null||images!=null||content!=null||categoryId!=null){
+        if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
             Category category=categoryService.getById(categoryId);
@@ -60,7 +60,7 @@ public class GunService {
                 return gun.getId();
             }
             else {
-                if(mapper.getById(id)!=null||mapper.getByCategoryId(categoryId)!=null) {
+                if(mapper.getById(id)!=null&&mapper.getByCategoryId(categoryId)!=null) {
                     gun.setId(id);
                     update(gun);
                     return gun.getId();
@@ -103,10 +103,13 @@ public class GunService {
     }
 
     public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
-
+        if(page!=null&&pageSize!=null) {
             Integer start = (page - 1) * pageSize;
             return mapper.getInfoPage(start, pageSize, gunName);
-
+        }
+        else {
+            throw new RuntimeException("参数内容为空");
+        }
     }
 
     //创建时间格式转换

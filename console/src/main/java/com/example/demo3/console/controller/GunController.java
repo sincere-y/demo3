@@ -7,6 +7,7 @@ import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
 import com.example.demo3.module.service.GunService;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@Slf4j
 @RestController
 public class GunController {
 
@@ -36,7 +37,7 @@ public class GunController {
             BigInteger id = service.edit(null, title.trim(), author.trim(), images, content,categoryId);
             return id.toString();
         }catch (RuntimeException e){
-            System.out.println(e);
+            log.error("编辑枪支信息失败", e);
             return e.getMessage();
 
         }

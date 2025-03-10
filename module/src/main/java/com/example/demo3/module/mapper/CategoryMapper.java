@@ -25,7 +25,8 @@ int delete(@Param("id")BigInteger id,@Param("time") Integer time );
 
 List<Category> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer categorySize);
 
-
+@Select("select * from category where is_deleted = 0")
+List<Category> getAllInfo();
 
 
 }

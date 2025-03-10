@@ -45,17 +45,11 @@ public class CodeGenerator {
                             .mapperTemplate("templateconfig/mapper.java")
                             .mapperXmlTemplate("templateconfig/mapper.xml")
                             .enableMapperAnnotation()
-
                             .controllerBuilder().disable()
-
                             .build();
-
                 })
-
-
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用 Freemarker 模板引擎
                 .execute(); // 执行生成
-
 
     }
 }

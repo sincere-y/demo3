@@ -18,35 +18,30 @@ import java.util.List;
  public Category getById(BigInteger id) {
  return mapper.getById(id);
  }
-
+ public List<Category> getAllInfo(){
+  return mapper.getAllInfo();
+ }
  public Category extractById(BigInteger id) {
  return mapper.extractById(id);
  }
-
 
  public int insert(Category category){
 
  return mapper.insert(category);
  }
-
-
  public int update(Category category){
 
  return mapper.update(category);
-
  }
-
 
  public int delete(BigInteger id) {
  return mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
  }
 
-
  public List<Category> getInfoPage(Integer page, Integer pageSize){
 
   Integer start = (page - 1) * pageSize;
   return mapper.getInfoPage(start, pageSize);
-
  }
 
 
