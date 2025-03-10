@@ -4,8 +4,8 @@ package com.example.demo3.module.service;
 
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.example.demo3.module.entity.Gun;
+import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.mapper.GunMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
@@ -44,7 +44,13 @@ public class GunService {
         if(title!=null||author!=null||images!=null||content!=null||categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
-            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
+            Gun gunByCategoryId = mapper.getByCategoryId(categoryId);
+            if(gunByCategoryId != null){
+                gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
+            }
+            else {
+                throw new RuntimeException("categoryId不存在");
+            }
             if(id==null){
                 gun.setCreateTime(timestamp).setIsDeleted(0);
                 insert(gun);
