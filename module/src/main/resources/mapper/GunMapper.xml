@@ -51,6 +51,12 @@
             is_deleted=0
             <if test="gunName != null and gunName != ''" >
                 and title like concat('%',#{gunName},'%')
+                or gun.category_id in
+                 (select name from category
+                 <where>
+                 is_deleted=0
+                  and name like concat('%',#{gunName},'%')
+                 </where>)
             </if>
         </where>
         order by id asc
