@@ -50,8 +50,8 @@
         <where>
             is_deleted=0
             <if test="gunName != null and gunName != ''" >
-                and gun.title like concat('%',#{gunName},'%')
-                or (gun.category_id in
+                and ( gun.title like concat('%',#{gunName},'%')
+                or gun.category_id in
                  select id from category
                  <where>
                  is_deleted=0
