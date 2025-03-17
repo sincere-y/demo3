@@ -30,7 +30,16 @@ public class GunController {
     public GunListVo gunAllList(@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName) {
         Integer pageSize=6;
-        List<Gun> guns = gunService.getInfoPage(page,pageSize,gunName);
+        List<Integer> ids=gunService.getCategoryId(gunName);
+        StringBuffer resultIds = new StringBuffer();
+        for (int i =0; i < ids.size(); i++) {
+            if (i > 0) {
+                resultIds.append(",");
+            }
+            resultIds.append(ids.get(i));
+        }
+
+        List<Gun> guns = gunService.getInfoPage(page,pageSize,gunName,resultIds);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
 
         for (Gun gun : guns) {

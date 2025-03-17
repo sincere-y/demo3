@@ -29,6 +29,8 @@ List<Category> getInfoPage(@Param("start") Integer start, @Param("pageSize") Int
 @Select("select * from category where is_deleted = 0")
 List<Category> getAllInfo();
 
+//@Select("select * from category where is_deleted = 0 and (IFNULL(#{parentId}, parent_id) = parent_id)")
+    List<Category> getCategoryByParentId(@Param("parentId") BigInteger parentId);
 
 }
 

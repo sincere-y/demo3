@@ -35,5 +35,15 @@
         where id = #{category.id}
     </update>
 
+    <select id="getCategoryByParentId" resultType="com.example.demo3.module.entity.Category">
+        SELECT * FROM category WHERE is_deleted = 0
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="parentId == null">
+            AND parent_id IS NULL
+        </if>
+    </select>
+
 </mapper>
 

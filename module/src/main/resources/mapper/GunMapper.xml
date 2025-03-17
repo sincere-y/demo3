@@ -51,18 +51,23 @@
             is_deleted=0
             <if test="gunName != null and gunName != ''" >
                 and ( title like concat('%',#{gunName},'%')
-                or gun.category_id in
-                 (select id from category
-                 where
-                 is_deleted=0 and name like concat('%',#{gunName},'%')
-                 )
+                or gun.category_id in(${resultIds})
                 )
             </if>
         </where>
         order by id asc
         limit #{start},#{pageSize}
-
     </select>
+
+    <select id="getCategoryId" parameterType="com.example.demo3.module.entity.Gun" resultType="java.lang.Integer">
+        select id from category
+        where is_deleted = 0
+        <if test="gunName != null and gunName != ''">
+            and name like concat('%', #{gunName}, '%')
+        </if>
+    </select>
+
+
 
     <select id="countById" parameterType="com.example.demo3.module.entity.Gun" resultType="int">
         SELECT COUNT(*) FROM gun WHERE id = #{id}

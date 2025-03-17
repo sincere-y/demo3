@@ -6,8 +6,10 @@ import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 @RestController
@@ -17,8 +19,11 @@ public class CategoryController {
 
 
     @RequestMapping("/category/list")
-    public CategoryListVo gunAllList() {
-        List<Category> categories = categoryService.getAllInfo();
+    public CategoryListVo gunAllList(@RequestParam(name ="parentId",required = false ) BigInteger parentId) {
+        if (parentId == null) {
+            parentId = null;
+        }
+        List<Category> categories = categoryService.getCategoryByParentId(parentId);
         List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
 
         for (Category category : categories) {
@@ -26,7 +31,8 @@ public class CategoryController {
             vo.setId(category.getId());
             vo.setCategoryImage(category.getImage());
             vo.setCategoryName(category.getName());
-
+            List<CategoryListCellVo> children = gunAllList(category.getId()).getList();
+            vo.setList(children);
             categoryListCellVo.add(vo);
         }
         CategoryListVo categoryListVo = new CategoryListVo();

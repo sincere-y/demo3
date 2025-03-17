@@ -8,5 +8,5 @@ import java.util.List;
 public class CategoryListVo {
 
     private List<CategoryListCellVo> list;
-    private Boolean isEnd;
+
 }

@@ -42,6 +42,7 @@ public class GunService {
     public int getTotal(String gunName){
         return mapper.getTotal(gunName);
     }
+    public List<Integer> getCategoryId(String gunName){return mapper.getCategoryId(gunName);}
 
     public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
         if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
@@ -102,10 +103,10 @@ public class GunService {
         else return 0;
     }
 
-    public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
+    public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName,StringBuffer resultIds){
         if(page!=null&&pageSize!=null) {
             Integer start = (page - 1) * pageSize;
-            return mapper.getInfoPage(start, pageSize, gunName);
+            return mapper.getInfoPage(start, pageSize,gunName, resultIds);
         }
         else {
             throw new RuntimeException("参数内容为空");

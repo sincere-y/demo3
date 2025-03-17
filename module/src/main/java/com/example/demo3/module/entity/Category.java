@@ -12,7 +12,7 @@ import java.math.BigInteger;
 public class Category {
 
     private BigInteger id;
-
+    private BigInteger parentId;
     private Integer createTime;
 
     private Integer updateTime;

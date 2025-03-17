@@ -21,6 +21,11 @@ import java.util.List;
  public List<Category> getAllInfo(){
   return mapper.getAllInfo();
  }
+ public List<Category> getCategoryByParentId(BigInteger parentId){
+  return mapper.getCategoryByParentId(parentId);
+ }
+
+
  public Category extractById(BigInteger id) {
  return mapper.extractById(id);
  }
