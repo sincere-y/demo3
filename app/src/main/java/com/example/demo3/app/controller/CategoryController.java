@@ -31,8 +31,17 @@ public class CategoryController {
             vo.setId(category.getId());
             vo.setCategoryImage(category.getImage());
             vo.setCategoryName(category.getName());
-            List<CategoryListCellVo> children = gunAllList(category.getId()).getList();
-            vo.setList(children);
+
+            List<Category> childrens = categoryService.getCategoryByParentId(category.getId());
+            List<CategoryListCellVo> categoryChildrenListCellVo = new ArrayList<>();
+            for (Category children : childrens) {
+                CategoryListCellVo childrenVo = new CategoryListCellVo();
+                childrenVo.setId(children.getId());
+                childrenVo.setCategoryImage(children.getImage());
+                childrenVo.setCategoryName(children.getName());
+                categoryChildrenListCellVo.add(childrenVo);
+            }
+            vo.setList(categoryChildrenListCellVo);
             categoryListCellVo.add(vo);
         }
         CategoryListVo categoryListVo = new CategoryListVo();

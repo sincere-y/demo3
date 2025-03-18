@@ -15,6 +15,7 @@ import java.util.List;
  @Resource
  private CategoryMapper mapper;
 
+ public List<Integer> getCategoryId(String gunName){return mapper.getCategoryId(gunName);}
  public Category getById(BigInteger id) {
  return mapper.getById(id);
  }

@@ -42,7 +42,7 @@ public class GunService {
     public int getTotal(String gunName){
         return mapper.getTotal(gunName);
     }
-    public List<Integer> getCategoryId(String gunName){return mapper.getCategoryId(gunName);}
+
 
     public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
         if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
@@ -76,24 +76,7 @@ public class GunService {
         }
 
     }
-//    public int createGun(String title,String author,String images,String content){
-//        if(title!=null||author!=null||images!=null||content!=null) {
-//            int timestamp = (int) (System.currentTimeMillis() / 1000);
-//            Gun gun = new Gun();
-//            gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setCreateTime(timestamp).setUpdateTime(timestamp).setIsDeleted(0);
-//            return insert(gun);
-//        }
-//        else return 0;
-//    }
-//    public int updateGun(BigInteger id,String title,String author,String images,String content){
-//        if(id!=null||title!=null||author!=null||images!=null||content!=null) {
-//            int timestamp = (int) (System.currentTimeMillis() / 1000);
-//            Gun gun = new Gun();
-//            gun.setId(id).setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp);
-//            return update(gun);
-//        }
-//        else return 0;
-//    }
+
 
     public int deleteGun(BigInteger gunId){
         if(gunId!=null) {
@@ -103,10 +86,21 @@ public class GunService {
         else return 0;
     }
 
-    public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName,StringBuffer resultIds){
+    public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
         if(page!=null&&pageSize!=null) {
+            List<Integer> ids=categoryService.getCategoryId(gunName);
+            StringBuffer resultIds = new StringBuffer();
+            if (ids != null) {
+                for (int i = 0; i < ids.size(); i++) {
+                    if (i > 0) {
+                        resultIds.append(",");
+                    }
+                    resultIds.append(ids.get(i));
+                }
+            }
+            String categoryIds = resultIds.toString();
             Integer start = (page - 1) * pageSize;
-            return mapper.getInfoPage(start, pageSize,gunName, resultIds);
+            return mapper.getInfoPage(start, pageSize,gunName, categoryIds);
         }
         else {
             throw new RuntimeException("参数内容为空");

@@ -34,9 +34,9 @@ public interface GunMapper {
 
     int getTotal(@Param("gunName") String gunName);
 
-    List<Gun> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer pageSize,@Param("gunName")String gunName, @Param("resultIds")StringBuffer resultIds);
+    List<Gun> getInfoPage(@Param("start") Integer start, @Param("pageSize") Integer pageSize,@Param("gunName")String gunName, @Param("categoryIds")String categoryIds);
 
-    List<Integer> getCategoryId(@Param("gunName")String gunName);
+
 
 
 }
