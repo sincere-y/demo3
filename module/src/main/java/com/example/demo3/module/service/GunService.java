@@ -9,6 +9,7 @@ import com.example.demo3.module.mapper.GunMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -89,7 +90,7 @@ public class GunService {
     public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
         if(page!=null&&pageSize!=null) {
             List<Integer> ids=categoryService.getCategoryId(gunName);
-            StringBuffer resultIds = new StringBuffer();
+            StringBuilder resultIds = new StringBuilder();
             if (ids != null) {
                 for (int i = 0; i < ids.size(); i++) {
                     if (i > 0) {
@@ -118,6 +119,25 @@ public class GunService {
         }
         return null;
     }
+
+    //base64解码
+    public String decodeURLParam(String encodedValue) {
+        try {
+            String decodedValue = URLDecoder.decode(encodedValue, "UTF-8");
+            return decodedValue;
+        } catch (Exception e) {
+            // 解码出错时的异常处理
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //base64编码
+
+    //json解码
+
+    //json编码
+
+
 
 
 }

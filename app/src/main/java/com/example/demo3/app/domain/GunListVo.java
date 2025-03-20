@@ -8,5 +8,6 @@ public class GunListVo {
 
     private List<GunListCellVo> list;
     private Boolean isEnd;
+    private String wp;
 
 }
