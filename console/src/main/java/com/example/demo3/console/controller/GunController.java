@@ -34,6 +34,8 @@ public class GunController {
                             @RequestParam(name = "content")String content,
                             @RequestParam(name = "categoryId")BigInteger categoryId) {
         try {
+
+
             BigInteger id = service.edit(null, title.trim(), author.trim(), images, content,categoryId);
             return id.toString();
         }catch (RuntimeException e){

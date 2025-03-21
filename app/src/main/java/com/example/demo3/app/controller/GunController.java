@@ -14,10 +14,10 @@ import com.example.demo3.module.service.GunService;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -38,10 +38,10 @@ public class GunController {
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
         String decodedValue = null;
         WapperClass wapper = null;
-        try{
-            decodedValue = URLDecoder.decode(wp, "UTF-8");
-        }
-        catch (Exception e) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(wp);
+             decodedValue = new String(decodedBytes, "UTF-8");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try{
@@ -89,15 +89,16 @@ public class GunController {
 
         WapperClass wapperClass = new WapperClass();
         wapperClass.setPage(page+1);
-        wapperClass.setGunName(gunName);
-        wapperClass.setKeyword(keyword);
+        wapperClass.setGunName(keyword);
+
 
         String wp1=null;
         try {
             // 将 WapperClass 对象转换为 JSON 字符串
             String jsonString = JSONObject.toJSONString(wapperClass);
             // 对 JSON 字符串进行 URL 编码
-            wp1=URLEncoder.encode(jsonString, "UTF-8");
+            byte[] jsonBytes = jsonString.getBytes("UTF-8");
+            wp1 = Base64.getEncoder().encodeToString(jsonBytes);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
