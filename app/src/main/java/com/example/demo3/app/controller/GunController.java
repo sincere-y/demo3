@@ -1,5 +1,6 @@
 package com.example.demo3.app.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.demo3.app.domain.*;
 import com.example.demo3.module.entity.Category;
@@ -15,6 +16,7 @@ import com.example.demo3.module.service.GunService;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -37,15 +39,14 @@ public class GunController {
                                 /*@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
         String decodedValue = null;
-        WapperClass wapper = null;
-        try {
+        Wapper wapper = null;
+        if(wp!=null){
             byte[] decodedBytes = Base64.getUrlDecoder().decode(wp);
-             decodedValue = new String(decodedBytes, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
+            decodedValue = new String(decodedBytes, StandardCharsets.UTF_8);
         }
+
         try{
-            wapper = JSONObject.parseObject(decodedValue).toJavaObject(WapperClass.class);
+            wapper = JSON.parseObject(decodedValue,Wapper.class);
 
         }
         catch (Exception e) {
@@ -57,10 +58,7 @@ public class GunController {
              page = wapper.getPage();
              gunName = wapper.getGunName();
         }
-
-
         Integer pageSize=6;
-
         List<Gun> guns = gunService.getInfoPage(page,pageSize,gunName);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
 
@@ -85,22 +83,21 @@ public class GunController {
         else gunListVo.setIsEnd(false);
         gunListVo.setList(gunListCellVo);
 
-        WapperClass wapperClass = new WapperClass();
-        wapperClass.setPage(page+1);
-        wapperClass.setGunName(keyword);
+        Wapper nextWapper = new Wapper();
+        nextWapper.setPage(page+1);
+        nextWapper.setGunName(keyword);
 
-
-        String wp1=null;
+        String wpNext=null;
         try {
-            // 将 WapperClass 对象转换为 JSON 字符串
-            String jsonString = JSONObject.toJSONString(wapperClass);
+            // 将 Wapper 对象转换为 JSON 字符串
+            String jsonString = JSON.toJSONString(nextWapper);
             // 对 JSON 字符串进行 URL 编码
             byte[] jsonBytes = jsonString.getBytes("UTF-8");
-            wp1 = Base64.getUrlEncoder().encodeToString(jsonBytes);
+            wpNext = Base64.getUrlEncoder().encodeToString(jsonBytes);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        gunListVo.setWp(wp1);
+        gunListVo.setWp(wpNext);
 
         return gunListVo ;
 
