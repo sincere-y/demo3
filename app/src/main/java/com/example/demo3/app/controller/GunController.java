@@ -39,27 +39,25 @@ public class GunController {
         String decodedValue = null;
         WapperClass wapper = null;
         try {
-            byte[] decodedBytes = Base64.getDecoder().decode(wp);
+            byte[] decodedBytes = Base64.getUrlDecoder().decode(wp);
              decodedValue = new String(decodedBytes, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try{
-            JSONObject jsonObject = JSONObject.parseObject(decodedValue);
-            wapper = jsonObject.toJavaObject(WapperClass.class);
+            wapper = JSONObject.parseObject(decodedValue).toJavaObject(WapperClass.class);
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        Integer page=null;
+        Integer page=1;
         String gunName=null;
         if (wapper != null) {
              page = wapper.getPage();
              gunName = wapper.getGunName();
         }
-        if(page==null){
-            page=1;
-        }
+
 
         Integer pageSize=6;
 
@@ -98,7 +96,7 @@ public class GunController {
             String jsonString = JSONObject.toJSONString(wapperClass);
             // 对 JSON 字符串进行 URL 编码
             byte[] jsonBytes = jsonString.getBytes("UTF-8");
-            wp1 = Base64.getEncoder().encodeToString(jsonBytes);
+            wp1 = Base64.getUrlEncoder().encodeToString(jsonBytes);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
