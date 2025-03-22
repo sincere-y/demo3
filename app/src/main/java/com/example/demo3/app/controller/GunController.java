@@ -33,18 +33,17 @@ public class GunController {
 
 
     @RequestMapping("/gun/list")
-    public GunListVo gunAllList(@RequestParam(required = false) String wp,
-                                @RequestParam(required = false) String keyword
+    public GunListVo gunAllList(@RequestParam(name = "wp",required = false) String wp,
+                                @RequestParam(name = "keyWord",required = false) String keyWord
                                 /*@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
-        String decodedValue = null;
-        WapperVo wapperVo = null;
+        WapperVo wapperVo;
         Integer page=1;
-        String gunName=null;
+        String gunName= keyWord;
         if(wp!=null){
             byte[] decodedBytes = Base64.getUrlDecoder().decode(wp.getBytes(StandardCharsets.UTF_8));
             try{
-                wapperVo = JSON.parseObject(decodedValue, WapperVo.class);
+                wapperVo = JSON.parseObject(decodedBytes, WapperVo.class);
                 page = wapperVo.getPage();
                 gunName = wapperVo.getGunName();
             } catch (Exception e) {
@@ -78,8 +77,7 @@ public class GunController {
 
         WapperVo nextWapper = new WapperVo();
         nextWapper.setPage(page+1);
-        nextWapper.setGunName(keyword);
-
+        nextWapper.setGunName(keyWord);
         String wpNext=null;
         try {
             // 将 Wapper 对象转换为 JSON 字符串
