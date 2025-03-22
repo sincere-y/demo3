@@ -1,7 +1,6 @@
 package com.example.demo3.app.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.example.demo3.app.domain.*;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
@@ -39,24 +38,18 @@ public class GunController {
                                 /*@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
         String decodedValue = null;
-        Wapper wapper = null;
-        if(wp!=null){
-            byte[] decodedBytes = Base64.getUrlDecoder().decode(wp);
-            decodedValue = new String(decodedBytes, StandardCharsets.UTF_8);
-        }
-
-        try{
-            wapper = JSON.parseObject(decodedValue,Wapper.class);
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        WapperVo wapperVo = null;
         Integer page=1;
         String gunName=null;
-        if (wapper != null) {
-             page = wapper.getPage();
-             gunName = wapper.getGunName();
+        if(wp!=null){
+            byte[] decodedBytes = Base64.getUrlDecoder().decode(wp.getBytes(StandardCharsets.UTF_8));
+            try{
+                wapperVo = JSON.parseObject(decodedValue, WapperVo.class);
+                page = wapperVo.getPage();
+                gunName = wapperVo.getGunName();
+            } catch (Exception e) {
+              return null;
+            }
         }
         Integer pageSize=6;
         List<Gun> guns = gunService.getInfoPage(page,pageSize,gunName);
@@ -83,7 +76,7 @@ public class GunController {
         else gunListVo.setIsEnd(false);
         gunListVo.setList(gunListCellVo);
 
-        Wapper nextWapper = new Wapper();
+        WapperVo nextWapper = new WapperVo();
         nextWapper.setPage(page+1);
         nextWapper.setGunName(keyword);
 

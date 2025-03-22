@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @Data
-public class Wapper {
+public class WapperVo {
     private Integer page;
     private String gunName;
 
