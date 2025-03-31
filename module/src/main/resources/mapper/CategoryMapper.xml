@@ -34,8 +34,7 @@
         </set>
         where id = #{category.id}
     </update>
-
-    <select id="getCategoryId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="getCategoryId" parameterType="com.example.demo3.module.entity.Category" resultType="java.lang.Integer">
         select id from category
         where is_deleted = 0
         <if test="gunName != null and gunName != ''">
