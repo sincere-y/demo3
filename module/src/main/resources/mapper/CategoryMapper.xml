@@ -34,7 +34,8 @@
         </set>
         where id = #{category.id}
     </update>
-    <select id="getCategoryId" parameterType="com.example.demo3.module.entity.Category" resultType="java.lang.Integer">
+
+    <select id="getCategoryId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select id from category
         where is_deleted = 0
         <if test="gunName != null and gunName != ''">
@@ -51,6 +52,18 @@
         <if test="parentId == null">
             AND parent_id IS NULL
         </if>
+    </select>
+
+
+    <select id="getInfoById" parameterType="com.example.demo3.module.entity.Category" resultType="com.example.demo3.module.entity.Category">
+        select * FROM category
+        <where>
+            is_deleted=0
+                <if test="categoryIds != null and categoryIds != ''">
+                    and id in (${categoryIds})
+                </if>
+        </where>
+
     </select>
 
 </mapper>

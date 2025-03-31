@@ -32,5 +32,8 @@ List<Category> getAllInfo();
     List<Category> getCategoryByParentId(@Param("parentId") BigInteger parentId);
 
     List<Integer> getCategoryId(@Param("gunName")String gunName);
+
+    List<Category> getInfoById(@Param("categoryIds")String categoryIds);
+
 }
 

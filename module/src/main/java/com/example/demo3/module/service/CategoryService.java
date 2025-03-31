@@ -50,7 +50,19 @@ import java.util.List;
   return mapper.getInfoPage(start, pageSize);
  }
 
-
+public List<Category> getInfoById(List<BigInteger> ids){
+ StringBuilder resultIds = new StringBuilder();
+ if (ids != null) {
+  for (int i = 0; i < ids.size(); i++) {
+   if (i > 0) {
+    resultIds.append(",");
+   }
+   resultIds.append(ids.get(i));
+  }
+ }
+ String categoryIds = resultIds.toString();
+  return mapper.getInfoById(categoryIds);
+}
 
  }
 
