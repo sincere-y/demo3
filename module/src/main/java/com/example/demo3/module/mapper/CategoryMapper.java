@@ -2,7 +2,6 @@
 package com.example.demo3.module.mapper;
 
 import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.Gun;
 import org.apache.ibatis.annotations.*;
 import java.math.BigInteger;
 import java.util.List;
@@ -33,7 +32,7 @@ List<Category> getAllInfo();
 
     List<Integer> getCategoryId(@Param("gunName")String gunName);
 
-    List<Category> getInfoById(@Param("categoryIds")String categoryIds);
+    List<Category> getInfoByIds(@Param("categoryIds")String categoryIds);
 
 }
 

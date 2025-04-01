@@ -54,7 +54,7 @@
     </select>
 
 
-    <select id="getInfoById" parameterType="com.example.demo3.module.entity.Category" resultType="com.example.demo3.module.entity.Category">
+    <select id="getInfoByIds" parameterType="com.example.demo3.module.entity.Category" resultType="com.example.demo3.module.entity.Category">
         select * FROM category
         <where>
             is_deleted=0

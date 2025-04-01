@@ -2,7 +2,6 @@ package com.example.demo3.module.service;
 
 
 import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.mapper.CategoryMapper;
 
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ import java.util.List;
   return mapper.getInfoPage(start, pageSize);
  }
 
-public List<Category> getInfoById(List<BigInteger> ids){
+public List<Category> getInfoByIds(List<BigInteger> ids){
  StringBuilder resultIds = new StringBuilder();
  if (ids != null) {
   for (int i = 0; i < ids.size(); i++) {
@@ -61,7 +60,7 @@ public List<Category> getInfoById(List<BigInteger> ids){
   }
  }
  String categoryIds = resultIds.toString();
-  return mapper.getInfoById(categoryIds);
+  return mapper.getInfoByIds(categoryIds);
 }
 
  }

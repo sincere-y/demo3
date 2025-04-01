@@ -8,7 +8,6 @@ import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
 //import com.example.demo3.module.service.GunDtoService;
-import com.example.demo3.module.service.GunDtoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +29,6 @@ public class GunController {
     private GunService gunService;
     @Autowired
     private CategoryService categoryService;
-@Autowired
-private GunDtoService gunDtoService;
 
 
     @RequestMapping("/gun/list")
@@ -60,7 +57,7 @@ private GunDtoService gunDtoService;
         for (Gun gun : guns) {
             categoryIds.add(gun.getCategoryId());
         }
-        List<Category> categories = categoryService.getInfoById(categoryIds);
+        List<Category> categories = categoryService.getInfoByIds(categoryIds);
         for(Category category:categories){
             map.put(category.getId(),category.getName());
         }
@@ -69,12 +66,15 @@ private GunDtoService gunDtoService;
             String categoryName=map.get(gun.getCategoryId());
             if(categoryName!=null) {
                 vo.setCategoryName(categoryName);
+            }else {
+                vo.setCategoryName("未分类");
+            }
                 vo.setGunId(gun.getId());
                 vo.setTitle(gun.getTitle());
                 vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
                 vo.setImage(gun.getImages().split("\\$")[0]);
                 gunListCellVo.add(vo);
-            }
+
         }
 
         GunListVo gunListVo = new GunListVo();
@@ -149,18 +149,21 @@ private GunDtoService gunDtoService;
             }
         }
         Integer pageSize=6;
-        List<GunDto> guns = gunDtoService.getGunDtoList(page,pageSize,gunName);
+        List<GunDto> guns = gunService.getGunDtoList(page,pageSize,gunName);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
 
         for (GunDto gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-
-                vo.setCategoryName(gun.getName());
-                vo.setGunId(gun.getId());
-                vo.setTitle(gun.getTitle());
-                vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
-                vo.setImage(gun.getImages().split("\\$")[0]);
-                gunListCellVo.add(vo);
+                if(gun.getName().isEmpty()) {
+                    vo.setCategoryName("未分类");
+                }else {
+                    vo.setCategoryName(gun.getName());
+                }
+                    vo.setGunId(gun.getId());
+                    vo.setTitle(gun.getTitle());
+                    vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                    vo.setImage(gun.getImages().split("\\$")[0]);
+                    gunListCellVo.add(vo);
 
         }
 
