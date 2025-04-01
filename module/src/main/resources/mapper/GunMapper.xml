@@ -88,12 +88,13 @@
         <where>
             g.is_deleted = 0
             <if test="gunName != null and gunName != ''">
-                AND g.title LIKE CONCAT('%', #{gunName}, '%')
+               and (
+                g.title LIKE CONCAT('%', #{gunName}, '%')
+                OR c.name LIKE CONCAT('%', #{gunName}, '%')
+                )
             </if>
         </where>
         ORDER BY g.id ASC
         LIMIT #{start}, #{pageSize}
     </select>
-
-
 </mapper>
