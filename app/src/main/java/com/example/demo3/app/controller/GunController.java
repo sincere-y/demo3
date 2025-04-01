@@ -66,14 +66,13 @@ public class GunController {
             String categoryName=map.get(gun.getCategoryId());
             if(categoryName!=null) {
                 vo.setCategoryName(categoryName);
-            }else {
-                vo.setCategoryName("未分类");
-            }
+
                 vo.setGunId(gun.getId());
                 vo.setTitle(gun.getTitle());
                 vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
                 vo.setImage(gun.getImages().split("\\$")[0]);
                 gunListCellVo.add(vo);
+            }
 
         }
 
@@ -154,17 +153,14 @@ public class GunController {
 
         for (GunDto gun : guns) {
             GunListCellVo vo = new GunListCellVo();
-                if(gun.getName().isEmpty()) {
-                    vo.setCategoryName("未分类");
-                }else {
-                    vo.setCategoryName(gun.getName());
-                }
+                if(gun.getCategoryName()!=null) {
+                    vo.setCategoryName(gun.getCategoryName());
                     vo.setGunId(gun.getId());
                     vo.setTitle(gun.getTitle());
                     vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
                     vo.setImage(gun.getImages().split("\\$")[0]);
                     gunListCellVo.add(vo);
-
+                }
         }
 
         GunListVo gunListVo = new GunListVo();

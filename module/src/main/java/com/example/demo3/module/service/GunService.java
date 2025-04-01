@@ -2,11 +2,9 @@ package com.example.demo3.module.service;
 
 
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.mapper.GunDtoMapper;
 import com.example.demo3.module.mapper.GunMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -137,19 +135,19 @@ public class GunService {
 
     public List<GunDto> getGunDtoList(Integer page, Integer pageSize, String gunName){
         if(page!=null&&pageSize!=null) {
-            List<Integer> ids=categoryService.getCategoryId(gunName);
-            StringBuilder resultIds = new StringBuilder();
-            if (ids != null) {
-                for (int i = 0; i < ids.size(); i++) {
-                    if (i > 0) {
-                        resultIds.append(",");
-                    }
-                    resultIds.append(ids.get(i));
-                }
-            }
-            String categoryIds = resultIds.toString();
+//            List<Integer> ids=categoryService.getCategoryId(gunName);
+//            StringBuilder resultIds = new StringBuilder();
+//            if (ids != null) {
+//                for (int i = 0; i < ids.size(); i++) {
+//                    if (i > 0) {
+//                        resultIds.append(",");
+//                    }
+//                    resultIds.append(ids.get(i));
+//                }
+//            }
+//            String categoryIds = resultIds.toString();
             Integer start = (page - 1) * pageSize;
-            return mapper.getGunDtoList(start,pageSize,gunName,categoryIds);
+            return mapper.getGunDtoList(start,pageSize,gunName);
         }
         else {
             throw new RuntimeException("参数内容为空");

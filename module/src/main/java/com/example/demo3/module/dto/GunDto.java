@@ -9,7 +9,7 @@ public class GunDto {
     private String title;
     private String images;
     private Integer createTime;
-    private String name;
+    private String categoryName;
 
 
 }

@@ -70,8 +70,8 @@
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="images" column="images"/>
-        <result property="createTime" column="create_time"/>
-        <result property="name" column="name"/>
+        <result property="createTime" column="createTime"/>
+        <result property="categoryName" column="categoryName"/>
     </resultMap>
 
     <select id="getGunDtoList" resultMap="gunDtoResultMap">
@@ -80,7 +80,7 @@
         g.title,
         g.images,
         g.create_time AS createTime,
-        c.name AS name
+        c.name AS categoryName
         FROM gun g
         LEFT JOIN category c
         ON g.category_id = c.id
@@ -89,9 +89,6 @@
             g.is_deleted = 0
             <if test="gunName != null and gunName != ''">
                 AND g.title LIKE CONCAT('%', #{gunName}, '%')
-            </if>
-            <if test="categoryIds != null and categoryIds != ''">
-                AND g.category_id IN (${categoryIds})
             </if>
         </where>
         ORDER BY g.id ASC
