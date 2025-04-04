@@ -12,7 +12,9 @@ import com.aliyuncs.exceptions.ClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,8 +52,14 @@ public class OssUtils {
 
 
         String originalFilename = file.getOriginalFilename();
+        //扩展名
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String objectName = generateObjectName() + fileExtension;
+        //图片宽高
+        ImageSize imageSize = getImageSize(bytes, fileExtension);
+
+        String baseName = generateObjectName();
+        String sizeSuffix = "_" + imageSize.getWidth() + "x" + imageSize.getHeight();
+        String objectName = baseName + sizeSuffix + fileExtension;
 
         // 创建PutObjectRequest对象，用于上传文件到OSS
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, new ByteArrayInputStream(bytes));
@@ -78,7 +86,33 @@ public class OssUtils {
 //        return "https://" + bucketName + "." + endpoint + "/" + objectName;
 //    }
 
+    private ImageSize getImageSize(byte[] bytes, String fileExtension) throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        BufferedImage image = ImageIO.read(inputStream);
+        if (image == null) {
+            throw new IOException("无法解析图片文件");
+        }
+        return new ImageSize(image.getWidth(), image.getHeight());
+    }
 
+    // 内部类用于存储图片尺寸
+    private static class ImageSize {
+        private final int width;
+        private final int height;
+
+        public ImageSize(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+    }
 
 
 }
