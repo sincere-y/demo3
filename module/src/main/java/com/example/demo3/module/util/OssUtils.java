@@ -19,14 +19,14 @@ import java.util.UUID;
 @Component
 public class OssUtils {
 
-//    @Value("${aliyun.oss.endpoint}")
-    private String endpoint="https://oss-cn-beijing.aliyuncs.com";
-//    @Value("${aliyun.oss.accessKeyId}")
-    private String accessKeyId="LTAI5tG1L4Atn9yk3jed93Le";
-//    @Value("${aliyun.oss.accessKeySecret}")
-    private String accessKeySecret="9otxlGEorgZfK44WcjCmi40U3ix8ia";
-//    @Value("${aliyun.oss.bucketName}")
-    private String bucketName="web-static-images";
+    @Value("${aliyun.oss.endpoint}")
+    private String endpoint;
+    @Value("${aliyun.oss.accessKeyId}")
+    private String accessKeyId;
+    @Value("${aliyun.oss.accessKeySecret}")
+    private String accessKeySecret;
+    @Value("${aliyun.oss.bucketName}")
+    private String bucketName;
 
     //上传图片的方法
     public URL upload(MultipartFile file) throws IOException {
