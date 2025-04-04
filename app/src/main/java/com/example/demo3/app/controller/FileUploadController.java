@@ -1,5 +1,6 @@
 package com.example.demo3.app.controller;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.example.demo3.module.util.OssUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +33,10 @@ public class FileUploadController {
 //            Files.write(path, bytes);
 
             return url.toString();
+        } catch (ClientException e) {
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
-            return  e.getMessage();
+            throw new RuntimeException(e);
         }
     }
 
