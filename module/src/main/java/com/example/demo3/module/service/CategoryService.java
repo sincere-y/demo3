@@ -7,6 +7,7 @@ import com.example.demo3.module.mapper.CategoryMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,6 +63,50 @@ public List<Category> getInfoByIds(List<BigInteger> ids){
  String categoryIds = resultIds.toString();
   return mapper.getInfoByIds(categoryIds);
 }
+
+
+
+
+ public List<Category> getLeafCategories(BigInteger parentId) {
+  List<Category> result = new ArrayList<>();
+  findLeaves(parentId, result);
+  return result;
+ }
+
+ private void findLeaves(BigInteger parentId, List<Category> result) {
+  //根据parentID查询当前类目
+  List<Category> categories = getCategoryByParentId(parentId);
+
+  //根据当前类目查询子类目
+  for (Category category : categories) {
+   List<Category> childrens = getCategoryByParentId(category.getId());
+   if (childrens.isEmpty()) {
+    // 当前类目自身是叶子节点
+    Category self = getById(category.getId());
+
+    result.add(self);
+   }else {
+    findLeaves(category.getId(), result);
+   }
+
+  }
+
+//  for (Category child : childrens) {
+//   List<Category> grandChildren = getCategoryByParentId(child.getId());
+//   if (grandChildren.isEmpty()) {
+//    result.add(child); // 叶子节点
+//   } else {
+//    findLeaves(child.getId(), result); // 递归查找
+//   }
+//  }
+ }
+
+
+
+
+
+
+
 
  }
 

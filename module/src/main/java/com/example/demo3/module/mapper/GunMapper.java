@@ -39,5 +39,8 @@ public interface GunMapper {
 
     List<GunDto> getGunDtoList(@Param("start") Integer start, @Param("pageSize") Integer pageSize, @Param("gunName")String gunName);
 
+    int updateImageUrl(@Param("gunId") BigInteger gunId,@Param("url") String url);
 
+    @Select("select * from gun WHERE category_id=#{categoryId} and is_deleted=0")
+    Gun getGunByCategoryId(@Param("categoryId") BigInteger categoryId);
 }

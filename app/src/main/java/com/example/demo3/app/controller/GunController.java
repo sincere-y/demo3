@@ -66,11 +66,16 @@ public class GunController {
             String categoryName=map.get(gun.getCategoryId());
             if(categoryName!=null) {
                 vo.setCategoryName(categoryName);
-
                 vo.setGunId(gun.getId());
                 vo.setTitle(gun.getTitle());
                 vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
-                vo.setImage(gun.getImages().split("\\$")[0]);
+
+                GunListImage gunListImage = new GunListImage();
+                String firstImageUrl = gun.getImages().split("\\$")[0];
+                gunListImage.setSrc(firstImageUrl);
+                gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
+               vo.setImage(gunListImage);
+
                 gunListCellVo.add(vo);
             }
 
@@ -158,7 +163,7 @@ public class GunController {
                     vo.setGunId(gun.getId());
                     vo.setTitle(gun.getTitle());
                     vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
-                    vo.setImage(gun.getImages().split("\\$")[0]);
+//                    vo.setImage(gun.getImages().split("\\$")[0]);
                     gunListCellVo.add(vo);
                 }
         }

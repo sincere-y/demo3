@@ -1,9 +1,10 @@
 package com.example.demo3.app.controller;
 
-import com.example.demo3.app.domain.CategoryListCellVo;
-import com.example.demo3.app.domain.CategoryListVo;
+import com.example.demo3.app.domain.*;
 import com.example.demo3.module.entity.Category;
+import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
+import com.example.demo3.module.service.GunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,15 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 @RestController
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private GunService gunService;
 
 
     @RequestMapping("/category/list")
-    public CategoryListVo gunAllList(@RequestParam(name ="parentId",required = false ) BigInteger parentId) {
+    public CategoryListVo gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         if (parentId == null) {
             parentId = null;
         }
@@ -46,10 +50,82 @@ public class CategoryController {
         }
         CategoryListVo categoryListVo = new CategoryListVo();
         categoryListVo.setList(categoryListCellVo);
-        return categoryListVo ;
+        return categoryListVo;
 
     }
 
+
+    @RequestMapping("/category/multiLevelCategories")
+    public MultiLevelCategoriesVo multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
+        //顶级类目直接返回
+        if (parentId == null) {
+            return null;
+        }
+        //不存在直接返回
+        if (categoryService.getCategoryByParentId(parentId) == null) {
+            return null;
+        }
+        List<Category> categories = categoryService.getCategoryByParentId(parentId);
+        List<MultiLevelCategoriesCellVo> resultList = new ArrayList<>();
+
+        for (Category category : categories) {
+
+            List<Category> childrens = categoryService.getCategoryByParentId(category.getId());
+
+            for (Category children : childrens) {
+                MultiLevelCategoriesCellVo childrenVo = new MultiLevelCategoriesCellVo();
+                childrenVo.setId(children.getId());
+                childrenVo.setCategoryImage(children.getImage());
+                childrenVo.setCategoryName(children.getName());
+                resultList.add(childrenVo);
+            }
+        }
+        MultiLevelCategoriesVo multiLevelCategoriesVo = new MultiLevelCategoriesVo();
+        multiLevelCategoriesVo.setCategoriesListVo(resultList);
+
+        // 叶子节点查询方法
+        List<Category> leafCategories = categoryService.getLeafCategories(parentId);
+
+        List<GunListCellVo> content = new ArrayList<>();
+        List<BigInteger> categoryIds = new ArrayList<>();
+
+        for (Category category : leafCategories) {
+            categoryIds.add(category.getId());
+        }
+        HashMap<BigInteger, String> map = new HashMap<>();
+        List<Category> getCategories = categoryService.getInfoByIds(categoryIds);
+        for (Category category : getCategories) {
+            map.put(category.getId(), category.getName());
+        }
+        if (categoryIds.size() > 0) {
+            for (BigInteger categoryId : categoryIds) {
+
+                Gun gun = gunService.getGunByCategoryId(categoryId);
+                if(gun!=null) {
+                    String categoryName = map.get(gun.getCategoryId());
+                    GunListCellVo vo = new GunListCellVo();
+
+                    if (categoryName != null) {
+                        vo.setCategoryName(categoryName);
+                        vo.setGunId(gun.getId());
+                        vo.setTitle(gun.getTitle());
+                        vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+
+                        GunListImage gunListImage = new GunListImage();
+                        String firstImageUrl = gun.getImages().split("\\$")[0];
+                        gunListImage.setSrc(firstImageUrl);
+                        gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
+                        vo.setImage(gunListImage);
+
+                        content.add(vo);
+                    }
+                }
+            }
+            multiLevelCategoriesVo.setGunListVo(content);
+
+        }
+        return multiLevelCategoriesVo;
+    }
 
 
 

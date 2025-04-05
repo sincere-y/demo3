@@ -97,4 +97,15 @@
         ORDER BY g.id ASC
         LIMIT #{start}, #{pageSize}
     </select>
+
+    <update id="updateImageUrl" parameterType="com.example.demo3.module.entity.Gun">
+        update gun
+        <set>
+            <if test="url!= null and url != ''" >,images = #{url}</if>
+        </set>
+        where id = #{gunId} and is_deleted=0
+
+    </update>
+
+
 </mapper>

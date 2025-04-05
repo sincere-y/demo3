@@ -8,10 +8,11 @@ import java.math.BigInteger;
 public class GunListCellVo {
 
     private BigInteger gunId;
-    private String image;
+
     private String title;
     private String createTime;
     private String categoryName;
+    private GunListImage image;
 
 
 }

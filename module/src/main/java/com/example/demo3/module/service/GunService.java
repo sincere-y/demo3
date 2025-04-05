@@ -13,6 +13,8 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class GunService {
@@ -156,6 +158,23 @@ public class GunService {
     }
 
 
+    public int  updateImageUrl(BigInteger gunId,String url){
 
+        return mapper.updateImageUrl(gunId,url);
 
+    }
+    public float calculateAspectRatio(String imageUrl) {
+        Pattern pattern = Pattern.compile("_(\\d+)x(\\d+)");
+        Matcher matcher = pattern.matcher(imageUrl);
+        if (matcher.find()) {
+            int width = Integer.parseInt(matcher.group(1));
+            int height = Integer.parseInt(matcher.group(2));
+            return (float) width / height;
+        }
+        return 0; // 或者根据你的需求返回其他默认值
+    }
+
+   public Gun getGunByCategoryId(BigInteger categoryId){
+        return mapper.getGunByCategoryId(categoryId);
+   }
 }

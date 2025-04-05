@@ -8,17 +8,13 @@ import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
 import com.aliyun.oss.common.comm.SignVersion;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
-import com.aliyuncs.exceptions.ClientException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -26,14 +22,14 @@ import java.util.UUID;
 @Component
 public class OssUtils {
 
-    String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+    String endpoint = "oss-cn-beijing.aliyuncs.com";
     String bucketName = "web-static-images";
     // 替换为您的 Bucket 区域
     String region = "cn-beijing";
 
 
     //上传图片的方法
-    public URL upload(MultipartFile file) throws com.aliyuncs.exceptions.ClientException, IOException {
+    public String upload(MultipartFile file) throws com.aliyuncs.exceptions.ClientException, IOException {
 
         // 从环境变量中获取访问凭证。运行本代码示例之前，请先配置环境变量
         EnvironmentVariableCredentialsProvider credentialsProvider =
@@ -68,10 +64,10 @@ public class OssUtils {
         PutObjectResult result = ossClient.putObject(putObjectRequest);
         //关闭OSSClient
         ossClient.shutdown();
-        Date expiration = new Date(new Date().getTime() + 3600 * 1000);
-        URL url =ossClient.generatePresignedUrl(bucketName, objectName, expiration);
-        return url;
-//        return generateImageUrl(objectName);
+//        Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+//        String url =ossClient.generatePresignedUrl(bucketName, objectName, expiration).toString();
+//        return url;
+          return generateImageUrl(objectName);
 
 
 
@@ -82,9 +78,9 @@ public class OssUtils {
         String uniqueName = UUID.randomUUID().toString().replace("-", "");
         return "image/" + datePath + uniqueName;
     }
-//    private String generateImageUrl(String objectName) {
-//        return "https://" + bucketName + "." + endpoint + "/" + objectName;
-//    }
+    private String generateImageUrl(String objectName) {
+        return "https://" + bucketName + "." + endpoint + "/" + objectName;
+    }
 
     private ImageSize getImageSize(byte[] bytes, String fileExtension) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(bytes);
