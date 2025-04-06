@@ -170,14 +170,14 @@ public class GunService {
             int width = Integer.parseInt(matcher.group(1));
             int height = Integer.parseInt(matcher.group(2));
             if (height == 0) {
-                return -1;
+                return 0;
             }
             return (float) width / height;
         }
-        return -1;
+        return 0;
     }
 
-   public List<Gun> getGunByCategoryId(List<BigInteger> ids){
+   public List<Gun> getGunsByCategoryIds(List<BigInteger> ids){
 
        StringBuilder resultIds = new StringBuilder();
        if (ids != null) {
@@ -189,6 +189,6 @@ public class GunService {
            }
        }
        String categoryIds = resultIds.toString();
-        return mapper.getGunByCategoryId(categoryIds);
+        return mapper.getGunsByCategoryIds(categoryIds);
    }
 }

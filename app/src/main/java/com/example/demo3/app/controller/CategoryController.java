@@ -27,7 +27,7 @@ public class CategoryController {
         if (parentId == null) {
             parentId = null;
         }
-        List<Category> categories = categoryService.getCategoryByParentId(parentId);
+        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
 
         for (Category category : categories) {
@@ -36,7 +36,7 @@ public class CategoryController {
             vo.setCategoryImage(category.getImage());
             vo.setCategoryName(category.getName());
 
-            List<Category> childrens = categoryService.getCategoryByParentId(category.getId());
+            List<Category> childrens = categoryService.getCategoriesByParentId(category.getId());
             List<CategoryListCellVo> categoryChildrenListCellVo = new ArrayList<>();
             for (Category children : childrens) {
                 CategoryListCellVo childrenVo = new CategoryListCellVo();
@@ -58,23 +58,25 @@ public class CategoryController {
     @RequestMapping("/category/multiLevelCategories")
     public MultiLevelCategoriesVo multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
         //顶级类目直接返回
-        if(categoryService.getById(parentId).getParentId()==null){
-            return null;
-        }
         if (parentId == null) {
             return null;
         }
+        Category parentCategory= categoryService.getById(parentId);
+        if(parentCategory==null){
+            return null;
+        }else if (parentCategory.getParentId()==null){
+            return null;
+        }
+       
         //不存在直接返回
-        List<Category> categories = categoryService.getCategoryByParentId(parentId);
-        if (categories == null) {
+        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
+        if (categories.isEmpty()) {
             return null;
         }
 
         List<MultiLevelCategoriesCellVo> resultList = new ArrayList<>();
 
         for (Category category : categories) {
-
-
                 MultiLevelCategoriesCellVo childrenVo = new MultiLevelCategoriesCellVo();
                 childrenVo.setId(category.getId());
                 childrenVo.setCategoryImage(category.getImage());
@@ -90,24 +92,19 @@ public class CategoryController {
 
         List<GunListCellVo> content = new ArrayList<>();
         List<BigInteger> categoryIds = new ArrayList<>();
-
-        for (Category category : leafCategories) {
-            categoryIds.add(category.getId());
-        }
         HashMap<BigInteger, String> map = new HashMap<>();
         for (Category category : leafCategories) {
+            categoryIds.add(category.getId());
             map.put(category.getId(), category.getName());
         }
         if (categoryIds.size() > 0) {
-
-
-                List<Gun> guns = gunService.getGunByCategoryId(categoryIds);
-                for (Gun gun : guns) {
-                    if(gun!=null) {
+                List<Gun> guns = gunService.getGunsByCategoryIds(categoryIds);
+                if(guns.isEmpty()){
+                    for (Gun gun : guns) {
                         String categoryName = map.get(gun.getCategoryId());
                         GunListCellVo vo = new GunListCellVo();
-
                         if (categoryName != null) {
+
                             vo.setCategoryName(categoryName);
                             vo.setGunId(gun.getId());
                             vo.setTitle(gun.getTitle());
@@ -118,9 +115,9 @@ public class CategoryController {
                             gunListImage.setSrc(firstImageUrl);
                             gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
                             vo.setImage(gunListImage);
-
                             content.add(vo);
-                        }
+
+                            }
                     }
                 }
 

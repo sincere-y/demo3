@@ -106,7 +106,7 @@
         where id = #{gunId} and is_deleted=0
 
     </update>
-    <select id="getGunByCategoryId" parameterType="com.example.demo3.module.entity.Gun" resultType="com.example.demo3.module.entity.Gun">
+    <select id="getGunsByCategoryIds" parameterType="com.example.demo3.module.entity.Gun" resultType="com.example.demo3.module.entity.Gun">
         select * FROM gun
         <where>
             is_deleted=0

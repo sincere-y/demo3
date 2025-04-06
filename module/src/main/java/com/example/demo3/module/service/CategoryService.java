@@ -22,8 +22,8 @@ import java.util.List;
  public List<Category> getAllInfo(){
   return mapper.getAllInfo();
  }
- public List<Category> getCategoryByParentId(BigInteger parentId){
-  return mapper.getCategoryByParentId(parentId);
+ public List<Category> getCategoriesByParentId(BigInteger parentId){
+  return mapper.getCategoriesByParentId(parentId);
  }
 
 
@@ -75,11 +75,11 @@ public List<Category> getInfoByIds(List<BigInteger> ids){
 
  private void findLeaves(BigInteger parentId, List<Category> result) {
   //根据parentID查询当前类目
-  List<Category> categories = getCategoryByParentId(parentId);
+  List<Category> categories = getCategoriesByParentId(parentId);
 
   //根据当前类目查询子类目
   for (Category category : categories) {
-   List<Category> childrens = getCategoryByParentId(category.getId());
+   List<Category> childrens = getCategoriesByParentId(category.getId());
    if (childrens.isEmpty()) {
     // 当前类目自身是叶子节点
     Category self = getById(category.getId());

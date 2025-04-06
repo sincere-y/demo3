@@ -28,7 +28,7 @@ List<Category> getInfoPage(@Param("start") Integer start, @Param("pageSize") Int
 @Select("select * from category where is_deleted = 0")
 List<Category> getAllInfo();
 
-    List<Category> getCategoryByParentId(@Param("parentId") BigInteger parentId);
+    List<Category> getCategoriesByParentId(@Param("parentId") BigInteger parentId);
 
     List<Integer> getCategoryId(@Param("gunName")String gunName);
 

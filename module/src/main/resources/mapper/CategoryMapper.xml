@@ -43,7 +43,7 @@
 
     </select>
 
-    <select id="getCategoryByParentId" resultType="com.example.demo3.module.entity.Category">
+    <select id="getCategoriesByParentId" resultType="com.example.demo3.module.entity.Category">
         SELECT * FROM category WHERE is_deleted = 0
         <if test="parentId != null">
             AND parent_id = #{parentId}

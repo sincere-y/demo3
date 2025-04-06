@@ -30,10 +30,11 @@ public class FileUploadController {
             String url = ossUtils.upload(file);
             return url;
         } catch (ClientException e) {
-            throw new RuntimeException(e);
+           e.getMessage();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+           e.getMessage();
         }
+        return "";
     }
 
 

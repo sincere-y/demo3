@@ -21,7 +21,7 @@ public class CategoryController {
     @RequestMapping("/category/list")
     public CategoryListVo gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         // 获取指定parentId的分类列表（若parentId为null，则获取顶级分类）
-        List<Category> categories = categoryService.getCategoryByParentId(parentId);
+        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryVos = new ArrayList<>();
 
         // 遍历每个分类，递归构建其子分类结构
@@ -42,7 +42,7 @@ public class CategoryController {
         vo.setCategoryName(category.getName());
 
         // 获取当前分类的直接子分类
-        List<Category> children = categoryService.getCategoryByParentId(category.getId());
+        List<Category> children = categoryService.getCategoriesByParentId(category.getId());
         List<CategoryListCellVo> childrenVos = new ArrayList<>();
 
         // 递归处理每个子分类
