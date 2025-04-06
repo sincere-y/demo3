@@ -58,27 +58,29 @@ public class CategoryController {
     @RequestMapping("/category/multiLevelCategories")
     public MultiLevelCategoriesVo multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
         //顶级类目直接返回
+        if(categoryService.getById(parentId).getParentId()==null){
+            return null;
+        }
         if (parentId == null) {
             return null;
         }
         //不存在直接返回
-        if (categoryService.getCategoryByParentId(parentId) == null) {
+        List<Category> categories = categoryService.getCategoryByParentId(parentId);
+        if (categories == null) {
             return null;
         }
-        List<Category> categories = categoryService.getCategoryByParentId(parentId);
+
         List<MultiLevelCategoriesCellVo> resultList = new ArrayList<>();
 
         for (Category category : categories) {
 
-            List<Category> childrens = categoryService.getCategoryByParentId(category.getId());
 
-            for (Category children : childrens) {
                 MultiLevelCategoriesCellVo childrenVo = new MultiLevelCategoriesCellVo();
-                childrenVo.setId(children.getId());
-                childrenVo.setCategoryImage(children.getImage());
-                childrenVo.setCategoryName(children.getName());
+                childrenVo.setId(category.getId());
+                childrenVo.setCategoryImage(category.getImage());
+                childrenVo.setCategoryName(category.getName());
                 resultList.add(childrenVo);
-            }
+
         }
         MultiLevelCategoriesVo multiLevelCategoriesVo = new MultiLevelCategoriesVo();
         multiLevelCategoriesVo.setCategoriesListVo(resultList);
@@ -93,34 +95,35 @@ public class CategoryController {
             categoryIds.add(category.getId());
         }
         HashMap<BigInteger, String> map = new HashMap<>();
-        List<Category> getCategories = categoryService.getInfoByIds(categoryIds);
-        for (Category category : getCategories) {
+        for (Category category : leafCategories) {
             map.put(category.getId(), category.getName());
         }
         if (categoryIds.size() > 0) {
-            for (BigInteger categoryId : categoryIds) {
 
-                Gun gun = gunService.getGunByCategoryId(categoryId);
-                if(gun!=null) {
-                    String categoryName = map.get(gun.getCategoryId());
-                    GunListCellVo vo = new GunListCellVo();
 
-                    if (categoryName != null) {
-                        vo.setCategoryName(categoryName);
-                        vo.setGunId(gun.getId());
-                        vo.setTitle(gun.getTitle());
-                        vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                List<Gun> guns = gunService.getGunByCategoryId(categoryIds);
+                for (Gun gun : guns) {
+                    if(gun!=null) {
+                        String categoryName = map.get(gun.getCategoryId());
+                        GunListCellVo vo = new GunListCellVo();
 
-                        GunListImage gunListImage = new GunListImage();
-                        String firstImageUrl = gun.getImages().split("\\$")[0];
-                        gunListImage.setSrc(firstImageUrl);
-                        gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
-                        vo.setImage(gunListImage);
+                        if (categoryName != null) {
+                            vo.setCategoryName(categoryName);
+                            vo.setGunId(gun.getId());
+                            vo.setTitle(gun.getTitle());
+                            vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
 
-                        content.add(vo);
+                            GunListImage gunListImage = new GunListImage();
+                            String firstImageUrl = gun.getImages().split("\\$")[0];
+                            gunListImage.setSrc(firstImageUrl);
+                            gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
+                            vo.setImage(gunListImage);
+
+                            content.add(vo);
+                        }
                     }
                 }
-            }
+
             multiLevelCategoriesVo.setGunListVo(content);
 
         }

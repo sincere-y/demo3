@@ -169,12 +169,26 @@ public class GunService {
         if (matcher.find()) {
             int width = Integer.parseInt(matcher.group(1));
             int height = Integer.parseInt(matcher.group(2));
+            if (height == 0) {
+                return -1;
+            }
             return (float) width / height;
         }
-        return 0; // 或者根据你的需求返回其他默认值
+        return -1;
     }
 
-   public Gun getGunByCategoryId(BigInteger categoryId){
-        return mapper.getGunByCategoryId(categoryId);
+   public List<Gun> getGunByCategoryId(List<BigInteger> ids){
+
+       StringBuilder resultIds = new StringBuilder();
+       if (ids != null) {
+           for (int i = 0; i < ids.size(); i++) {
+               if (i > 0) {
+                   resultIds.append(",");
+               }
+               resultIds.append(ids.get(i));
+           }
+       }
+       String categoryIds = resultIds.toString();
+        return mapper.getGunByCategoryId(categoryIds);
    }
 }

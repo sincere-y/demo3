@@ -19,20 +19,15 @@ import java.net.URL;
 public class FileUploadController {
     @Autowired
     private OssUtils ossUtils;
-    @Autowired
-    private GunService gunService;
-//    @Value("${file.upload-dir}")
-//    private String uploadFolder;
+
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file,
-                             @RequestParam("gunId") BigInteger gunId) {
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return "文件为空";
         }
 
         try {
             String url = ossUtils.upload(file);
-            gunService.updateImageUrl(gunId, url);
             return url;
         } catch (ClientException e) {
             throw new RuntimeException(e);

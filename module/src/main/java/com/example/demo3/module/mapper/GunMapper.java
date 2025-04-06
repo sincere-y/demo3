@@ -41,6 +41,6 @@ public interface GunMapper {
 
     int updateImageUrl(@Param("gunId") BigInteger gunId,@Param("url") String url);
 
-    @Select("select * from gun WHERE category_id=#{categoryId} and is_deleted=0")
-    Gun getGunByCategoryId(@Param("categoryId") BigInteger categoryId);
+    @Select("select * from gun WHERE category_id=#{categoryIds} and is_deleted=0")
+    List<Gun> getGunByCategoryId(@Param("categoryIds") String categoryIds);
 }
