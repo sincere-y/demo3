@@ -21,7 +21,6 @@ public class CategoryController {
     @Autowired
     private GunService gunService;
 
-
     @RequestMapping("/category/list")
     public CategoryListVo gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         if (parentId == null) {

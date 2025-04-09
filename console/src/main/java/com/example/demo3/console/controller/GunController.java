@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +30,8 @@ public class GunController {
     private GunService service;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private HttpServletRequest request;
 
     @RequestMapping("/gun/create")
     public String gunCreate(@RequestParam(name = "title")String title,
@@ -72,23 +78,31 @@ public class GunController {
     public GunListVo gunAllList(@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName) {
 
-        Integer pageSize = 4;
-        List<Gun> guns =service.getInfoPage(page,pageSize,gunName);
-        List<GunListCellVo> gunListCellVo = new ArrayList<>();
-        for (Gun gun : guns) {
-            GunListCellVo vo = new GunListCellVo();
-            vo.setGunId(gun.getId());
-            vo.setTitle(gun.getTitle());
-            vo.setCreateTime(service.timeText(gun.getCreateTime()));
-            vo.setImage(gun.getImages().split("\\$")[0]);
-            gunListCellVo.add(vo);
-        }
-        GunListVo gunListVo = new GunListVo();
-        gunListVo.setList(gunListCellVo);
-        gunListVo.setTotal(service.getTotal(gunName));
-        gunListVo.setPageSize(pageSize);
+        Cookie[] cookies=request.getCookies();
+        if(cookies!=null){
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("username")){
+                    Integer pageSize = 4;
+                    List<Gun> guns =service.getInfoPage(page,pageSize,gunName);
+                    List<GunListCellVo> gunListCellVo = new ArrayList<>();
+                    for (Gun gun : guns) {
+                        GunListCellVo vo = new GunListCellVo();
+                        vo.setGunId(gun.getId());
+                        vo.setTitle(gun.getTitle());
+                        vo.setCreateTime(service.timeText(gun.getCreateTime()));
+                        vo.setImage(gun.getImages().split("\\$")[0]);
+                        gunListCellVo.add(vo);
+                    }
+                    GunListVo gunListVo = new GunListVo();
+                    gunListVo.setList(gunListCellVo);
+                    gunListVo.setTotal(service.getTotal(gunName));
+                    gunListVo.setPageSize(pageSize);
 
-        return gunListVo ;
+                    return gunListVo ;
+                }
+            }
+        }
+        return null;
 
     }
 
