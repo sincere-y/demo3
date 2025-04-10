@@ -19,8 +19,8 @@ public class UserService {
     public int update(User user){
         return mapper.update(user);
     }
-    public int delete(BigInteger id){
-        return mapper.delete(id);
+    public int delete(BigInteger id,int timestamp){
+        return mapper.delete(id,timestamp);
     }
     public User getById(BigInteger id){
         return mapper.getById(id);
@@ -34,15 +34,20 @@ public class UserService {
     }
 
     public int insert(String username,String password){
-        int timestamp = (int) (System.currentTimeMillis() / 1000);
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setIsDeleted(0);
-        user.setUpdateTime(timestamp);
-        user.setCreateTime(timestamp);
+        if(username!=null&&password!=null) {
+            int timestamp = (int) (System.currentTimeMillis() / 1000);
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setIsDeleted(0);
+            user.setUpdateTime(timestamp);
+            user.setCreateTime(timestamp);
 
-        return mapper.insert(user);
+            return mapper.insert(user);
+        }
+        else {
+            return 0;
+        }
 
     }
 

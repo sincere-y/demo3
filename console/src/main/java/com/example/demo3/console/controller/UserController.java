@@ -3,7 +3,6 @@ import com.alibaba.fastjson.JSON;
 import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +11,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
-import java.util.Date;
+
 import cn.hutool.crypto.digest.MD5;
 
 @RestController
-public class LoginController {
+public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,6 +36,7 @@ public class LoginController {
                 signJson = Base64.getUrlEncoder().encodeToString(jsonBytes);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                return "登录失败：发生异常";
             }
             Cookie cookie = new Cookie("sign", signJson);
             cookie.setMaxAge(3600 * 24);

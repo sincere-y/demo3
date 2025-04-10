@@ -16,9 +16,9 @@ public interface UserMapper {
     int update(@Param("user") User user);
 
     @Update("update user set is_deleted=1,update_time = #{updateTime} where id=#{id} limit 1")
-    int delete(@Param("id") BigInteger id);
+    int delete(@Param("id") BigInteger id,@Param("updateTime") Integer updateTime);
 
-    @Select("select * from user where username=#{username}")
+    @Select("select * from user where username=#{username} and is_deleted=0")
     User selectByUsername(String username);
 
     @Select("select * from user WHERE id=#{id} and is_deleted=0")
