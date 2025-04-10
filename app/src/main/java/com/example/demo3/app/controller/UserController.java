@@ -2,6 +2,8 @@ package com.example.demo3.app.controller;
 
 import cn.hutool.crypto.digest.MD5;
 
+import com.alibaba.fastjson.JSON;
+import com.example.demo3.app.domain.SignVo;
 import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
@@ -10,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+
 @RestController
 public class UserController {
     @Autowired
     private UserService userService;
     @RequestMapping("/login")
-    public Sign login(@Param("username") String username, @Param("password") String password) {
+    public SignVo login(@Param("username") String username, @Param("password") String password) {
         User user = userService.selectByUsername(username);
         String mPassword = MD5.create().digestHex(password);
         Sign sign = new Sign();
@@ -23,9 +28,20 @@ public class UserController {
 
             sign.setId(user.getId());
             sign.setExpireDate( (int) (System.currentTimeMillis() / 1000) + 3600*24);
-            return sign;
+            String signJson = null;
+            try{
+                String jsonString= JSON.toJSONString(sign);
+                byte[] jsonBytes = jsonString.getBytes("UTF-8");
+                signJson= Base64.getEncoder().encodeToString(jsonBytes);
+            }catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+            }
+
+            SignVo signVo = new SignVo();
+            signVo.setSign(signJson);
+            return signVo;
         }
-        return sign;
+        return null;
 
     }
 
