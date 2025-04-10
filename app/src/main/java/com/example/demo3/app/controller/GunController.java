@@ -2,12 +2,10 @@ package com.example.demo3.app.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo3.app.domain.*;
-//import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
-//import com.example.demo3.module.service.GunDtoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -6,13 +6,33 @@ import com.example.demo3.module.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
     private UserMapper mapper;
+
+    public int update(User user){
+        return mapper.update(user);
+    }
+    public int delete(BigInteger id){
+        return mapper.delete(id);
+    }
+    public User getById(BigInteger id){
+        return mapper.getById(id);
+    }
+
+    public User extractById(BigInteger id){
+        return mapper.extractById(id);
+    }
+    public List<User> getAllInfo(){
+        return mapper.getAllInfo();
+    }
+
     public int insert(String username,String password){
         int timestamp = (int) (System.currentTimeMillis() / 1000);
         User user = new User();

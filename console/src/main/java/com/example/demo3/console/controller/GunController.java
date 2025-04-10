@@ -81,7 +81,7 @@ public class GunController {
         Cookie[] cookies=request.getCookies();
         if(cookies!=null){
             for (Cookie cookie : cookies) {
-                if(cookie.getName().equals("username")){
+                if(cookie.getName().equals("sign")){
                     Integer pageSize = 4;
                     List<Gun> guns =service.getInfoPage(page,pageSize,gunName);
                     List<GunListCellVo> gunListCellVo = new ArrayList<>();

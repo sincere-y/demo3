@@ -20,7 +20,18 @@
         <if test="user.password != null and user.password !=''">#{user.password}</if>
         )
     </insert>
+    <update id="update" parameterType="com.example.demo3.module.entity.User">
+        update user
+        <set> id = #{user.id}
+            <if test="user.createTime != null ">,user.create_time=#{user.createTime},</if>
+            <if test="user.updateTime != null ">,user.update_time=#{user.updateTime},</if>
+            <if test="user.isDeleted != null ">,user.is_deleted=#{user.isDeleted},</if>
+            <if test="user.username != null and user.username !=''">,user.username=#{user.username},</if>
+            <if test="user.password != null and user.password !=''">,user.password#={user.password}</if>
+        </set>
+        where id = #{user.id}
 
+    </update>
 
 
 </mapper>
