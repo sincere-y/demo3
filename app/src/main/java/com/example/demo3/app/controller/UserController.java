@@ -7,6 +7,7 @@ import com.example.demo3.app.domain.SignVo;
 import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
+import com.example.demo3.module.utils.Response;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @RequestMapping("/login")
-    public SignVo login(@Param("username") String username, @Param("password") String password) {
+    public Response login(@Param("username") String username, @Param("password") String password) {
         User user = userService.selectByUsername(username);
         String mPassword = MD5.create().digestHex(password);
         Sign sign = new Sign();
@@ -39,23 +40,23 @@ public class UserController {
 
             SignVo signVo = new SignVo();
             signVo.setSign(signJson);
-            return signVo;
+            return new Response<>(1001,signVo) ;
         }
-        return null;
+        return new Response<>(1010);
 
     }
 
 
     @RequestMapping("/register")
-    public String register(@Param("username") String username, @Param("password") String password) {
+    public Response register(@Param("username") String username, @Param("password") String password) {
 
         if(username!=null&&password!=null&&userService.selectByUsername(username)!=null){
             String mPassword = MD5.create().digestHex(password);
             int result = userService.insert(username, mPassword);
-            return 1 == result ? "成功" : "失败";
+            return new Response<>(1001,1 == result ? "成功" : "失败") ;
         }
         else{
-            return "失败";
+            return new Response<>(1001, "失败") ;
         }
 
     }

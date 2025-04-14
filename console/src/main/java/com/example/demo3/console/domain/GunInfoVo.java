@@ -1,5 +1,6 @@
 package com.example.demo3.console.domain;
 
+import com.example.demo3.app.domain.BaseContentValueVo;
 import lombok.Data;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public class GunInfoVo {
     private String author;
     private String createTime;
     private String updateTime;
-    private String content;
+    private List<BaseContentValueVo> content;
 }

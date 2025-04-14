@@ -1,4 +1,4 @@
-package com.example.demo3.module.util;
+package com.example.demo3.module.utils;
 
 import com.aliyun.oss.ClientBuilderConfiguration;
 import com.aliyun.oss.OSS;

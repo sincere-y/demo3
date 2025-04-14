@@ -5,6 +5,7 @@ import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
 import com.example.demo3.module.service.GunService;
+import com.example.demo3.module.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,9 +23,9 @@ public class CategoryController {
     private GunService gunService;
 
     @RequestMapping("/category/list")
-    public CategoryListVo gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
+    public Response gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         if (parentId == null) {
-            parentId = null;
+            return new Response(4004);
         }
         List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
@@ -49,28 +50,28 @@ public class CategoryController {
         }
         CategoryListVo categoryListVo = new CategoryListVo();
         categoryListVo.setList(categoryListCellVo);
-        return categoryListVo;
+        return new Response(1001,categoryListVo);
 
     }
 
 
     @RequestMapping("/category/multiLevelCategories")
-    public MultiLevelCategoriesVo multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
+    public Response multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
         //顶级类目直接返回
         if (parentId == null) {
-            return null;
+            return new Response(4004);
         }
         Category parentCategory= categoryService.getById(parentId);
         if(parentCategory==null){
-            return null;
+            return new Response(4004);
         }else if (parentCategory.getParentId()==null){
-            return null;
+            return new Response(4004);
         }
        
         //不存在直接返回
         List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         if (categories.isEmpty()) {
-            return null;
+            return new Response(4004);
         }
 
         List<MultiLevelCategoriesCellVo> resultList = new ArrayList<>();
@@ -123,7 +124,7 @@ public class CategoryController {
             multiLevelCategoriesVo.setGunListVo(content);
 
         }
-        return multiLevelCategoriesVo;
+        return new Response(1001, multiLevelCategoriesVo);
     }
 
 

@@ -5,6 +5,7 @@ import com.example.demo3.console.domain.CategoryListCellVo;
 import com.example.demo3.console.domain.CategoryListVo;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.service.CategoryService;
+import com.example.demo3.module.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @RequestMapping("/category/list")
-    public CategoryListVo gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
+    public Response gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         // 获取指定parentId的分类列表（若parentId为null，则获取顶级分类）
         List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryVos = new ArrayList<>();
@@ -31,7 +32,7 @@ public class CategoryController {
 
         CategoryListVo result = new CategoryListVo();
         result.setList(categoryVos);
-        return result;
+        return new Response(1001,result);
     }
 
 

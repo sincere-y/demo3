@@ -1,6 +1,7 @@
 package com.example.demo3.app.controller;
 
 import com.example.demo3.app.domain.CategoryListVo;
+import com.example.demo3.module.utils.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +13,7 @@ public class TestController {
 
 
     @RequestMapping("/concatenateStringBuilder")
-    public int safeLength() {
+    public Response safeLength() {
         List<Integer> list = generateList();
         StringBuilder result = new StringBuilder();
         Thread thread = new Thread(() -> {
@@ -33,11 +34,11 @@ public class TestController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return result.length();
+        return new Response<>(1001,result.length()) ;
     }
 
     @RequestMapping("/concatenateStringBuffer")
-    public int unSafeLength() {
+    public Response unSafeLength() {
         List<Integer> list = generateList();
         StringBuffer result = new StringBuffer();
         Thread thread = new Thread(() -> {
@@ -58,7 +59,7 @@ public class TestController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return result.length();
+        return new Response<>(1001,result.length()) ;
     }
 
 

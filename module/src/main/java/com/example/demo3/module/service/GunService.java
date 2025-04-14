@@ -1,7 +1,8 @@
 package com.example.demo3.module.service;
 
 
-
+import com.alibaba.fastjson.JSON;
+import com.example.demo3.module.dto.ArticleContentDto;
 import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.entity.Category;
@@ -54,6 +55,18 @@ public class GunService {
             Gun gun = new Gun();
             Category category=categoryService.getById(categoryId);
             if(category != null){
+                try {
+                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
+                    for(ArticleContentDto checkContent:checkContents){
+                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
+                            throw new RuntimeException("article content is error");
+                        }
+                    }
+                } catch (Exception cause) {
+                    // ignores
+                    throw new RuntimeException("article content is error");
+                }
+
                 gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             }
             else {

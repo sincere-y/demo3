@@ -6,6 +6,7 @@ import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
+import com.example.demo3.module.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,8 @@ public class GunController {
 
 
     @RequestMapping("/gun/list")
-    public GunListVo gunAllList(@RequestParam(name = "wp",required = false) String wp,
-                                @RequestParam(name = "keyWord",required = false) String keyWord
+    public Response gunAllList(@RequestParam(name = "wp",required = false) String wp,
+                               @RequestParam(name = "keyWord",required = false) String keyWord
                                 /*@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
         WapperVo wapperVo;
@@ -44,7 +45,7 @@ public class GunController {
                 page = wapperVo.getPage();
                 gunName = wapperVo.getGunName();
             } catch (Exception e) {
-                return null;
+                return new Response(4004);
             }
         }
         Integer pageSize=6;
@@ -103,37 +104,42 @@ public class GunController {
         }
         gunListVo.setWp(wpNext);
 
-        return gunListVo ;
+        return new Response(1001,gunListVo);
 
     }
 
     @RequestMapping("/gun/info")
-    public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
+    public Response gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = gunService.getById(gunId);
         if(gun==null) {
-            return gunInfoVo;
+            return new Response(1001,gunInfoVo);
         }
         else {
             Category category = categoryService.getById(gun.getCategoryId());
             if (category == null) {
-                return gunInfoVo;
+                return new Response(1001,gunInfoVo);
             } else {
                 gunInfoVo.setTitle(gun.getTitle());
                 gunInfoVo.setAuthor(gun.getAuthor());
-                gunInfoVo.setContent(gun.getContent());
                 gunInfoVo.setCreateTime(gunService.timeText(gun.getCreateTime()));
                 gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
                 gunInfoVo.setCategoryName(category.getName());
                 gunInfoVo.setCategoryImage(category.getImage());
+                try {
+                    List<BaseContentValueVo> contents = JSON.parseArray(gun.getContent(), BaseContentValueVo.class);
+                    gunInfoVo.setContent(contents);
+                } catch (Exception cause) {
 
-                return gunInfoVo;
+                    return new Response(4004);
+                }
+                return new Response(1001,gunInfoVo);
             }
         }
     }
 //联表查询测试
     @RequestMapping("/gun/list1")
-    public GunListVo gunAllListUseJoin(@RequestParam(name = "wp",required = false) String wp,
+    public Response gunAllListUseJoin(@RequestParam(name = "wp",required = false) String wp,
                                 @RequestParam(name = "keyWord",required = false) String keyWord
                                 /*@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName*/) {
@@ -147,7 +153,7 @@ public class GunController {
                 page = wapperVo.getPage();
                 gunName = wapperVo.getGunName();
             } catch (Exception e) {
-                return null;
+                return new Response(4004);
             }
         }
         Integer pageSize=6;
@@ -190,7 +196,7 @@ public class GunController {
         }
         gunListVo.setWp(wpNext);
 
-        return gunListVo ;
+        return new Response(1001,gunListVo);
 
     }
 

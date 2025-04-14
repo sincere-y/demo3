@@ -1,14 +1,15 @@
 package com.example.demo3.console.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.example.demo3.app.domain.BaseContentValueVo;
 import com.example.demo3.console.domain.GunInfoVo;
 import com.example.demo3.console.domain.GunListCellVo;
 import com.example.demo3.console.domain.GunListVo;
-import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.service.CategoryService;
 import com.example.demo3.module.service.GunService;
+import com.example.demo3.module.utils.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,25 +33,25 @@ public class GunController {
     private HttpServletRequest request;
 
     @RequestMapping("/gun/create")
-    public String gunCreate(@RequestParam(name = "title")String title,
-                            @RequestParam(name = "author")String author,
-                            @RequestParam(name = "images")String images,
-                            @RequestParam(name = "content")String content,
-                            @RequestParam(name = "categoryId")BigInteger categoryId) {
+    public Response gunCreate(@RequestParam(name = "title")String title,
+                              @RequestParam(name = "author")String author,
+                              @RequestParam(name = "images")String images,
+                              @RequestParam(name = "content")String content,
+                              @RequestParam(name = "categoryId")BigInteger categoryId) {
         try {
 
 
             BigInteger id = service.edit(null, title.trim(), author.trim(), images, content,categoryId);
-            return id.toString();
+            return new Response(1001,id.toString());
         }catch (RuntimeException e){
             log.error("编辑枪支信息失败", e);
-            return e.getMessage();
+            return new Response(3051);
 
         }
     }
 
     @RequestMapping("/gun/update")
-    public String gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
+    public Response gunUpdate(@RequestParam(name = "gunId")BigInteger gunId,
                             @RequestParam(name = "title")String title,
                             @RequestParam(name = "author")String author,
                             @RequestParam(name = "images") String images,
@@ -60,22 +59,22 @@ public class GunController {
                             @RequestParam(name = "categoryId")BigInteger categoryId){
         try{
             BigInteger id = service.edit(gunId,title.trim(),author.trim(),images,content,categoryId);
-            return id.toString();
+            return new Response(1001,id.toString());
         }
         catch (RuntimeException e){
             System.out.println(e);
-            return e.getMessage();
+            return new Response(3051);
         }
 
     }
     @RequestMapping("/gun/delete")
-    public String gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
+    public Response gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
         int result = service.deleteGun(gunId);
-        return 1 == result ? "成功":"失败";
+        return new Response(1001,1 == result ? "成功":"失败");
     }
 
     @RequestMapping("/gun/list")
-    public GunListVo gunAllList(@RequestParam(name = "page")Integer page,
+    public Response gunAllList(@RequestParam(name = "page")Integer page,
                                 @RequestParam(name ="gunName",required = false )String gunName) {
 
         Cookie[] cookies=request.getCookies();
@@ -98,27 +97,34 @@ public class GunController {
                     gunListVo.setTotal(service.getTotal(gunName));
                     gunListVo.setPageSize(pageSize);
 
-                    return gunListVo ;
+                    return new Response(1001, gunListVo );
                 }
             }
         }
-        return null;
+        return new Response(1002);
 
     }
 
     @RequestMapping("/gun/info")
-    public GunInfoVo gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
+    public Response gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = service.getById(gunId);
         if(gun!=null) {
             gunInfoVo.setTitle(gun.getTitle());
             gunInfoVo.setAuthor(gun.getAuthor());
-            gunInfoVo.setContent(gun.getContent());
+            try {
+                List<BaseContentValueVo> contents = JSON.parseArray(gun.getContent(), BaseContentValueVo.class);
+                gunInfoVo.setContent(contents);
+            } catch (Exception cause) {
+
+                return new Response(4004);
+            }
             gunInfoVo.setCreateTime(service.timeText(gun.getCreateTime()));
             gunInfoVo.setUpdateTime(service.timeText(gun.getUpdateTime()));
             gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
+
         }
-        return gunInfoVo;
+        return new Response(1001,gunInfoVo);
     }
 
 
