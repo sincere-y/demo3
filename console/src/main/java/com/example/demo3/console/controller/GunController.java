@@ -1,7 +1,7 @@
 package com.example.demo3.console.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo3.app.domain.BaseContentValueVo;
+import com.example.demo3.console.domain.BaseContentValueVo;
 import com.example.demo3.console.domain.GunInfoVo;
 import com.example.demo3.console.domain.GunListCellVo;
 import com.example.demo3.console.domain.GunListVo;

@@ -1,6 +1,6 @@
 package com.example.demo3.console.domain;
 
-import com.example.demo3.app.domain.BaseContentValueVo;
+
 import lombok.Data;
 
 import java.util.List;
