@@ -54,13 +54,13 @@ public class UserController {
             String mPassword = MD5.create().digestHex(password);
             int result = userService.insert(username, mPassword);
             if(result==1){
-                return new Response<>(1001,"成功");
+                return new Response<>(1001);
             }else {
-                return new Response<>(5000, "失败");
+                return new Response<>(5000);
             }
         }
         else{
-            return new Response<>(5000, "失败") ;
+            return new Response<>(5000) ;
         }
 
     }

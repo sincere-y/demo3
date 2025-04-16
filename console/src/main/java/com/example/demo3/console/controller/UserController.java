@@ -42,7 +42,7 @@ public class UserController {
             Cookie cookie = new Cookie("sign", signJson);
             cookie.setMaxAge(3600 * 24);
             response.addCookie(cookie);
-            return new Response(1001,"登录成功");
+            return new Response(1001);
         }
         return new Response(1010);
 

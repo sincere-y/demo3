@@ -71,9 +71,9 @@ public class GunController {
     public Response gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
         int result = service.deleteGun(gunId);
         if(result==1){
-            return new Response<>(1001,"成功");
+            return new Response<>(1001);
         }else {
-            return new Response<>(5000, "失败");
+            return new Response<>(5000);
         }
     }
 
