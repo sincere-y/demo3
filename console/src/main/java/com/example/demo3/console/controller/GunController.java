@@ -128,7 +128,7 @@ public class GunController {
             gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
 
         }else {
-            return new Response(4004);
+            return new Response(4005);
         }
         return new Response(1001,gunInfoVo);
     }

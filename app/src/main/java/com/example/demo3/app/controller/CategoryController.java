@@ -63,7 +63,7 @@ public class CategoryController {
         }
         Category parentCategory= categoryService.getById(parentId);
         if(parentCategory==null){
-            return new Response(4004);
+            return new Response(4005);
         }else if (parentCategory.getParentId()==null){
             return new Response(4004);
         }

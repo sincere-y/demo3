@@ -38,11 +38,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             sendErrorResponse(response, 1002);
             return false;
         }
-        try {
             byte[] decodedBytes = Base64.getUrlDecoder().decode(signJson.getBytes(StandardCharsets.UTF_8));
-
             Sign sign = JSON.parseObject(decodedBytes, Sign.class);
-
             long currentTime = System.currentTimeMillis() / 1000;
             if (currentTime > sign.getExpireDate()) {
                 sendErrorResponse(response, 4004);
@@ -50,13 +47,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
             User user = userService.getById(sign.getId());
             if (user == null) {
-                sendErrorResponse(response, 1004);
+                sendErrorResponse(response, 4005);
                 return false;
             }
           return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
 
     }
