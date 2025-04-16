@@ -19,7 +19,7 @@ public class FileUploadController {
     @PostMapping("/upload")
     public Response uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new Response(4004);
+            return new Response(4006);
         }
 
         try {

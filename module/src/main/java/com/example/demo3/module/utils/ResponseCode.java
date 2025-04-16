@@ -20,6 +20,9 @@ public class ResponseCode {
         statusMap.put(3051, "文章必填信息不能为空");
         statusMap.put(3052, "民宿ID不正确");
 
+        statusMap.put(5000, "操作失败");
+        statusMap.put(4006, "请求参数为空");
+
 
         statusMap.put(4003, "没有权限");
         statusMap.put(4004, "链接超时");

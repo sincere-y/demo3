@@ -53,10 +53,14 @@ public class UserController {
         if(username!=null&&password!=null&&userService.selectByUsername(username)!=null){
             String mPassword = MD5.create().digestHex(password);
             int result = userService.insert(username, mPassword);
-            return new Response<>(1001,1 == result ? "成功" : "失败") ;
+            if(result==1){
+                return new Response<>(1001,"成功");
+            }else {
+                return new Response<>(5000, "失败");
+            }
         }
         else{
-            return new Response<>(1001, "失败") ;
+            return new Response<>(5000, "失败") ;
         }
 
     }

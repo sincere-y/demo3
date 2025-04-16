@@ -25,7 +25,7 @@ public class CategoryController {
     @RequestMapping("/category/list")
     public Response gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         if (parentId == null) {
-            return new Response(4004);
+            return new Response(4006);
         }
         List<Category> categories = categoryService.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
@@ -59,7 +59,7 @@ public class CategoryController {
     public Response multiLevelCategories(@RequestParam(name = "parentId") BigInteger parentId) {
         //顶级类目直接返回
         if (parentId == null) {
-            return new Response(4004);
+            return new Response(4006);
         }
         Category parentCategory= categoryService.getById(parentId);
         if(parentCategory==null){

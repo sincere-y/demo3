@@ -113,7 +113,7 @@ public class GunController {
         GunInfoVo gunInfoVo = new GunInfoVo();
         Gun gun = gunService.getById(gunId);
         if(gun==null) {
-            return new Response(1001,gunInfoVo);
+            return new Response(4004);
         }
         else {
             Category category = categoryService.getById(gun.getCategoryId());
