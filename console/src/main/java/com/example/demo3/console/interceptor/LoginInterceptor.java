@@ -5,6 +5,7 @@ import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
 import com.example.demo3.module.utils.Response;
+import com.example.demo3.module.utils.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -34,7 +35,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         if (signJson == null || signJson.isEmpty()) {
-            System.out.println("signJson为空");
+            sendErrorResponse(response, 1002, "没有登录哦~");
             return false;
         }
         try {
@@ -44,12 +45,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             long currentTime = System.currentTimeMillis() / 1000;
             if (currentTime > sign.getExpireDate()) {
-                System.out.println("过期");
+                sendErrorResponse(response, 4004, "链接超时");
                 return false;
             }
             User user = userService.getById(sign.getId());
             if (user == null) {
-                System.out.println("用户不存在");
+                sendErrorResponse(response, 1004, "用户不存在");
                 return false;
             }
           return true;
@@ -59,4 +60,21 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 
     }
+
+    private void sendErrorResponse(HttpServletResponse response, int code, String msg) throws Exception {
+    // 设置响应的内容类型为JSON，并指定字符编码为UTF-8
+        response.setContentType("application/json;charset=UTF-8");
+    // 创建一个ResponseStatus对象，设置状态码和消息
+        ResponseStatus resp = new Response<>(code).getStatus().setMsg(msg);
+    // 将ResponseStatus对象转换为JSON字符串
+        String json = JSON.toJSONString(resp);
+    // 获取响应的Writer对象，并写入JSON字符串
+        response.getWriter().write(json);
+    // 刷新Writer对象，确保所有数据都被发送到客户端
+        response.getWriter().flush();
+    }
+
+
+
+
 }
