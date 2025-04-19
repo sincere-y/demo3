@@ -27,7 +27,7 @@ public class CodeGenerator {
 
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("gun","category") // 设置需要生成的表名
+                    builder.addInclude("gun_tag_relation","tag") // 设置需要生成的表名
 
                             .entityBuilder()
                             .javaTemplate("templateconfig/entity.java")

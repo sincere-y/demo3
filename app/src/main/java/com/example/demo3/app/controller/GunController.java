@@ -5,7 +5,10 @@ import com.example.demo3.app.domain.*;
 import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.Gun;
+import com.example.demo3.module.entity.GunTagRelation;
 import com.example.demo3.module.service.CategoryService;
+import com.example.demo3.module.service.GunTagRelationService;
+import com.example.demo3.module.service.TagService;
 import com.example.demo3.module.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,10 @@ public class GunController {
     private GunService gunService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private GunTagRelationService gunTagRelationService;
+    @Autowired
+    private TagService tagService;
 
 
     @RequestMapping("/gun/list")
@@ -126,6 +133,11 @@ public class GunController {
                 gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
                 gunInfoVo.setCategoryName(category.getName());
                 gunInfoVo.setCategoryImage(category.getImage());
+                List<GunTagRelation> gunTagRelations=  gunTagRelationService.getByGunId(gunId);
+                for(GunTagRelation gunTagRelation:gunTagRelations){
+                    gunInfoVo.getTag().add(tagService.getById(gunTagRelation.getTagId()));
+                }
+
                 try {
                     List<BaseContentValueVo> contents = JSON.parseArray(gun.getContent(), BaseContentValueVo.class);
                     gunInfoVo.setContent(contents);

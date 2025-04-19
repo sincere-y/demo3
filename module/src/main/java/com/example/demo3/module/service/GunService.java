@@ -8,6 +8,8 @@ import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.mapper.GunMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.net.URLDecoder;
@@ -48,24 +50,24 @@ public class GunService {
         return mapper.getTotal(gunName);
     }
 
-
+    @Transactional(rollbackFor = Exception.class)
     public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
         if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
             Category category=categoryService.getById(categoryId);
             if(category != null){
-                try {
-                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
-                    for(ArticleContentDto checkContent:checkContents){
-                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
-                            throw new RuntimeException("article content is error");
-                        }
-                    }
-                } catch (Exception cause) {
-                    // ignores
-                    throw new RuntimeException("article content is error");
-                }
+//                try {
+//                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
+//                    for(ArticleContentDto checkContent:checkContents){
+//                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
+//                            throw new RuntimeException("article content is error");
+//                        }
+//                    }
+//                } catch (Exception cause) {
+//                    // ignores
+//                    throw new RuntimeException("article content is error");
+//                }
 
                 gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             }

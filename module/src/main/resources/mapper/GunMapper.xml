@@ -29,7 +29,7 @@
             <if test="gun.images != null and gun.images != ''" >,images = #{gun.images}</if>
             <if test="gun.content != null and gun.content != ''">,content = #{gun.content}</if>
             <if test="gun.updateTime != null" >,update_time = #{gun.updateTime}</if>
-            <if test="gun.categoryId != null" >,categoryId = #{gun.categoryId},</if>
+            <if test="gun.categoryId != null" >,category_id = #{gun.categoryId}</if>
         </set>
         where id = #{gun.id}
 
