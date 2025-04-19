@@ -43,7 +43,7 @@ public List<GunTagRelation> getByGunId(BigInteger gunId){
  public int delete(BigInteger id) {
  return mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
  }
- @Transactional(rollbackFor = Exception.class)
+
  public BigInteger edit(BigInteger gunId, BigInteger tagId){
   if(gunId!= null||tagId!=null){
    int timestamp = (int) (System.currentTimeMillis() / 1000);

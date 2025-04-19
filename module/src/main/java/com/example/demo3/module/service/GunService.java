@@ -6,6 +6,8 @@ import com.example.demo3.module.dto.ArticleContentDto;
 import com.example.demo3.module.dto.GunDto;
 import com.example.demo3.module.entity.Gun;
 import com.example.demo3.module.entity.Category;
+import com.example.demo3.module.entity.GunTagRelation;
+import com.example.demo3.module.entity.Tag;
 import com.example.demo3.module.mapper.GunMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,6 +28,11 @@ public class GunService {
     private GunMapper mapper;
     @Resource
     private CategoryService categoryService;
+@Resource
+private TagService tagService;
+@Resource
+private GunTagRelationService gunTagRelationService;
+
 
 
     public Gun getById(BigInteger id){
@@ -51,23 +59,38 @@ public class GunService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId){
+    public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId,String[] tag){
+        List<BigInteger> tagIds=new ArrayList<>();
+        if(tag!=null&&tag.length>0){
+            for (String part : tag) {
+                Tag tagInfo = tagService.getByName(part);
+
+                if (tagInfo != null) {
+                    tagIds.add(tagInfo.getId());
+                } else {
+                    BigInteger tagId = tagService.edit(part);
+                    tagIds.add(tagId);
+                }
+            }
+        }else {
+            throw new RuntimeException("tag为空");
+        }
         if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();
             Category category=categoryService.getById(categoryId);
             if(category != null){
-                try {
-                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
-                    for(ArticleContentDto checkContent:checkContents){
-                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
-                            throw new RuntimeException("article content is error");
-                        }
-                    }
-                } catch (Exception cause) {
-                    // ignores
-                    throw new RuntimeException("article content is error");
-                }
+//                try {
+//                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
+//                    for(ArticleContentDto checkContent:checkContents){
+//                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
+//                            throw new RuntimeException("article content is error");
+//                        }
+//                    }
+//                } catch (Exception cause) {
+//                    // ignores
+//                    throw new RuntimeException("article content is error");
+//                }
 
                 gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             }
@@ -77,12 +100,33 @@ public class GunService {
             if(id==null){
                 gun.setCreateTime(timestamp).setIsDeleted(0);
                 insert(gun);
-                return gun.getId();
+                BigInteger gunId=gun.getId();
+                for (BigInteger tagId : tagIds) {
+                    gunTagRelationService.edit(gunId, tagId);
+                }
+                return gunId;
             }
             else {
                 if(mapper.getById(id)!=null) {
                     gun.setId(id);
                     update(gun);
+                    List<GunTagRelation> gunTagRelations = gunTagRelationService.getByGunId(id);
+                    List<BigInteger> currentTagIds = new ArrayList<>();
+                    for (GunTagRelation currentTag : gunTagRelations) {
+                        currentTagIds.add(currentTag.getTagId());
+                    }
+                    for (BigInteger tagId : tagIds) {
+                        if (!currentTagIds.contains(tagId)) {
+                            gunTagRelationService.edit(id, tagId);
+                        }
+                    }
+                    for (GunTagRelation currentTag : gunTagRelations) {
+                        BigInteger currentTagId = currentTag.getTagId();
+                        if (!tagIds.contains(currentTagId)) {
+                            gunTagRelationService.delete(currentTag.getId());
+                        }
+                    }
+
                     return gun.getId();
                 }
                 else {

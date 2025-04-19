@@ -6,8 +6,6 @@ import com.example.demo3.console.domain.GunInfoVo;
 import com.example.demo3.console.domain.GunListCellVo;
 import com.example.demo3.console.domain.GunListVo;
 import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.GunTagRelation;
-import com.example.demo3.module.entity.Tag;
 import com.example.demo3.module.service.CategoryService;
 import com.example.demo3.module.service.GunService;
 import com.example.demo3.module.service.GunTagRelationService;
@@ -35,14 +33,10 @@ public class GunController {
 
     @Autowired
     private GunService service;
-    @Autowired
-    private CategoryService categoryService;
+
     @Autowired
     private HttpServletRequest request;
-    @Autowired
-    private TagService tagService;
-    @Autowired
-    private GunTagRelationService gunTagRelationService;
+
     @Autowired
     private PlatformTransactionManager transactionManager;
 
@@ -63,29 +57,29 @@ public class GunController {
         if (tags == null) return new Response(4006);
         String[] tag = tags.split(",");
         List<BigInteger> tagIds=new ArrayList<>();
-        return transactionTemplate.execute(status -> {
-            for (String part : tag) {
-                Tag tagInfo = tagService.getByName(part);
-
-                if (tagInfo != null) {
-                    tagIds.add(tagInfo.getId());
-                } else {
-                    BigInteger id = tagService.edit(part);
-                    tagIds.add(id);
-                }
-            }
+//        return transactionTemplate.execute(status -> {
+//            for (String part : tag) {
+//                Tag tagInfo = tagService.getByName(part);
+//
+//                if (tagInfo != null) {
+//                    tagIds.add(tagInfo.getId());
+//                } else {
+//                    BigInteger id = tagService.edit(part);
+//                    tagIds.add(id);
+//                }
+//            }
             try {
-                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId);
-                for (BigInteger tagId : tagIds) {
-                    gunTagRelationService.edit(id, tagId);
-                }
+                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,tag);
+//                for (BigInteger tagId : tagIds) {
+//                    gunTagRelationService.edit(id, tagId);
+//                }
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
                 log.error("编辑枪支信息失败", e);
                 return new Response(3051);
 
             }
-        });
+//        });
 
 
     }
@@ -100,36 +94,36 @@ public class GunController {
                               @RequestParam(name = "tags")String tags) {
         String[] tag = tags.split(",");
         List<BigInteger> tagIds=new ArrayList<>();
-        return transactionTemplate.execute(status -> {
-            for (String part : tag) {
-                Tag tagInfo = tagService.getByName(part);
-
-                if (tagInfo != null) {
-                    tagIds.add(tagInfo.getId());
-                } else {
-                    BigInteger id = tagService.edit(part);
-                    tagIds.add(id);
-                }
-            }
+//        return transactionTemplate.execute(status -> {
+//            for (String part : tag) {
+//                Tag tagInfo = tagService.getByName(part);
+//
+//                if (tagInfo != null) {
+//                    tagIds.add(tagInfo.getId());
+//                } else {
+//                    BigInteger id = tagService.edit(part);
+//                    tagIds.add(id);
+//                }
+//            }
 
             try {
-                BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId);
-                List<GunTagRelation> gunTagRelations = gunTagRelationService.getByGunId(gunId);
-                List<BigInteger> currentTagIds = new ArrayList<>();
-                for (GunTagRelation currentTag : gunTagRelations) {
-                    currentTagIds.add(currentTag.getTagId());
-                }
-                for (BigInteger tagId : tagIds) {
-                    if (!currentTagIds.contains(tagId)) {
-                        gunTagRelationService.edit(gunId, tagId);
-                    }
-                }
-                for (GunTagRelation currentTag : gunTagRelations) {
-                    BigInteger currentTagId = currentTag.getTagId();
-                    if (!tagIds.contains(currentTagId)) {
-                        gunTagRelationService.delete(currentTag.getId());
-                    }
-                }
+                BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId,tag);
+//                List<GunTagRelation> gunTagRelations = gunTagRelationService.getByGunId(gunId);
+//                List<BigInteger> currentTagIds = new ArrayList<>();
+//                for (GunTagRelation currentTag : gunTagRelations) {
+//                    currentTagIds.add(currentTag.getTagId());
+//                }
+//                for (BigInteger tagId : tagIds) {
+//                    if (!currentTagIds.contains(tagId)) {
+//                        gunTagRelationService.edit(gunId, tagId);
+//                    }
+//                }
+//                for (GunTagRelation currentTag : gunTagRelations) {
+//                    BigInteger currentTagId = currentTag.getTagId();
+//                    if (!tagIds.contains(currentTagId)) {
+//                        gunTagRelationService.delete(currentTag.getId());
+//                    }
+//                }
 
 
                 return new Response(1001, id.toString());
@@ -137,7 +131,7 @@ public class GunController {
                 System.out.println(e);
                 return new Response(3051);
             }
-        });
+//        });
 
     }
     @RequestMapping("/gun/delete")

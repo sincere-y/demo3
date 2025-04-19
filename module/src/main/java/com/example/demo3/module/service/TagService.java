@@ -41,7 +41,7 @@ import java.math.BigInteger;
  public int delete(BigInteger id) {
  return mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
  }
- @Transactional(rollbackFor = Exception.class)
+
  public BigInteger edit(String name){
   if(name!= null){
    int timestamp = (int) (System.currentTimeMillis() / 1000);
