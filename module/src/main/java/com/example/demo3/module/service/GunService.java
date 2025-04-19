@@ -57,17 +57,17 @@ public class GunService {
             Gun gun = new Gun();
             Category category=categoryService.getById(categoryId);
             if(category != null){
-//                try {
-//                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
-//                    for(ArticleContentDto checkContent:checkContents){
-//                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
-//                            throw new RuntimeException("article content is error");
-//                        }
-//                    }
-//                } catch (Exception cause) {
-//                    // ignores
-//                    throw new RuntimeException("article content is error");
-//                }
+                try {
+                    List<ArticleContentDto> checkContents = JSON.parseArray(content, ArticleContentDto.class);
+                    for(ArticleContentDto checkContent:checkContents){
+                        if(!ArticleDefine.isArticleContentType(checkContent.getType())){
+                            throw new RuntimeException("article content is error");
+                        }
+                    }
+                } catch (Exception cause) {
+                    // ignores
+                    throw new RuntimeException("article content is error");
+                }
 
                 gun.setTitle(title).setAuthor(author).setImages(images).setContent(content).setUpdateTime(timestamp).setCategoryId(categoryId);
             }
