@@ -53,34 +53,16 @@ public class GunController {
                               @RequestParam(name = "images")String images,
                               @RequestParam(name = "content")String content,
                               @RequestParam(name = "categoryId")BigInteger categoryId,
-                              @RequestParam(name = "tags")String tags) {
-        if (tags == null) return new Response(4006);
-        String[] tag = tags.split(",");
-        List<BigInteger> tagIds=new ArrayList<>();
-//        return transactionTemplate.execute(status -> {
-//            for (String part : tag) {
-//                Tag tagInfo = tagService.getByName(part);
-//
-//                if (tagInfo != null) {
-//                    tagIds.add(tagInfo.getId());
-//                } else {
-//                    BigInteger id = tagService.edit(part);
-//                    tagIds.add(id);
-//                }
-//            }
+                              @RequestParam(name = "tags" ,required = false)String tags) {
+        String[] tagsString = tags.split(",");
             try {
-                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,tag);
-//                for (BigInteger tagId : tagIds) {
-//                    gunTagRelationService.edit(id, tagId);
-//                }
+                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,tagsString);
+
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
                 log.error("编辑枪支信息失败", e);
                 return new Response(3051);
-
             }
-//        });
-
 
     }
 
@@ -93,45 +75,14 @@ public class GunController {
                               @RequestParam(name = "categoryId")BigInteger categoryId,
                               @RequestParam(name = "tags")String tags) {
         String[] tag = tags.split(",");
-        List<BigInteger> tagIds=new ArrayList<>();
-//        return transactionTemplate.execute(status -> {
-//            for (String part : tag) {
-//                Tag tagInfo = tagService.getByName(part);
-//
-//                if (tagInfo != null) {
-//                    tagIds.add(tagInfo.getId());
-//                } else {
-//                    BigInteger id = tagService.edit(part);
-//                    tagIds.add(id);
-//                }
-//            }
-
             try {
                 BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId,tag);
-//                List<GunTagRelation> gunTagRelations = gunTagRelationService.getByGunId(gunId);
-//                List<BigInteger> currentTagIds = new ArrayList<>();
-//                for (GunTagRelation currentTag : gunTagRelations) {
-//                    currentTagIds.add(currentTag.getTagId());
-//                }
-//                for (BigInteger tagId : tagIds) {
-//                    if (!currentTagIds.contains(tagId)) {
-//                        gunTagRelationService.edit(gunId, tagId);
-//                    }
-//                }
-//                for (GunTagRelation currentTag : gunTagRelations) {
-//                    BigInteger currentTagId = currentTag.getTagId();
-//                    if (!tagIds.contains(currentTagId)) {
-//                        gunTagRelationService.delete(currentTag.getId());
-//                    }
-//                }
-
-
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
                 System.out.println(e);
                 return new Response(3051);
             }
-//        });
+
 
     }
     @RequestMapping("/gun/delete")
