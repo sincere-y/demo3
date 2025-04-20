@@ -59,10 +59,9 @@ private GunTagRelationService gunTagRelationService;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId,String[] tagsString){
+    public BigInteger edit(BigInteger id,String title,String author,String images,String content,BigInteger categoryId,String[] arrTags){
         List<BigInteger> tagIds=new ArrayList<>();
-        if(tagsString!=null&&tagsString.length>0){
-            for (String part : tagsString) {
+            for (String part : arrTags) {
                 Tag tagInfo = tagService.getByName(part);
 
                 if (tagInfo != null) {
@@ -72,9 +71,7 @@ private GunTagRelationService gunTagRelationService;
                     tagIds.add(tagId);
                 }
             }
-        }else {
-            throw new RuntimeException("tag为空");
-        }
+
         if(title!=null&&author!=null&&images!=null&&content!=null&&categoryId!=null){
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             Gun gun = new Gun();

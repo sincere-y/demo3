@@ -54,9 +54,9 @@ public class GunController {
                               @RequestParam(name = "content")String content,
                               @RequestParam(name = "categoryId")BigInteger categoryId,
                               @RequestParam(name = "tags" ,required = false)String tags) {
-        String[] tagsString = tags.split(",");
+        String[] arrTags = tags.split(",");
             try {
-                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,tagsString);
+                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,arrTags);
 
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
@@ -74,9 +74,9 @@ public class GunController {
                               @RequestParam(name = "content")String content,
                               @RequestParam(name = "categoryId")BigInteger categoryId,
                               @RequestParam(name = "tags")String tags) {
-        String[] tag = tags.split(",");
+        String[] arrTags = tags.split(",");
             try {
-                BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId,tag);
+                BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId,arrTags);
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
                 System.out.println(e);
