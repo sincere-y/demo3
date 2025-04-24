@@ -47,7 +47,7 @@ public class AliyunSendSmsService {
 
         return new Client(config);
     }
-    public  Boolean sendMessage(String phone, String templateCode, Map<String, Object> codeMap) throws Exception {
+    public void sendMessage(String phone, String templateCode, Map<String, Object> codeMap) throws Exception {
 
 
         // 初始化请求客户端
@@ -59,39 +59,33 @@ public class AliyunSendSmsService {
                 .setTemplateCode(templateCode)
                 .setTemplateParam(JSONObject.toJSONString(codeMap));
 
-        Boolean result = false;
-        String failureReason = null;
-        try{
-            Future<Boolean> future = executorService.submit(() -> {
-                try {
-                    client.sendSms(sendSmsRequest);
-                    return true;
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        executorService.submit(() -> {
+            Boolean result = false;
+            String failureReason = null;
+            String code = (String) codeMap.get("code"); // 提前获取验证码
 
-            });
+            try {
+                client.sendSms(sendSmsRequest);
+                result = true;
+                // 发送成功才写入Redis
+                redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
+            } catch (Exception e) {
+                failureReason = e.getMessage();
+                e.printStackTrace();
+            }
 
-            result = future.get();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            failureReason = e.getMessage();
-        }
-
-        // 记录短信发送情况
-        int timestamp = (int) (System.currentTimeMillis() / 1000);
-        SmsRecord smsRecord = new SmsRecord();
-        smsRecord.setContent(JSONObject.toJSONString(codeMap));
-        smsRecord.setCreateTime(timestamp);
-        smsRecord.setIsDeleted(0);
-        smsRecord.setPhone(phone);
-        smsRecord.setUpdateTime(timestamp);
-        smsRecord.setResult(result);
-        smsRecord.setFailureReason(failureReason); // 设置失败原因
-        smsRecordService.insert(smsRecord);
-
-        return result;
+            // 记录短信发送结果（在异步线程中完成）
+            int timestamp = (int) (System.currentTimeMillis() / 1000);
+            SmsRecord smsRecord = new SmsRecord();
+            smsRecord.setContent(JSONObject.toJSONString(codeMap));
+            smsRecord.setCreateTime(timestamp);
+            smsRecord.setIsDeleted(0);
+            smsRecord.setPhone(phone);
+            smsRecord.setUpdateTime(timestamp);
+            smsRecord.setResult(result);
+            smsRecord.setFailureReason(failureReason);
+            smsRecordService.insert(smsRecord); // 确保线程安全的数据库操作
+        });
 
     }
 
@@ -108,14 +102,8 @@ public class AliyunSendSmsService {
         Map<String, Object> codeMap = new HashMap<>();
         codeMap.put("code", code);
         // 调用aliyunSendSmsService发送短信
-        Boolean bool = sendMessage(phone, templateCode, codeMap);
-        if (bool) {
-            // 如果发送成功，则将生成的4位随机验证码存入redis缓存,5分钟后过期
-            redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
-            return phone + " ： " + code + "发送成功！";
-        } else {
-            return phone + " ： " + code + "发送失败！";
-        }
+        sendMessage(phone, templateCode, codeMap);
+        return phone + " ： 短信已提交发送";
 
     }
 
