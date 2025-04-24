@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.module.mapper.SmsRecordMapper">
+    <insert id="insert" parameterType="com.example.demo3.module.entity.SmsRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into sms_record (
+        <if test="sms_record.phone != null and sms_record.phone != ''" >phone,</if>
+        <if test="sms_record.result != null and sms_record.result != ''" >result,</if>
+        <if test="sms_record.content != null and sms_record.content != ''" >content,</if>
+        <if test="sms_record.createTime != null" >create_time,</if>
+        <if test="sms_record.updateTime != null" >update_time,</if>
+        failure_reason,
+
+        is_deleted)
+        values (
+
+        <if test="sms_record.phone != null and sms_record.phone != ''" >#{sms_record.phone},</if>
+        <if test="sms_record.result != null and sms_record.result !=''" >#{sms_record.result},</if>
+        <if test="sms_record.content != null and sms_record.content != ''" >#{sms_record.content},</if>
+        <if test="sms_record.createTime != null" >#{sms_record.createTime},</if>
+        <if test="sms_record.updateTime != null" >#{sms_record.updateTime},</if>
+        #{sms_record.failureReason},
+        #{sms_record.isDeleted})
+    </insert>
+    <update id="update" parameterType="com.example.demo3.module.entity.SmsRecord">
+        update sms_record
+        <set> id = #{sms_record.id}
+            <if test="sms_record.result != null and sms_record.result !=''">,title = #{sms_record.result}</if>
+            <if test="sms_record.content != null and sms_record.content != ''">,content = #{sms_record.content}</if>
+            <if test="sms_record.updateTime != null" >,update_time = #{sms_record.updateTime}</if>
+            ,update_time = #{sms_record.failureReason}
+        </set>
+        where id = #{sms_record.id}
+
+    </update>
+
+
+
+</mapper>

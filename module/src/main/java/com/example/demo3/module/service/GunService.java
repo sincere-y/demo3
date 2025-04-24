@@ -9,6 +9,8 @@ import com.example.demo3.module.entity.Category;
 import com.example.demo3.module.entity.GunTagRelation;
 import com.example.demo3.module.entity.Tag;
 import com.example.demo3.module.mapper.GunMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,8 @@ public class GunService {
 private TagService tagService;
 @Resource
 private GunTagRelationService gunTagRelationService;
-
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     public Gun getById(BigInteger id){
@@ -148,19 +151,36 @@ private GunTagRelationService gunTagRelationService;
 
     public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
         if(page!=null&&pageSize!=null) {
-            List<Integer> ids=categoryService.getCategoryId(gunName);
-            StringBuilder resultIds = new StringBuilder();
-            if (ids != null) {
-                for (int i = 0; i < ids.size(); i++) {
-                    if (i > 0) {
-                        resultIds.append(",");
-                    }
-                    resultIds.append(ids.get(i));
+
+            List<Gun> gunList = (List<Gun>) redisTemplate.opsForValue().get("gunInfo_" + page + "_" + pageSize + "_" + gunName);
+
+            if (gunList == null) {
+                List<Integer> ids=(List<Integer>) redisTemplate.opsForValue().get("_" + gunName + "_");
+                if (ids == null) {
+                    ids = new ArrayList<>();
                 }
+
+                if (ids.isEmpty()) {
+                    ids = categoryService.getCategoryId(gunName);
+                    redisTemplate.opsForValue().set("_" + gunName + "_", ids);
+                }
+
+                StringBuilder resultIds = new StringBuilder();
+                if (ids != null) {
+                    for (int i = 0; i < ids.size(); i++) {
+                        if (i > 0) {
+                            resultIds.append(",");
+                        }
+                        resultIds.append(ids.get(i));
+                    }
+                }
+                String categoryIds = resultIds.toString();
+                Integer start = (page - 1) * pageSize;
+                gunList= mapper.getInfoPage(start, pageSize, gunName, categoryIds);
+                redisTemplate.opsForValue().set("gunInfo_" + page + "_" + pageSize + "_" + gunName, gunList);
+
             }
-            String categoryIds = resultIds.toString();
-            Integer start = (page - 1) * pageSize;
-            return mapper.getInfoPage(start, pageSize,gunName, categoryIds);
+            return gunList;
         }
         else {
             throw new RuntimeException("参数内容为空");
