@@ -5,6 +5,7 @@ import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.teaopenapi.models.Config;
 import com.example.demo3.module.entity.SmsRecord;
+import com.example.demo3.module.entity.SmsTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,6 +33,8 @@ public class AliyunSendSmsService {
 
 
     private ExecutorService executorService = Executors.newFixedThreadPool(10); // 创建一个固定大小的线程池
+    @Autowired
+    private SmsTaskService smsTaskService;
 
 
     public static Client createClient() throws Exception {
@@ -106,6 +109,33 @@ public class AliyunSendSmsService {
         return phone + " ： 短信已提交发送";
 
     }
+
+    public String recordSmsTask(String phone){
+
+        String code = redisTemplate.opsForValue().get(phone);
+        if (!StringUtils.isEmpty(code)) {
+            return phone + " : " + code + "已经存在，还没有过期！";
+        }
+        // 如果redis 中根据手机号拿不到验证码，则生成4位随机验证码
+        code = UUID.randomUUID().toString().substring(0, 4);
+        // 验证码存入codeMap
+        Map<String, Object> codeMap = new HashMap<>();
+        codeMap.put("code", code);
+
+
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
+        SmsTask smsTask = new SmsTask();
+        smsTask.setPhone(phone);
+        smsTask.setContent(JSONObject.toJSONString(codeMap));
+        smsTask.setStatus(0); // 未发送
+        smsTask.setCreateTime(timestamp);
+        smsTask.setUpdateTime(timestamp);
+        smsTask.setIsDeleted(0);
+        smsTaskService.insert(smsTask);
+        return phone + " ： 短信已提交发送";
+
+    }
+
 
 
 }

@@ -24,10 +24,11 @@
     <update id="update" parameterType="com.example.demo3.module.entity.SmsRecord">
         update sms_record
         <set> id = #{sms_record.id}
+            <if test="sms_record.phone != null and sms_record.phone !=''">,title = #{sms_record.phone}</if>
             <if test="sms_record.result != null and sms_record.result !=''">,title = #{sms_record.result}</if>
             <if test="sms_record.content != null and sms_record.content != ''">,content = #{sms_record.content}</if>
             <if test="sms_record.updateTime != null" >,update_time = #{sms_record.updateTime}</if>
-            ,update_time = #{sms_record.failureReason}
+            ,failure_reason = #{sms_record.failureReason}
         </set>
         where id = #{sms_record.id}
 
