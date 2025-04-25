@@ -3,6 +3,7 @@ package com.example.demo3.module.service;
 import com.alibaba.fastjson2.JSONObject;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.example.demo3.module.entity.SmsRecord;
 import com.example.demo3.module.entity.SmsTask;
@@ -35,7 +36,7 @@ public class AliyunSendSmsService {
     private ExecutorService executorService = Executors.newFixedThreadPool(10); // 创建一个固定大小的线程池
     @Autowired
     private SmsTaskService smsTaskService;
-
+    String codeKey ="code";
 
     public static Client createClient() throws Exception {
         Config config = new Config()
@@ -65,13 +66,16 @@ public class AliyunSendSmsService {
         executorService.submit(() -> {
             Boolean result = false;
             String failureReason = null;
-            String code = (String) codeMap.get("code"); // 提前获取验证码
-
+            SendSmsResponse response = null;
             try {
-                client.sendSms(sendSmsRequest);
-                result = true;
-                // 发送成功才写入Redis
-                redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
+                response = client.sendSms(sendSmsRequest);
+                // 检查业务状态码
+                if ("OK".equalsIgnoreCase(response.getBody().getCode())) {
+                    result = true;
+                } else {
+                    failureReason = "阿里云返回错误: " + response.getBody().getCode() + " - " + response.getBody().getMessage();
+                }
+
             } catch (Exception e) {
                 failureReason = e.getMessage();
                 e.printStackTrace();
@@ -93,34 +97,7 @@ public class AliyunSendSmsService {
     }
 
 
-    public String sendSingleCode(String phone) throws Exception {
-        // 根据手机号从redis中拿验证码
-        String code = redisTemplate.opsForValue().get(phone);
-        if (!StringUtils.isEmpty(code)) {
-            return phone + " : " + code + "已经存在，还没有过期！";
-        }
-        // 如果redis 中根据手机号拿不到验证码，则生成4位随机验证码
-        code = UUID.randomUUID().toString().substring(0, 4);
-        // 验证码存入codeMap
-        Map<String, Object> codeMap = new HashMap<>();
-        codeMap.put("code", code);
-        // 调用aliyunSendSmsService发送短信
-        sendMessage(phone, templateCode, codeMap);
-        return phone + " ： 短信已提交发送";
-
-    }
-
-    public String recordSmsTask(String phone){
-
-        String code = redisTemplate.opsForValue().get(phone);
-        if (!StringUtils.isEmpty(code)) {
-            return phone + " : " + code + "已经存在，还没有过期！";
-        }
-        // 如果redis 中根据手机号拿不到验证码，则生成4位随机验证码
-        code = UUID.randomUUID().toString().substring(0, 4);
-        // 验证码存入codeMap
-        Map<String, Object> codeMap = new HashMap<>();
-        codeMap.put("code", code);
+    public String recordSmsTask(String phone,Map<String, Object> codeMap){
 
 
         int timestamp = (int) (System.currentTimeMillis() / 1000);

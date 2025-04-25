@@ -34,8 +34,7 @@ public class GunService {
 private TagService tagService;
 @Resource
 private GunTagRelationService gunTagRelationService;
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+
 
 
     public Gun getById(BigInteger id){
@@ -151,20 +150,7 @@ private GunTagRelationService gunTagRelationService;
 
     public List<Gun> getInfoPage(Integer page,Integer pageSize,String gunName){
         if(page!=null&&pageSize!=null) {
-
-            List<Gun> gunList = (List<Gun>) redisTemplate.opsForValue().get("gunInfo_" + page + "_" + pageSize + "_" + gunName);
-
-            if (gunList == null) {
-                List<Integer> ids=(List<Integer>) redisTemplate.opsForValue().get("_" + gunName + "_");
-                if (ids == null) {
-                    ids = new ArrayList<>();
-                }
-
-                if (ids.isEmpty()) {
-                    ids = categoryService.getCategoryId(gunName);
-                    redisTemplate.opsForValue().set("_" + gunName + "_", ids);
-                }
-
+                List<Integer> ids = categoryService.getCategoryId(gunName);
                 StringBuilder resultIds = new StringBuilder();
                 if (ids != null) {
                     for (int i = 0; i < ids.size(); i++) {
@@ -176,11 +162,7 @@ private GunTagRelationService gunTagRelationService;
                 }
                 String categoryIds = resultIds.toString();
                 Integer start = (page - 1) * pageSize;
-                gunList= mapper.getInfoPage(start, pageSize, gunName, categoryIds);
-                redisTemplate.opsForValue().set("gunInfo_" + page + "_" + pageSize + "_" + gunName, gunList);
-
-            }
-            return gunList;
+                return mapper.getInfoPage(start, pageSize, gunName, categoryIds);
         }
         else {
             throw new RuntimeException("参数内容为空");

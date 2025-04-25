@@ -14,7 +14,8 @@ public class ResponseCode {
         //create user and forget password
         statusMap.put(2014, "账号尚未注册");
 
-
+        statusMap.put(409,"已经存在，还没有过期");
+        statusMap.put(200,"短信已发送");
         //console error
         //article error
         statusMap.put(3051, "文章必填信息不能为空");

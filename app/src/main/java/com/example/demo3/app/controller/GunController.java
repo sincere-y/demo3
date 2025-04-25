@@ -12,11 +12,13 @@ import com.example.demo3.module.service.TagService;
 import com.example.demo3.module.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo3.module.service.GunService;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
@@ -35,6 +37,8 @@ public class GunController {
     private GunTagRelationService gunTagRelationService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     @RequestMapping("/gun/list")
@@ -56,14 +60,23 @@ public class GunController {
             }
         }
         Integer pageSize=6;
-        List<Gun> guns = gunService.getInfoPage(page,pageSize,gunName);
+
+        List<Gun> guns = (List<Gun>) redisTemplate.opsForValue().get("gunInfo_" + page + "_" + pageSize + "_" + gunName);
+        if (guns == null|| guns.isEmpty()) {
+            guns = gunService.getInfoPage(page,pageSize,gunName);
+            redisTemplate.opsForValue().set("gunInfo_" + page + "_" + pageSize + "_" + gunName, guns);
+        }
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
         List<BigInteger> categoryIds= new ArrayList<>();
         HashMap<BigInteger, String> map = new HashMap<>();
         for (Gun gun : guns) {
             categoryIds.add(gun.getCategoryId());
         }
-        List<Category> categories = categoryService.getInfoByIds(categoryIds);
+        List<Category> categories = (List<Category>) redisTemplate.opsForValue().get("InfoByIds_" +categoryIds);
+        if(categories==null||categories.isEmpty()){
+        categories = categoryService.getInfoByIds(categoryIds);
+            redisTemplate.opsForValue().set("InfoByIds_" +categoryIds,categories);
+        }
         for(Category category:categories){
             map.put(category.getId(),category.getName());
         }
