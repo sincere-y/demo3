@@ -1,6 +1,7 @@
 package com.example.demo3.module.crond;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.example.demo3.module.entity.SmsTask;
 import com.example.demo3.module.mapper.SmsTaskMapper;
 import com.example.demo3.module.service.AliyunSendSmsService;
@@ -34,8 +35,16 @@ public class SmsCrond {
             try {
                 Map<String, Object> codeMap = JSONObject.parseObject(task.getContent(), Map.class);
                 aliyunSendSmsService.sendMessage(task.getPhone(), templateCode, codeMap);
-
-                smsTaskService.update(task.getId(),timestamp,1,null,null); // 发送成功
+                Integer status=0;
+                String failureReason = null;
+                SendSmsResponse response = null;
+                if ("OK".equalsIgnoreCase(response.getBody().getCode())) {
+                    status=1;
+                } else {
+                    status=2;
+                    failureReason = "阿里云返回错误: " + response.getBody().getCode() + " - " + response.getBody().getMessage();
+                }
+                smsTaskService.update(task.getId(),timestamp,status,failureReason,null); // 发送成功
             } catch (Exception e) {
 
                 smsTaskService.update(task.getId(),timestamp, 2, e.getMessage(),null); // 发送失败

@@ -26,11 +26,6 @@ public class AliyunSendSmsService {
 
     @Resource
     private SmsRecordService smsRecordService;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-    @Value("${aliyun.sms.templateCode}")
-    private String templateCode;
 
 
     private ExecutorService executorService = Executors.newFixedThreadPool(10); // 创建一个固定大小的线程池

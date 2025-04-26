@@ -41,6 +41,7 @@ public class GunController {
     private RedisTemplate<String, Object> redisTemplate;
 
 
+
     @RequestMapping("/gun/list")
     public Response gunAllList(@RequestParam(name = "wp",required = false) String wp,
                                @RequestParam(name = "keyWord",required = false) String keyWord
@@ -60,11 +61,11 @@ public class GunController {
             }
         }
         Integer pageSize=6;
-
-        List<Gun> guns = (List<Gun>) redisTemplate.opsForValue().get("gunInfo_" + page + "_" + pageSize + "_" + gunName);
+        String gunInfoByPagePageSizeGunNameKey = "gunInfo_" + page + "_" + pageSize + "_" + gunName;
+        List<Gun> guns = (List<Gun>) redisTemplate.opsForValue().get(gunInfoByPagePageSizeGunNameKey);
         if (guns == null|| guns.isEmpty()) {
             guns = gunService.getInfoPage(page,pageSize,gunName);
-            redisTemplate.opsForValue().set("gunInfo_" + page + "_" + pageSize + "_" + gunName, guns);
+            redisTemplate.opsForValue().set(gunInfoByPagePageSizeGunNameKey, guns);
         }
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
         List<BigInteger> categoryIds= new ArrayList<>();
@@ -72,10 +73,11 @@ public class GunController {
         for (Gun gun : guns) {
             categoryIds.add(gun.getCategoryId());
         }
-        List<Category> categories = (List<Category>) redisTemplate.opsForValue().get("InfoByIds_" +categoryIds);
+        String categoryInfoByIdsKey="InfoByIds_" +categoryIds;
+        List<Category> categories = (List<Category>) redisTemplate.opsForValue().get(categoryInfoByIdsKey);
         if(categories==null||categories.isEmpty()){
         categories = categoryService.getInfoByIds(categoryIds);
-            redisTemplate.opsForValue().set("InfoByIds_" +categoryIds,categories);
+            redisTemplate.opsForValue().set(categoryInfoByIdsKey,categories);
         }
         for(Category category:categories){
             map.put(category.getId(),category.getName());
