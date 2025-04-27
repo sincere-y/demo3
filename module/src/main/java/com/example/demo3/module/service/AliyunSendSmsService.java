@@ -46,7 +46,7 @@ public class AliyunSendSmsService {
 
         return new Client(config);
     }
-    public void sendMessage(String phone, String templateCode, Map<String, Object> codeMap) throws Exception {
+    public SendSmsResponse sendMessage(String phone, String templateCode, Map<String, Object> codeMap) throws Exception {
 
 
         // 初始化请求客户端
@@ -88,7 +88,7 @@ public class AliyunSendSmsService {
             smsRecord.setFailureReason(failureReason);
             smsRecordService.insert(smsRecord); // 确保线程安全的数据库操作
         });
-
+        return client.sendSms(sendSmsRequest);
     }
 
 

@@ -34,10 +34,10 @@ public class SmsCrond {
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             try {
                 Map<String, Object> codeMap = JSONObject.parseObject(task.getContent(), Map.class);
-                aliyunSendSmsService.sendMessage(task.getPhone(), templateCode, codeMap);
+                SendSmsResponse response = aliyunSendSmsService.sendMessage(task.getPhone(), templateCode, codeMap);
                 Integer status=0;
                 String failureReason = null;
-                SendSmsResponse response = null;
+
                 if ("OK".equalsIgnoreCase(response.getBody().getCode())) {
                     status=1;
                 } else {
