@@ -38,31 +38,32 @@ public class ExcelController {
     private GunService gunService;
 
     @RequestMapping("/excel/upload")
-    public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
+    public Response uploadExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("请上传文件");
+            return new Response(4006);
         }
 
         handleFile(file);
 
-        return ResponseEntity.ok("文件正在处理中，请稍后查看结果");
+        return  new Response(1001);
     }
 
     @Async
-    public ResponseEntity<?> handleFile(MultipartFile file) {
+    public Response handleFile(MultipartFile file) {
+
+        List<UserData> dataList = null;
         try {
-            List<UserData> dataList = EasyExcel.read(file.getInputStream())
+            dataList = EasyExcel.read(file.getInputStream())
                     .head(UserData.class)
                     .sheet()
                     .doReadSync();
-
-            return ResponseEntity.ok(dataList);
-
         } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("文件读取失败");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("文件解析错误: " + e.getMessage());
+            return  new Response(4004);
         }
+
+        return  new Response(1001,dataList);
+
+
 
     }
 
