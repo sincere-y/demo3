@@ -1,16 +1,15 @@
 package com.example.demo3.app.controller;
 
-import com.example.demo3.module.service.AliyunSendSmsService;
-import com.example.demo3.module.utils.Response;
+import com.example.demo3.app.feign.AliyunSendSmsFeign;
+
+import com.example.demo3.common.utils.Response;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class AliyunSmsApiController {
     @Autowired
-    private AliyunSendSmsService aliyunSendSmsService;
+    private AliyunSendSmsFeign aliyunSendSmsFeign;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -52,7 +51,7 @@ public class AliyunSmsApiController {
             codeMap.put(codeKey, code);
             // 调用aliyunSendSmsService发送短信
             try {
-                aliyunSendSmsService.sendMessage(phone, templateCode, codeMap);
+                aliyunSendSmsFeign.sendMessage(phone, templateCode, codeMap);
             } catch (Exception e) {
                 return new Response(4004);
             }
@@ -74,7 +73,7 @@ public class AliyunSmsApiController {
         // 验证码存入codeMap
         Map<String, Object> codeMap = new HashMap<>();
         codeMap.put(codeKey, code);
-        aliyunSendSmsService.recordSmsTask(phone,codeMap);
+        aliyunSendSmsFeign.recordSmsTask(phone,codeMap);
 
         redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
 

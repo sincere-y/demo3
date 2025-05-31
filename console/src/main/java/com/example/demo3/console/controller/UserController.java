@@ -3,7 +3,6 @@ import com.alibaba.fastjson.JSON;
 import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
-import com.example.demo3.module.utils.Response;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

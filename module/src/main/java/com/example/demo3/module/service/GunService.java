@@ -2,15 +2,14 @@ package com.example.demo3.module.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo3.module.dto.ArticleContentDto;
-import com.example.demo3.module.dto.GunDto;
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.GunTagRelation;
-import com.example.demo3.module.entity.Tag;
+import com.example.demo3.common.dto.ArticleContentDto;
+import com.example.demo3.common.dto.GunDto;
+import com.example.demo3.common.entity.Category;
+import com.example.demo3.common.entity.Gun;
+
+import com.example.demo3.common.entity.GunTagRelation;
+import com.example.demo3.common.entity.Tag;
 import com.example.demo3.module.mapper.GunMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

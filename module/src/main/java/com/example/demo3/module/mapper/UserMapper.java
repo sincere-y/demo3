@@ -1,6 +1,7 @@
 package com.example.demo3.module.mapper;
 
-import com.example.demo3.module.entity.User;
+
+import com.example.demo3.common.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

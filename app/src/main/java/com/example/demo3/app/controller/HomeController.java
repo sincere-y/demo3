@@ -1,10 +1,10 @@
 package com.example.demo3.app.controller;
 
 import com.example.demo3.app.domain.HomeVo;
-import com.example.demo3.module.service.BannerService;
-import com.example.demo3.module.service.ChannelService;
-import com.example.demo3.module.service.EventService;
-import com.example.demo3.module.service.RecommendService;
+import com.example.demo3.app.feign.BannerFeign;
+import com.example.demo3.app.feign.ChannelFeign;
+import com.example.demo3.app.feign.EventFeign;
+import com.example.demo3.app.feign.RecommendFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,21 +16,21 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class HomeController {
     @Autowired
-    private BannerService bannerService;
+    private BannerFeign bannerFeign;
     @Autowired
-    private ChannelService channelService;
+    private ChannelFeign channelFeign;
     @Autowired
-    private EventService eventService;
+    private EventFeign eventFeign;
     @Autowired
-    private RecommendService recommendService;
+    private RecommendFeign recommendFeign;
 
     @GetMapping("/home")
     public HomeVo getHome() throws ExecutionException, InterruptedException {
         // 异步获取各模块数据
-        CompletableFuture<List<String>> bannersFuture = CompletableFuture.supplyAsync(bannerService::getBanners);
-        CompletableFuture<List<String>> channelsFuture = CompletableFuture.supplyAsync(channelService::getChannels);
-        CompletableFuture<List<String>> eventsFuture = CompletableFuture.supplyAsync(eventService::getEvents);
-        CompletableFuture<List<String>> recommendsFuture = CompletableFuture.supplyAsync(recommendService::getRecommends);
+        CompletableFuture<List<String>> bannersFuture = CompletableFuture.supplyAsync(bannerFeign::getBanners);
+        CompletableFuture<List<String>> channelsFuture = CompletableFuture.supplyAsync(channelFeign::getChannels);
+        CompletableFuture<List<String>> eventsFuture = CompletableFuture.supplyAsync(eventFeign::getEvents);
+        CompletableFuture<List<String>> recommendsFuture = CompletableFuture.supplyAsync(recommendFeign::getRecommends);
 
         // 等待所有任务完成
         CompletableFuture.allOf(bannersFuture, channelsFuture, eventsFuture, recommendsFuture).join();

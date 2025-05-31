@@ -1,11 +1,11 @@
 package com.example.demo3.module.service;
 
-import com.example.demo3.module.entity.GunTagRelation;
+import com.example.demo3.common.entity.GunTagRelation;
+
 
 import com.example.demo3.module.mapper.GunTagRelationMapper;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;

@@ -1,7 +1,7 @@
 package com.example.demo3.module.mapper;
 
-import com.example.demo3.module.entity.SmsRecord;
-import com.example.demo3.module.entity.SmsTask;
+
+import com.example.demo3.common.entity.SmsTask;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

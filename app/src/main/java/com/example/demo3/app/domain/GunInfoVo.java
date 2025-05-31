@@ -1,12 +1,7 @@
 package com.example.demo3.app.domain;
 
 
-
-
-
-
-import com.example.demo3.module.entity.GunTagRelation;
-import com.example.demo3.module.entity.Tag;
+import com.example.demo3.common.entity.Tag;
 import lombok.Data;
 
 import java.util.List;

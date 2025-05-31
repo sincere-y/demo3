@@ -1,7 +1,8 @@
 package com.example.demo3.module.service;
 
 
-import com.example.demo3.module.entity.Category;
+import com.example.demo3.common.entity.Category;
+
 import com.example.demo3.module.mapper.CategoryMapper;
 
 import org.springframework.stereotype.Service;

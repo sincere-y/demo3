@@ -1,7 +1,7 @@
 package com.example.demo3.module.mapper;
 
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.SmsRecord;
+
+import com.example.demo3.common.entity.SmsRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

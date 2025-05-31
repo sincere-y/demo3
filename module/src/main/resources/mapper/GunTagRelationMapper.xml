@@ -4,7 +4,7 @@
 <mapper namespace="com.example.demo3.module.mapper.GunTagRelationMapper">
 
 
-    <insert id="insert" parameterType="com.example.demo3.module.entity.GunTagRelation" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.example.demo3.common.entity.GunTagRelation" useGeneratedKeys="true" keyProperty="id">
         insert into gun_tag_relation (
 
 
@@ -35,7 +35,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.example.demo3.module.entity.GunTagRelation">
+    <update id="update" parameterType="com.example.demo3.common.entity.GunTagRelation">
         update gun_tag_relation
         <set>
 

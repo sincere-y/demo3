@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.example.demo3.module.auth.Sign;
 import com.example.demo3.module.entity.User;
 import com.example.demo3.module.service.UserService;
-import com.example.demo3.module.utils.Response;
-import com.example.demo3.module.utils.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

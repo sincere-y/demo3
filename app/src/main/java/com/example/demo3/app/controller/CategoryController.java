@@ -1,11 +1,12 @@
 package com.example.demo3.app.controller;
 
 import com.example.demo3.app.domain.*;
-import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.service.CategoryService;
-import com.example.demo3.module.service.GunService;
-import com.example.demo3.module.utils.Response;
+import com.example.demo3.app.feign.CategoryFeign;
+import com.example.demo3.app.feign.GunFeign;
+
+import com.example.demo3.common.entity.Category;
+import com.example.demo3.common.entity.Gun;
+import com.example.demo3.common.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,16 +19,16 @@ import java.util.List;
 @RestController
 public class CategoryController {
     @Autowired
-    private CategoryService categoryService;
+    private CategoryFeign categoryFeign;
     @Autowired
-    private GunService gunService;
+    private GunFeign gunFeign;
 
     @RequestMapping("/category/list")
     public Response gunAllList(@RequestParam(name = "parentId", required = false) BigInteger parentId) {
         if (parentId == null) {
             return new Response(4006);
         }
-        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
+        List<Category> categories = categoryFeign.getCategoriesByParentId(parentId);
         List<CategoryListCellVo> categoryListCellVo = new ArrayList<>();
 
         for (Category category : categories) {
@@ -36,7 +37,7 @@ public class CategoryController {
             vo.setCategoryImage(category.getImage());
             vo.setCategoryName(category.getName());
 
-            List<Category> childrens = categoryService.getCategoriesByParentId(category.getId());
+            List<Category> childrens = categoryFeign.getCategoriesByParentId(category.getId());
             List<CategoryListCellVo> categoryChildrenListCellVo = new ArrayList<>();
             for (Category children : childrens) {
                 CategoryListCellVo childrenVo = new CategoryListCellVo();
@@ -61,7 +62,7 @@ public class CategoryController {
         if (parentId == null) {
             return new Response(4006);
         }
-        Category parentCategory= categoryService.getById(parentId);
+        Category parentCategory= categoryFeign.getById(parentId);
         if(parentCategory==null){
             return new Response(4005);
         }else if (parentCategory.getParentId()==null){
@@ -69,7 +70,7 @@ public class CategoryController {
         }
        
         //不存在直接返回
-        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
+        List<Category> categories = categoryFeign.getCategoriesByParentId(parentId);
         if (categories.isEmpty()) {
             return new Response(4004);
         }
@@ -88,7 +89,7 @@ public class CategoryController {
         multiLevelCategoriesVo.setCategoriesListVo(resultList);
 
         // 叶子节点查询方法
-        List<Category> leafCategories = categoryService.getLeafCategories(parentId);
+        List<Category> leafCategories = categoryFeign.getLeafCategories(parentId);
 
         List<GunListCellVo> content = new ArrayList<>();
         List<BigInteger> categoryIds = new ArrayList<>();
@@ -98,7 +99,7 @@ public class CategoryController {
             map.put(category.getId(), category.getName());
         }
         if (categoryIds.size() > 0) {
-                List<Gun> guns = gunService.getGunsByCategoryIds(categoryIds);
+                List<Gun> guns = gunFeign.getGunsByCategoryIds(categoryIds);
                 if(guns.isEmpty()){
                     for (Gun gun : guns) {
                         String categoryName = map.get(gun.getCategoryId());
@@ -108,12 +109,12 @@ public class CategoryController {
                             vo.setCategoryName(categoryName);
                             vo.setGunId(gun.getId());
                             vo.setTitle(gun.getTitle());
-                            vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                            vo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
 
                             GunListImage gunListImage = new GunListImage();
                             String firstImageUrl = gun.getImages().split("\\$")[0];
                             gunListImage.setSrc(firstImageUrl);
-                            gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
+                            gunListImage.setAr(gunFeign.calculateAspectRatio(firstImageUrl));
                             vo.setImage(gunListImage);
                             content.add(vo);
 

@@ -1,9 +1,8 @@
 package com.example.demo3.module.service;
 
-import com.example.demo3.module.entity.SmsRecord;
-import com.example.demo3.module.entity.SmsTask;
+import com.example.demo3.common.entity.SmsTask;
+
 import com.example.demo3.module.mapper.SmsTaskMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

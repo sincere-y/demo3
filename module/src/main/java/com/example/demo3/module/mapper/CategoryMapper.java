@@ -1,7 +1,7 @@
 
 package com.example.demo3.module.mapper;
 
-import com.example.demo3.module.entity.Category;
+import com.example.demo3.common.entity.Category;
 import org.apache.ibatis.annotations.*;
 import java.math.BigInteger;
 import java.util.List;

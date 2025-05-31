@@ -1,8 +1,9 @@
 package com.example.demo3.module.mapper;
 
 
-import com.example.demo3.module.dto.GunDto;
-import com.example.demo3.module.entity.Gun;
+
+import com.example.demo3.common.dto.GunDto;
+import com.example.demo3.common.entity.Gun;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

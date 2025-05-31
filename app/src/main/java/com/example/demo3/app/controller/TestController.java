@@ -1,7 +1,8 @@
 package com.example.demo3.app.controller;
 
 import com.example.demo3.app.domain.CategoryListVo;
-import com.example.demo3.module.utils.Response;
+
+import com.example.demo3.common.utils.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,7 +1,8 @@
 
 package com.example.demo3.module.mapper;
 
-import com.example.demo3.module.entity.GunTagRelation;
+
+import com.example.demo3.common.entity.GunTagRelation;
 import org.apache.ibatis.annotations.*;
 import java.math.BigInteger;
 import java.util.List;

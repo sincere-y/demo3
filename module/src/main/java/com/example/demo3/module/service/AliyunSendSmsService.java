@@ -5,21 +5,17 @@ import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
-import com.example.demo3.module.entity.SmsRecord;
-import com.example.demo3.module.entity.SmsTask;
+
+import com.example.demo3.common.entity.SmsRecord;
+import com.example.demo3.common.entity.SmsTask;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
-import java.util.HashMap;
+
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+
 
 @Service
 public class AliyunSendSmsService {

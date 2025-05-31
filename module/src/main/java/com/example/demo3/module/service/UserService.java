@@ -1,14 +1,12 @@
 package com.example.demo3.module.service;
 
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.User;
+import com.example.demo3.common.entity.User;
+
 import com.example.demo3.module.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service

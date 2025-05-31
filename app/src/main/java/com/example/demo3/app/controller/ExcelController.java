@@ -1,13 +1,14 @@
 package com.example.demo3.app.controller;
 
+import com.example.demo3.app.feign.CategoryFeign;
+import com.example.demo3.app.feign.GunFeign;
+import com.example.demo3.common.entity.Category;
+import com.example.demo3.common.entity.Gun;
+import com.example.demo3.common.entity.UserData;
+import com.example.demo3.common.utils.Response;
 import org.springframework.core.io.InputStreamResource;
 import com.alibaba.excel.EasyExcel;
-import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.UserData;
-import com.example.demo3.module.service.CategoryService;
-import com.example.demo3.module.service.GunService;
-import com.example.demo3.module.utils.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,9 +34,9 @@ import java.util.zip.ZipOutputStream;
 public class ExcelController {
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryFeign categoryFeign;
     @Autowired
-    private GunService gunService;
+    private GunFeign gunFeign;
 
     @RequestMapping("/excel/upload")
     public Response uploadExcel(@RequestParam("file") MultipartFile file) {
@@ -79,7 +80,7 @@ public class ExcelController {
     @Async
     public void   exportCategoryFile() {
 
-        List<Category> categories = categoryService.getAllInfo();
+        List<Category> categories = categoryFeign.getAllInfo();
         String fileName = "D:\\Program Files (x86)\\test\\01.xlsx";
         try {
             EasyExcel.write(fileName, Category.class).sheet("分类信息")
@@ -99,10 +100,10 @@ public class ExcelController {
 
             // 提交异步任务生成 Excel 数据
             CompletableFuture<byte[]> categoryFuture = generateExcelAsync(
-                    categoryService.getAllInfo(), Category.class, "Category.xlsx"
+                    categoryFeign.getAllInfo(), Category.class, "Category.xlsx"
             );
             CompletableFuture<byte[]> gunFuture = generateExcelAsync(
-                    gunService.getAllInfo(), Gun.class, "Gun.xlsx"
+                    gunFeign.getAllInfo(), Gun.class, "Gun.xlsx"
             );
         byte[] categoryBytes = null;
         try {

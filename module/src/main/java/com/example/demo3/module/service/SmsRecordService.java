@@ -1,7 +1,7 @@
 package com.example.demo3.module.service;
 
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.SmsRecord;
+
+import com.example.demo3.common.entity.SmsRecord;
 import com.example.demo3.module.mapper.SmsRecordMapper;
 import org.springframework.stereotype.Service;
 

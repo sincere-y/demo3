@@ -4,10 +4,11 @@ import cn.hutool.crypto.digest.MD5;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo3.app.domain.SignVo;
-import com.example.demo3.module.auth.Sign;
-import com.example.demo3.module.entity.User;
-import com.example.demo3.module.service.UserService;
-import com.example.demo3.module.utils.Response;
+import com.example.demo3.app.feign.UserFeign;
+
+import com.example.demo3.common.auth.Sign;
+import com.example.demo3.common.entity.User;
+import com.example.demo3.common.utils.Response;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,10 @@ import java.util.Base64;
 @RestController
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserFeign userFeign;
     @RequestMapping("/login")
     public Response login(@Param("username") String username, @Param("password") String password) {
-        User user = userService.selectByUsername(username);
+        User user = userFeign.selectByUsername(username);
         String mPassword = MD5.create().digestHex(password);
         Sign sign = new Sign();
         if (user != null && user.getPassword().equals(mPassword)) {
@@ -50,9 +51,9 @@ public class UserController {
     @RequestMapping("/register")
     public Response register(@Param("username") String username, @Param("password") String password) {
 
-        if(username!=null&&password!=null&&userService.selectByUsername(username)!=null){
+        if(username!=null&&password!=null&& userFeign.selectByUsername(username)!=null){
             String mPassword = MD5.create().digestHex(password);
-            int result = userService.insert(username, mPassword);
+            int result = userFeign.insert(username, mPassword);
             if(result==1){
                 return new Response<>(1001);
             }else {

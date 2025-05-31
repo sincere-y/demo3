@@ -4,7 +4,7 @@
 <mapper namespace="com.example.demo3.module.mapper.TagMapper">
 
 
-        <insert id="insert" parameterType="com.example.demo3.module.entity.Tag" useGeneratedKeys="true" keyProperty="id">
+        <insert id="insert" parameterType="com.example.demo3.common.entity.Tag" useGeneratedKeys="true" keyProperty="id">
             insert into tag (
 
                     <if test="tag.createTime != null ">create_time,</if>
@@ -26,7 +26,7 @@
         </insert>
 
 
-    <update id="update" parameterType="com.example.demo3.module.entity.Tag">
+    <update id="update" parameterType="com.example.demo3.common.entity.Tag">
         update tag
         <set>
                 id=#{tag.id}

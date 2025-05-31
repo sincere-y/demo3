@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo3.module.mapper.GunMapper">
-    <insert id="insert" parameterType="com.example.demo3.module.entity.Gun" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.example.demo3.common.entity.Gun" useGeneratedKeys="true" keyProperty="id">
         insert into gun (
         <if test="gun.title != null and gun.title != ''" >title,</if>
         <if test="gun.author != null and gun.author != ''" >author,</if>
@@ -21,7 +21,7 @@
         <if test="gun.categoryId != null" >#{gun.categoryId},</if>
         #{gun.isDeleted})
     </insert>
-    <update id="update" parameterType="com.example.demo3.module.entity.Gun">
+    <update id="update" parameterType="com.example.demo3.common.entity.Gun">
         update gun
         <set> id = #{gun.id}
             <if test="gun.title != null and gun.title !=''">,title = #{gun.title}</if>
@@ -35,7 +35,7 @@
 
     </update>
 
-    <select id="getTotal" parameterType="com.example.demo3.module.entity.Gun" resultType="int">
+    <select id="getTotal" parameterType="com.example.demo3.common.entity.Gun" resultType="int">
         select count(*) FROM gun
         <where>
             is_deleted=0
@@ -45,7 +45,7 @@
         </where>
     </select>
 
-    <select id="getInfoPage" parameterType="com.example.demo3.module.entity.Gun" resultType="com.example.demo3.module.entity.Gun">
+    <select id="getInfoPage" parameterType="com.example.demo3.common.entity.Gun" resultType="com.example.demo3.common.entity.Gun">
         select * FROM gun
         <where>
             is_deleted=0
@@ -62,11 +62,11 @@
 
 
 
-    <select id="countById" parameterType="com.example.demo3.module.entity.Gun" resultType="int">
+    <select id="countById" parameterType="com.example.demo3.common.entity.Gun" resultType="int">
         SELECT COUNT(*) FROM gun WHERE id = #{id}
     </select>
 
-    <resultMap id="gunDtoResultMap" type="com.example.demo3.module.dto.GunDto">
+    <resultMap id="gunDtoResultMap" type="com.example.demo3.common.dto.GunDto">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="images" column="images"/>
@@ -98,7 +98,7 @@
         LIMIT #{start}, #{pageSize}
     </select>
 
-    <update id="updateImageUrl" parameterType="com.example.demo3.module.entity.Gun">
+    <update id="updateImageUrl" parameterType="com.example.demo3.common.entity.Gun">
         update gun
         <set>
             <if test="url!= null and url != ''" >,images = #{url}</if>
@@ -106,7 +106,7 @@
         where id = #{gunId} and is_deleted=0
 
     </update>
-    <select id="getGunsByCategoryIds" parameterType="com.example.demo3.module.entity.Gun" resultType="com.example.demo3.module.entity.Gun">
+    <select id="getGunsByCategoryIds" parameterType="com.example.demo3.common.entity.Gun" resultType="com.example.demo3.common.entity.Gun">
         select * FROM gun
         <where>
             is_deleted=0

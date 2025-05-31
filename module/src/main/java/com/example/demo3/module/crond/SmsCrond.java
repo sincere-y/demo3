@@ -2,7 +2,8 @@ package com.example.demo3.module.crond;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
-import com.example.demo3.module.entity.SmsTask;
+
+import com.example.demo3.common.entity.SmsTask;
 import com.example.demo3.module.mapper.SmsTaskMapper;
 import com.example.demo3.module.service.AliyunSendSmsService;
 import com.example.demo3.module.service.SmsTaskService;

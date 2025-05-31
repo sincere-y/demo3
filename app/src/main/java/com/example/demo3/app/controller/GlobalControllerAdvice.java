@@ -1,6 +1,7 @@
 package com.example.demo3.app.controller;
 
-import com.example.demo3.module.utils.Response;
+
+import com.example.demo3.common.utils.Response;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

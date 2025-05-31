@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo3.module.mapper.CategoryMapper">
-    <insert id="insert" parameterType="com.example.demo3.module.entity.Category" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.example.demo3.common.entity.Category" useGeneratedKeys="true" keyProperty="id">
         insert into category (
 
             <if test="category.createTime != null ">create_time,</if>
@@ -22,7 +22,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.example.demo3.module.entity.Category">
+    <update id="update" parameterType="com.example.demo3.common.entity.Category">
         update category
         <set>
         id = #{category.id},
@@ -34,7 +34,7 @@
         </set>
         where id = #{category.id}
     </update>
-    <select id="getCategoryId" parameterType="com.example.demo3.module.entity.Category" resultType="java.lang.Integer">
+    <select id="getCategoryId" parameterType="com.example.demo3.common.entity.Category" resultType="java.lang.Integer">
         select id from category
         where is_deleted = 0
         <if test="gunName != null and gunName != ''">
@@ -43,7 +43,7 @@
 
     </select>
 
-    <select id="getCategoriesByParentId" resultType="com.example.demo3.module.entity.Category">
+    <select id="getCategoriesByParentId" resultType="com.example.demo3.common.entity.Category">
         SELECT * FROM category WHERE is_deleted = 0
         <if test="parentId != null">
             AND parent_id = #{parentId}
@@ -54,7 +54,7 @@
     </select>
 
 
-    <select id="getInfoByIds" parameterType="com.example.demo3.module.entity.Category" resultType="com.example.demo3.module.entity.Category">
+    <select id="getInfoByIds" parameterType="com.example.demo3.common.entity.Category" resultType="com.example.demo3.common.entity.Category">
         select * FROM category
         <where>
             is_deleted=0

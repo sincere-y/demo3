@@ -2,23 +2,22 @@ package com.example.demo3.app.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo3.app.domain.*;
-import com.example.demo3.module.dto.GunDto;
-import com.example.demo3.module.entity.Category;
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.entity.GunTagRelation;
-import com.example.demo3.module.service.CategoryService;
-import com.example.demo3.module.service.GunTagRelationService;
-import com.example.demo3.module.service.TagService;
-import com.example.demo3.module.utils.Response;
+import com.example.demo3.app.feign.CategoryFeign;
+import com.example.demo3.app.feign.GunFeign;
+import com.example.demo3.app.feign.GunTagRelationFeign;
+import com.example.demo3.app.feign.TagFeign;
+import com.example.demo3.common.dto.GunDto;
+import com.example.demo3.common.entity.Category;
+import com.example.demo3.common.entity.Gun;
+import com.example.demo3.common.entity.GunTagRelation;
+import com.example.demo3.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo3.module.service.GunService;
 
-import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
@@ -30,13 +29,13 @@ import java.util.*;
 @RestController
 public class GunController {
     @Autowired
-    private GunService gunService;
+    private GunFeign gunFeign;
     @Autowired
-    private CategoryService categoryService;
+    private CategoryFeign categoryFeign;
     @Autowired
-    private GunTagRelationService gunTagRelationService;
+    private GunTagRelationFeign gunTagRelationFeign;
     @Autowired
-    private TagService tagService;
+    private TagFeign tagFeign;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -64,7 +63,7 @@ public class GunController {
         String gunInfoByPagePageSizeGunNameKey = "gunInfo_" + page + "_" + pageSize + "_" + gunName;
         List<Gun> guns = (List<Gun>) redisTemplate.opsForValue().get(gunInfoByPagePageSizeGunNameKey);
         if (guns == null|| guns.isEmpty()) {
-            guns = gunService.getInfoPage(page,pageSize,gunName);
+            guns = gunFeign.getInfoPage(page,pageSize,gunName);
             redisTemplate.opsForValue().set(gunInfoByPagePageSizeGunNameKey, guns);
         }
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
@@ -76,7 +75,7 @@ public class GunController {
         String categoryInfoByIdsKey="InfoByIds_" +categoryIds;
         List<Category> categories = (List<Category>) redisTemplate.opsForValue().get(categoryInfoByIdsKey);
         if(categories==null||categories.isEmpty()){
-        categories = categoryService.getInfoByIds(categoryIds);
+        categories = categoryFeign.getInfoByIds(categoryIds);
             redisTemplate.opsForValue().set(categoryInfoByIdsKey,categories);
         }
         for(Category category:categories){
@@ -89,12 +88,12 @@ public class GunController {
                 vo.setCategoryName(categoryName);
                 vo.setGunId(gun.getId());
                 vo.setTitle(gun.getTitle());
-                vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                vo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
 
                 GunListImage gunListImage = new GunListImage();
                 String firstImageUrl = gun.getImages().split("\\$")[0];
                 gunListImage.setSrc(firstImageUrl);
-                gunListImage.setAr(gunService.calculateAspectRatio(firstImageUrl));
+                gunListImage.setAr(gunFeign.calculateAspectRatio(firstImageUrl));
                vo.setImage(gunListImage);
 
                 gunListCellVo.add(vo);
@@ -133,24 +132,24 @@ public class GunController {
     @RequestMapping("/gun/info")
     public Response gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
-        Gun gun = gunService.getById(gunId);
+        Gun gun = gunFeign.getById(gunId);
         if(gun==null) {
             return new Response(4004);
         }
         else {
-            Category category = categoryService.getById(gun.getCategoryId());
+            Category category = categoryFeign.getById(gun.getCategoryId());
             if (category == null) {
                 return new Response(1001,gunInfoVo);
             } else {
                 gunInfoVo.setTitle(gun.getTitle());
                 gunInfoVo.setAuthor(gun.getAuthor());
-                gunInfoVo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                gunInfoVo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
                 gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
                 gunInfoVo.setCategoryName(category.getName());
                 gunInfoVo.setCategoryImage(category.getImage());
-                List<GunTagRelation> gunTagRelations=  gunTagRelationService.getByGunId(gunId);
+                List<GunTagRelation> gunTagRelations=  gunTagRelationFeign.getByGunId(gunId);
                 for(GunTagRelation gunTagRelation:gunTagRelations){
-                    gunInfoVo.getTag().add(tagService.getById(gunTagRelation.getTagId()));
+                    gunInfoVo.getTag().add(tagFeign.getById(gunTagRelation.getTagId()));
                 }
 
                 try {
@@ -184,7 +183,7 @@ public class GunController {
             }
         }
         Integer pageSize=6;
-        List<GunDto> guns = gunService.getGunDtoList(page,pageSize,gunName);
+        List<GunDto> guns = gunFeign.getGunDtoList(page,pageSize,gunName);
         List<GunListCellVo> gunListCellVo = new ArrayList<>();
 
         for (GunDto gun : guns) {
@@ -193,7 +192,7 @@ public class GunController {
                     vo.setCategoryName(gun.getCategoryName());
                     vo.setGunId(gun.getId());
                     vo.setTitle(gun.getTitle());
-                    vo.setCreateTime(gunService.timeText(gun.getCreateTime()));
+                    vo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
 //                    vo.setImage(gun.getImages().split("\\$")[0]);
                     gunListCellVo.add(vo);
                 }

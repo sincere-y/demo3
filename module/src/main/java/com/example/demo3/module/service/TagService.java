@@ -1,10 +1,8 @@
 package com.example.demo3.module.service;
-import com.example.demo3.module.entity.Tag;
+import com.example.demo3.common.entity.Tag;
+
 import com.example.demo3.module.mapper.TagMapper;
-import com.example.demo3.module.service.TagService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
