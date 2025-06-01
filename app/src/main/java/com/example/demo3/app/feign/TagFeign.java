@@ -10,8 +10,8 @@ import java.math.BigInteger;
 @FeignClient(name = "module",contextId = "TagFeign")
 public interface TagFeign {
     @RequestMapping("/tag/edit")
-    public BigInteger edit(@RequestParam(name ="name")String name);
+     BigInteger edit(@RequestParam(name ="name")String name);
 
     @RequestMapping("/tag/byId")
-    public Tag getById(@RequestParam(name ="id")BigInteger id) ;
+     Tag getById(@RequestParam(name ="id")BigInteger id) ;
 }

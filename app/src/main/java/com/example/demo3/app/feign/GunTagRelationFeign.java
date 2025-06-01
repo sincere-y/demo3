@@ -17,5 +17,5 @@ public interface GunTagRelationFeign {
 
 
     @RequestMapping("/gunTagRelation/ByGunId")
-    public List<GunTagRelation> getByGunId(@RequestParam(name ="gunId")BigInteger gunId);
+     List<GunTagRelation> getByGunId(@RequestParam(name ="gunId")BigInteger gunId);
 }

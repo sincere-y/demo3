@@ -12,7 +12,7 @@ public interface OssUtilsFeign {
 
 
     @RequestMapping("/upload")
-    public String upload(@RequestParam(name = "file") MultipartFile file) throws com.aliyuncs.exceptions.ClientException, IOException ;
+     String upload(@RequestParam(name = "file") MultipartFile file) throws com.aliyuncs.exceptions.ClientException, IOException ;
 
 
 
