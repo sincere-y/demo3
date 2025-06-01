@@ -51,7 +51,7 @@ public class UserController {
     @RequestMapping("/register")
     public Response register(@Param("username") String username, @Param("password") String password) {
 
-        if(username!=null&&password!=null&& userFeign.selectByUsername(username)!=null){
+        if(username!=null&&password!=null&& userFeign.selectByUsername(username)==null){
             String mPassword = MD5.create().digestHex(password);
             int result = userFeign.insert(username, mPassword);
             if(result==1){

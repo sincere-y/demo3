@@ -43,8 +43,6 @@ public class AliyunSendSmsService {
         return new Client(config);
     }
     public SendSmsResponse sendMessage(String phone, String templateCode, Map<String, Object> codeMap) throws Exception {
-
-
         // 初始化请求客户端
         Client client = AliyunSendSmsService.createClient();
         // 构建请求：
@@ -90,7 +88,6 @@ public class AliyunSendSmsService {
 
     public String recordSmsTask(String phone,Map<String, Object> codeMap){
 
-
         int timestamp = (int) (System.currentTimeMillis() / 1000);
         SmsTask smsTask = new SmsTask();
         smsTask.setPhone(phone);
@@ -103,6 +100,8 @@ public class AliyunSendSmsService {
         return phone + " ： 短信已提交发送";
 
     }
+
+
 
 
 

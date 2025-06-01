@@ -15,7 +15,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @RequestMapping("/user/byId")
-    public User getById(BigInteger id){
+    public User getById(@RequestParam(name ="id")BigInteger id){
         return userService.getById(id);
     }
     @RequestMapping("/user/insert")

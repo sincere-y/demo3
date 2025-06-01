@@ -52,6 +52,9 @@ public class SmsTaskService {
     }
 
 
-
+    public boolean tryLockTask(BigInteger id) {
+        int res = mapper.lockTask(id);
+        return res == 1;
+    }
 
 }

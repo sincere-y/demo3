@@ -31,7 +31,8 @@ public interface SmsTaskMapper {
     @Select("select * from sms_task where is_deleted=0 and status=0")
     List<SmsTask> getUnsentTasks();
 
-
+    @Update("update sms_task set status=100 where id=#{id} and status=0")
+    int lockTask(BigInteger id);
 
 
 

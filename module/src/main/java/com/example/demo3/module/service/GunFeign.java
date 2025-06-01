@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class GunService {
+public class GunFeign {
     @Resource
     private GunMapper mapper;
     @Resource

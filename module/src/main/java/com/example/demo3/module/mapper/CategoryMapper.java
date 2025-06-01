@@ -19,7 +19,7 @@ int insert(@Param("category") Category category);
 
 int update(@Param("category") Category category);
 
-@Update("UPDATE category SET updated_time = #{time} , is_deleted = 1 WHERE id = #{id}")
+@Update("UPDATE category SET update_time = #{time} , is_deleted = 1 WHERE id = #{id}")
 int delete(@Param("id")BigInteger id,@Param("time") Integer time );
 
 @Select("select * FROM category where is_deleted=0 order by id asc limit #{start},#{pageSize}")

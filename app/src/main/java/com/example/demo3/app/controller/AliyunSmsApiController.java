@@ -23,14 +23,10 @@ import java.util.concurrent.TimeUnit;
 public class AliyunSmsApiController {
     @Autowired
     private AliyunSendSmsFeign aliyunSendSmsFeign;
-
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
     @Value("${aliyun.sms.templateCode}")
     private String templateCode;
-
-
     String codeKey ="code";
 
 

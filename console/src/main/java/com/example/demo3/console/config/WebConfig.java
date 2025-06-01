@@ -3,6 +3,7 @@ package com.example.demo3.console.config;
 import com.example.demo3.console.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
@@ -10,7 +11,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     // 注入自定义的拦截器对象
     @Autowired
+    @Lazy
     private LoginInterceptor loginInterceptor;
+
+//    private final LoginInterceptor loginInterceptor;
+
+//    public WebConfig(@Lazy LoginInterceptor loginInterceptor) {
+//        this.loginInterceptor = loginInterceptor;
+//    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

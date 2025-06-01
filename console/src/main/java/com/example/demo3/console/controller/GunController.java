@@ -1,17 +1,18 @@
 package com.example.demo3.console.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo3.common.entity.Gun;
+import com.example.demo3.common.utils.Response;
 import com.example.demo3.console.domain.BaseContentValueVo;
 import com.example.demo3.console.domain.GunInfoVo;
 import com.example.demo3.console.domain.GunListCellVo;
 import com.example.demo3.console.domain.GunListVo;
-import com.example.demo3.module.entity.Gun;
-import com.example.demo3.module.service.GunService;
+
+
+import com.example.demo3.console.feign.GunFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.TransactionTemplate;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,20 +29,20 @@ import java.util.List;
 public class GunController {
 
     @Autowired
-    private GunService service;
+    private GunFeign gunFeign;
 
     @Autowired
     private HttpServletRequest request;
 
-    @Autowired
-    private PlatformTransactionManager transactionManager;
-
-    private TransactionTemplate transactionTemplate;
-    @PostConstruct
-    public void init() {
-        transactionTemplate = new TransactionTemplate(transactionManager);
-        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED); // 设置传播行为
-    }
+//    @Autowired
+//    private PlatformTransactionManager transactionManager;
+//
+//    private TransactionTemplate transactionTemplate;
+//    @PostConstruct
+//    public void init() {
+//        transactionTemplate = new TransactionTemplate(transactionManager);
+//        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED); // 设置传播行为
+//    }
 
     @RequestMapping("/gun/create")
     public Response gunCreate(@RequestParam(name = "title")String title,
@@ -52,7 +53,7 @@ public class GunController {
                               @RequestParam(name = "tags" ,required = false)String tags) {
         String[] arrTags = tags.split(",");
             try {
-                BigInteger id = service.edit(null, title.trim(), author.trim(), images, content, categoryId,arrTags);
+                BigInteger id = gunFeign.edit(null, title.trim(), author.trim(), images, content, categoryId,arrTags);
 
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
@@ -72,7 +73,7 @@ public class GunController {
                               @RequestParam(name = "tags")String tags) {
         String[] arrTags = tags.split(",");
             try {
-                BigInteger id = service.edit(gunId, title.trim(), author.trim(), images, content, categoryId,arrTags);
+                BigInteger id = gunFeign.edit(gunId, title.trim(), author.trim(), images, content, categoryId,arrTags);
                 return new Response(1001, id.toString());
             } catch (RuntimeException e) {
                 System.out.println(e);
@@ -83,7 +84,7 @@ public class GunController {
     }
     @RequestMapping("/gun/delete")
     public Response gunDelete(@RequestParam(name = "gunId")BigInteger gunId) {
-        int result = service.deleteGun(gunId);
+        int result = gunFeign.deleteGun(gunId);
         if(result==1){
             return new Response<>(1001);
         }else {
@@ -93,26 +94,26 @@ public class GunController {
 
     @RequestMapping("/gun/list")
     public Response gunAllList(@RequestParam(name = "page")Integer page,
-                                @RequestParam(name ="gunName",required = false )String gunName) {
+                               @RequestParam(name ="gunName",required = false )String gunName) {
 
         Cookie[] cookies=request.getCookies();
         if(cookies!=null){
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals("sign")){
                     Integer pageSize = 4;
-                    List<Gun> guns =service.getInfoPage(page,pageSize,gunName);
+                    List<Gun> guns = gunFeign.getInfoPage(page,pageSize,gunName);
                     List<GunListCellVo> gunListCellVo = new ArrayList<>();
                     for (Gun gun : guns) {
                         GunListCellVo vo = new GunListCellVo();
                         vo.setGunId(gun.getId());
                         vo.setTitle(gun.getTitle());
-                        vo.setCreateTime(service.timeText(gun.getCreateTime()));
+                        vo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
                         vo.setImage(gun.getImages().split("\\$")[0]);
                         gunListCellVo.add(vo);
                     }
                     GunListVo gunListVo = new GunListVo();
                     gunListVo.setList(gunListCellVo);
-                    gunListVo.setTotal(service.getTotal(gunName));
+                    gunListVo.setTotal(gunFeign.getTotal(gunName));
                     gunListVo.setPageSize(pageSize);
 
                     return new Response(1001, gunListVo );
@@ -126,7 +127,7 @@ public class GunController {
     @RequestMapping("/gun/info")
     public Response gunInfo(@RequestParam(name = "gunId") BigInteger gunId) {
         GunInfoVo gunInfoVo = new GunInfoVo();
-        Gun gun = service.getById(gunId);
+        Gun gun = gunFeign.getById(gunId);
         if(gun!=null) {
             gunInfoVo.setTitle(gun.getTitle());
             gunInfoVo.setAuthor(gun.getAuthor());
@@ -137,8 +138,8 @@ public class GunController {
 
                 return new Response(4004);
             }
-            gunInfoVo.setCreateTime(service.timeText(gun.getCreateTime()));
-            gunInfoVo.setUpdateTime(service.timeText(gun.getUpdateTime()));
+            gunInfoVo.setCreateTime(gunFeign.timeText(gun.getCreateTime()));
+            gunInfoVo.setUpdateTime(gunFeign.timeText(gun.getUpdateTime()));
             gunInfoVo.setImages(Arrays.asList(gun.getImages().split("\\$")));
 
         }else {

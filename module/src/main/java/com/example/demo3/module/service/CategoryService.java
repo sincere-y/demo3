@@ -5,6 +5,7 @@ import com.example.demo3.common.entity.Category;
 
 import com.example.demo3.module.mapper.CategoryMapper;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigInteger;
@@ -15,7 +16,8 @@ import java.util.List;
  public class CategoryService {
  @Resource
  private CategoryMapper mapper;
-
+ @Resource
+ private RabbitTemplate rabbitTemplate;
  public List<Integer> getCategoryId(String gunName){return mapper.getCategoryId(gunName);}
  public Category getById(BigInteger id) {
  return mapper.getById(id);
@@ -42,7 +44,15 @@ import java.util.List;
  }
 
  public int delete(BigInteger id) {
- return mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
+  int result =mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
+
+  if (result > 0) {
+   // 删除成功后发送消息到 RabbitMQ
+   rabbitTemplate.convertAndSend("category.delete.queue", id.toString());
+  }
+
+  return result;
+
  }
 
  public List<Category> getInfoPage(Integer page, Integer pageSize){

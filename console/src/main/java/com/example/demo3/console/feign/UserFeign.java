@@ -1,4 +1,4 @@
-package com.example.demo3.app.feign;
+package com.example.demo3.console.feign;
 
 import com.example.demo3.common.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,11 +10,11 @@ import java.math.BigInteger;
 @FeignClient(name = "module",contextId = "UserFeign")
 public interface UserFeign {
     @RequestMapping("/user/byId")
-    public User getById(@RequestParam(name ="id")BigInteger id);
+     User getById(@RequestParam(name ="id")BigInteger id);
     @RequestMapping("/user/insert")
-    public int insert(@RequestParam(name ="username")String username,
+     int insert(@RequestParam(name ="username")String username,
                       @RequestParam(name ="password")String password);
     @RequestMapping("/user/selectByUsername")
-    public User selectByUsername(@RequestParam(name ="username")String username);
+     User selectByUsername(@RequestParam(name ="username")String username);
 
 }

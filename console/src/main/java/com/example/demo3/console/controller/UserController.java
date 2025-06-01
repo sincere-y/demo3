@@ -1,9 +1,12 @@
 package com.example.demo3.console.controller;
 import com.alibaba.fastjson.JSON;
-import com.example.demo3.module.auth.Sign;
-import com.example.demo3.module.entity.User;
-import com.example.demo3.module.service.UserService;
-import org.apache.ibatis.annotations.Param;
+
+import com.example.demo3.common.auth.Sign;
+import com.example.demo3.common.entity.User;
+import com.example.demo3.common.utils.Response;
+import com.example.demo3.console.feign.UserFeign;
+
+import feign.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +20,13 @@ import cn.hutool.crypto.digest.MD5;
 @RestController
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserFeign userFeign;
     @Autowired
     private HttpServletResponse response;
 
     @RequestMapping("/login")
     public Response login(@Param("username") String username, @Param("password") String password) {
-        User user = userService.selectByUsername(username);
+        User user = userFeign.selectByUsername(username);
         String mPassword = MD5.create().digestHex(password);
         if (user != null && user.getPassword().equals(mPassword)) {
             Sign sign = new Sign();

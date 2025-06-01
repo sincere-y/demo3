@@ -32,6 +32,10 @@ public class SmsCrond {
     public void processSmsTasks() {
         List<SmsTask> tasks = smsTaskService.getUnsentTasks();
         for (SmsTask task : tasks) {
+            if (!smsTaskService.tryLockTask(task.getId())) {
+                // 锁定失败，可能被其他线程处理了，跳过
+                continue;
+            }
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             try {
                 Map<String, Object> codeMap = JSONObject.parseObject(task.getContent(), Map.class);

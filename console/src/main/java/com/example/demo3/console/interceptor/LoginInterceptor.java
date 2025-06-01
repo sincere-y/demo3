@@ -1,9 +1,11 @@
 package com.example.demo3.console.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo3.module.auth.Sign;
-import com.example.demo3.module.entity.User;
-import com.example.demo3.module.service.UserService;
+
+import com.example.demo3.common.auth.Sign;
+import com.example.demo3.common.entity.User;
+import com.example.demo3.common.utils.Response;
+import com.example.demo3.console.feign.UserFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,7 +19,7 @@ import java.util.Base64;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
-    private UserService userService;
+    private UserFeign userFeign;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -43,7 +45,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 sendErrorResponse(response, 4004);
                 return false;
             }
-            User user = userService.getById(sign.getId());
+            User user = userFeign.getById(sign.getId());
             if (user == null) {
                 sendErrorResponse(response, 4005);
                 return false;

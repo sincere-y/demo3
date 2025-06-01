@@ -1,11 +1,9 @@
 package com.example.demo3.module.controller;
 
-import com.alibaba.fastjson.JSON;
-
 import com.example.demo3.common.dto.GunDto;
 import com.example.demo3.common.entity.Gun;
 
-import com.example.demo3.module.service.GunService;
+import com.example.demo3.module.service.GunFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,18 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
-import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
 public class GunController {
     @Autowired
-    private GunService gunService;
+    private GunFeign gunService;
     @RequestMapping("/gun/getGunById")
     public Gun getById(@RequestParam(name ="id")BigInteger id){
         return gunService.getById(id);
