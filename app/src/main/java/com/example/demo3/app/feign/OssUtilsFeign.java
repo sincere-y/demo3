@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@FeignClient(name = "module",contextId = "OssUtilsFeign")
+@FeignClient(name = "ossutils",contextId = "OssUtilsFeign")
 public interface OssUtilsFeign {
 
 

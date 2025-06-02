@@ -1,13 +1,6 @@
 package com.example.demo3.module.controller;
 
-import com.aliyun.oss.ClientBuilderConfiguration;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.common.auth.CredentialsProviderFactory;
-import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
-import com.aliyun.oss.common.comm.SignVersion;
-import com.aliyun.oss.model.PutObjectRequest;
-import com.aliyun.oss.model.PutObjectResult;
+
 import com.example.demo3.module.utils.OssUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

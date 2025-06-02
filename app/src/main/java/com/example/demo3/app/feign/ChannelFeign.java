@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@FeignClient(name = "module",contextId = "ChannelFeign")
+@FeignClient(name = "channel",contextId = "ChannelFeign")
 public interface ChannelFeign {
     @RequestMapping("/channel/list")
      List<String> getChannels();

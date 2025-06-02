@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.gun.mapper.GunTagRelationMapper">
+
+
+    <insert id="insert" parameterType="com.example.demo3.common.entity.GunTagRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into gun_tag_relation (
+
+
+        
+                <if test="gun_tag_relation.createTime != null ">create_time,</if>
+        
+                <if test="gun_tag_relation.updateTime != null ">update_time,</if>
+        
+                <if test="gun_tag_relation.isDeleted != null ">is_deleted,</if>
+        
+                <if test="gun_tag_relation.gunId != null ">gun_id,</if>
+        
+                <if test="gun_tag_relation.tagId != null ">tag_id</if>
+        
+        )
+        values (
+
+                <if test="gun_tag_relation.createTime != null ">#{gun_tag_relation.createTime},</if>
+
+                <if test="gun_tag_relation.updateTime != null ">#{gun_tag_relation.updateTime},</if>
+
+                <if test="gun_tag_relation.isDeleted != null ">#{gun_tag_relation.isDeleted},</if>
+
+                <if test="gun_tag_relation.gunId != null ">#{gun_tag_relation.gunId},</if>
+
+                <if test="gun_tag_relation.tagId != null ">#{gun_tag_relation.tagId}</if>
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.example.demo3.common.entity.GunTagRelation">
+        update gun_tag_relation
+        <set>
+
+                id= #{gun_tag_relation.id},
+                <if test="gun_tag_relation.createTime != null ">,create_time=#{gun_tag_relation.createTime}</if>
+
+                <if test="gun_tag_relation.updateTime != null ">,update_time=#{gun_tag_relation.updateTime}</if>
+
+                <if test="gun_tag_relation.isDeleted != null ">,is_deleted=#{gun_tag_relation.isDeleted}</if>
+
+                <if test="gun_tag_relation.gunId != null ">,gun_id=#{gun_tag_relation.gunId}</if>
+
+                <if test="gun_tag_relation.tagId != null ">,tag_id=#{gun_tag_relation.tagId}</if>
+        </set>
+        where id = #{gun_tag_relation.id}
+    </update>
+
+
+</mapper>
+

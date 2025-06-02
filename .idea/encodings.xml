@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/aliyunsendsms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/banner/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/category/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/channel/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/console/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/console/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gun/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ossutils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recommend/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tag/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/user/src/main/java" charset="UTF-8" />
   </component>
 </project>

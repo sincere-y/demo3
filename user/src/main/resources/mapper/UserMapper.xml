@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.user.mapper.UserMapper">
+    <insert id="insert" parameterType="com.example.demo3.common.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (
+
+        <if test="user.createTime != null ">create_time,</if>
+        <if test="user.updateTime != null ">update_time,</if>
+        <if test="user.isDeleted != null ">is_deleted,</if>
+        <if test="user.username != null and user.username !=''">username,</if>
+        <if test="user.password != null and user.password !=''">password</if>
+        )
+        values (
+
+        <if test="user.createTime != null ">#{user.createTime},</if>
+        <if test="user.updateTime != null ">#{user.updateTime},</if>
+        <if test="user.isDeleted != null ">#{user.isDeleted},</if>
+        <if test="user.username != null and user.username !=''">#{user.username},</if>
+        <if test="user.password != null and user.password !=''">#{user.password}</if>
+        )
+    </insert>
+    <update id="update" parameterType="com.example.demo3.common.entity.User">
+        update user
+        <set> id = #{user.id}
+            <if test="user.createTime != null ">,user.create_time=#{user.createTime},</if>
+            <if test="user.updateTime != null ">,user.update_time=#{user.updateTime},</if>
+            <if test="user.isDeleted != null ">,user.is_deleted=#{user.isDeleted},</if>
+            <if test="user.username != null and user.username !=''">,user.username=#{user.username},</if>
+            <if test="user.password != null and user.password !=''">,user.password#={user.password}</if>
+        </set>
+        where id = #{user.id}
+
+    </update>
+
+
+</mapper>

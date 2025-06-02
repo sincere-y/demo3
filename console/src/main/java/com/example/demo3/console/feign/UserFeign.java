@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
 
-@FeignClient(name = "module",contextId = "UserFeign")
+@FeignClient(name = "user",contextId = "UserFeign")
 public interface UserFeign {
     @RequestMapping("/user/byId")
      User getById(@RequestParam(name ="id")BigInteger id);

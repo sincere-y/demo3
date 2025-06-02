@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigInteger;
 import java.util.List;
 
-@FeignClient(name = "module",contextId = "GunTagRelationFeign")
+@FeignClient(name = "gun",contextId = "GunTagRelationFeign")
 public interface GunTagRelationFeign {
 
     @RequestMapping("/gunTagRelation/edit")

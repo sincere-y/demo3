@@ -1,0 +1,125 @@
+package com.example.demo3.category.service;
+
+
+import com.example.demo3.category.mapper.CategoryMapper;
+import com.example.demo3.common.entity.Category;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+ public class CategoryService {
+ @Resource
+ private CategoryMapper mapper;
+ @Resource
+ private RabbitTemplate rabbitTemplate;
+ public List<Integer> getCategoryId(String gunName){return mapper.getCategoryId(gunName);}
+ public Category getById(BigInteger id) {
+ return mapper.getById(id);
+ }
+ public List<Category> getAllInfo(){
+  return mapper.getAllInfo();
+ }
+ public List<Category> getCategoriesByParentId(BigInteger parentId){
+  return mapper.getCategoriesByParentId(parentId);
+ }
+
+
+ public Category extractById(BigInteger id) {
+ return mapper.extractById(id);
+ }
+
+ public int insert(Category category){
+
+ return mapper.insert(category);
+ }
+ public int update(Category category){
+
+ return mapper.update(category);
+ }
+
+ public int delete(BigInteger id) {
+  int result =mapper.delete(id, (int) (System.currentTimeMillis() / 1000));
+
+  if (result > 0) {
+   // 删除成功后发送消息到 RabbitMQ
+   rabbitTemplate.convertAndSend("category.delete.queue", id.toString());
+  }
+
+  return result;
+
+ }
+
+ public List<Category> getInfoPage(Integer page, Integer pageSize){
+
+  Integer start = (page - 1) * pageSize;
+  return mapper.getInfoPage(start, pageSize);
+ }
+
+public List<Category> getInfoByIds(List<BigInteger> ids){
+ StringBuilder resultIds = new StringBuilder();
+ if (ids != null) {
+  for (int i = 0; i < ids.size(); i++) {
+   if (i > 0) {
+    resultIds.append(",");
+   }
+   resultIds.append(ids.get(i));
+  }
+ }
+ String categoryIds = resultIds.toString();
+  return mapper.getInfoByIds(categoryIds);
+}
+
+
+
+
+ public List<Category> getLeafCategories(BigInteger parentId) {
+  List<Category> result = new ArrayList<>();
+  findLeaves(parentId, result);
+  return result;
+ }
+
+ private void findLeaves(BigInteger parentId, List<Category> result) {
+  //根据parentID查询当前类目
+  List<Category> categories = getCategoriesByParentId(parentId);
+
+  //根据当前类目查询子类目
+  for (Category category : categories) {
+   List<Category> childrens = getCategoriesByParentId(category.getId());
+   if (childrens.isEmpty()) {
+    // 当前类目自身是叶子节点
+    Category self = getById(category.getId());
+
+    result.add(self);
+   }else {
+    findLeaves(category.getId(), result);
+   }
+
+  }
+
+//  for (Category child : childrens) {
+//   List<Category> grandChildren = getCategoryByParentId(child.getId());
+//   if (grandChildren.isEmpty()) {
+//    result.add(child); // 叶子节点
+//   } else {
+//    findLeaves(child.getId(), result); // 递归查找
+//   }
+//  }
+ }
+
+
+
+
+
+
+
+
+ }
+
+
+

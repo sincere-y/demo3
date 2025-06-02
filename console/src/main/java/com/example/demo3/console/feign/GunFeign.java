@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigInteger;
 import java.util.List;
 
-@FeignClient(name = "module",contextId = "GunFeign")
+@FeignClient(name = "gun",contextId = "GunFeign")
 public interface GunFeign {
     @RequestMapping("/gun/getGunById")
      Gun getById(@RequestParam(name ="id") BigInteger id);

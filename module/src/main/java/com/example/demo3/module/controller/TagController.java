@@ -26,4 +26,9 @@ public class TagController {
     }
 
 
+@RequestMapping("/tag/byName")
+    public Tag getByName(@RequestParam(name ="name")String name){
+        return tagService.getByName(name);
+    }
+
 }

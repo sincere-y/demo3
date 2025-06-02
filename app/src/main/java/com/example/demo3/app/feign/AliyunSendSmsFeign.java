@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "module",contextId = "AliyunSendSmsFeign")
+@FeignClient(name = "aliyunsendsms",contextId = "AliyunSendSmsFeign")
 public interface AliyunSendSmsFeign {
 
     @RequestMapping("/send/message")

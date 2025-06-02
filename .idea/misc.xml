@@ -7,6 +7,16 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/server/pom.xml" />
         <option value="$PROJECT_DIR$/common/pom.xml" />
+        <option value="$PROJECT_DIR$/aliyunsendsms/pom.xml" />
+        <option value="$PROJECT_DIR$/banner/pom.xml" />
+        <option value="$PROJECT_DIR$/category/pom.xml" />
+        <option value="$PROJECT_DIR$/channel/pom.xml" />
+        <option value="$PROJECT_DIR$/event/pom.xml" />
+        <option value="$PROJECT_DIR$/gun/pom.xml" />
+        <option value="$PROJECT_DIR$/ossutils/pom.xml" />
+        <option value="$PROJECT_DIR$/recommend/pom.xml" />
+        <option value="$PROJECT_DIR$/tag/pom.xml" />
+        <option value="$PROJECT_DIR$/user/pom.xml" />
       </list>
     </option>
   </component>

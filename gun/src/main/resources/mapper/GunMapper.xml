@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.gun.mapper.GunMapper">
+    <insert id="insert" parameterType="com.example.demo3.common.entity.Gun" useGeneratedKeys="true" keyProperty="id">
+        insert into gun (
+        <if test="gun.title != null and gun.title != ''" >title,</if>
+        <if test="gun.author != null and gun.author != ''" >author,</if>
+        <if test="gun.images != null and gun.images != ''" >images,</if>
+        <if test="gun.content != null and gun.content != ''" >content,</if>
+        <if test="gun.createTime != null" >create_time,</if>
+        <if test="gun.updateTime != null" >update_time,</if>
+        <if test="gun.categoryId != null" >category_id,</if>
+        is_deleted)
+        values (
+        <if test="gun.title != null and gun.title !=''" >#{gun.title},</if>
+        <if test="gun.author != null and gun.author != ''" >#{gun.author},</if>
+        <if test="gun.images != null and gun.images != ''" >#{gun.images},</if>
+        <if test="gun.content != null and gun.content != ''" >#{gun.content},</if>
+        <if test="gun.createTime != null" >#{gun.createTime},</if>
+        <if test="gun.updateTime != null" >#{gun.updateTime},</if>
+        <if test="gun.categoryId != null" >#{gun.categoryId},</if>
+        #{gun.isDeleted})
+    </insert>
+    <update id="update" parameterType="com.example.demo3.common.entity.Gun">
+        update gun
+        <set> id = #{gun.id}
+            <if test="gun.title != null and gun.title !=''">,title = #{gun.title}</if>
+            <if test="gun.author != null and gun.author != ''" >,author = #{gun.author}</if>
+            <if test="gun.images != null and gun.images != ''" >,images = #{gun.images}</if>
+            <if test="gun.content != null and gun.content != ''">,content = #{gun.content}</if>
+            <if test="gun.updateTime != null" >,update_time = #{gun.updateTime}</if>
+            <if test="gun.categoryId != null" >,category_id = #{gun.categoryId}</if>
+        </set>
+        where id = #{gun.id}
+
+    </update>
+
+    <select id="getTotal" parameterType="com.example.demo3.common.entity.Gun" resultType="int">
+        select count(*) FROM gun
+        <where>
+            is_deleted=0
+            <if test="gunName != null and gunName != ''" >
+                and title like concat('%',#{gunName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getInfoPage" parameterType="com.example.demo3.common.entity.Gun" resultType="com.example.demo3.common.entity.Gun">
+        select * FROM gun
+        <where>
+            is_deleted=0
+            <if test="gunName != null and gunName != ''" >
+                and ( title like concat('%',#{gunName},'%')
+                <if test="categoryIds != null and categoryIds != ''">
+                    or gun.category_id in(${categoryIds})
+                </if>)
+            </if>
+        </where>
+        order by id asc
+        limit #{start},#{pageSize}
+    </select>
+
+
+
+    <select id="countById" parameterType="com.example.demo3.common.entity.Gun" resultType="int">
+        SELECT COUNT(*) FROM gun WHERE id = #{id}
+    </select>
+
+    <resultMap id="gunDtoResultMap" type="com.example.demo3.common.dto.GunDto">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="images" column="images"/>
+        <result property="createTime" column="createTime"/>
+        <result property="categoryName" column="categoryName"/>
+    </resultMap>
+
+    <select id="getGunDtoList" resultMap="gunDtoResultMap">
+        SELECT
+        g.id,
+        g.title,
+        g.images,
+        g.create_time AS createTime,
+        c.name AS categoryName
+        FROM gun g
+        LEFT JOIN category c
+        ON g.category_id = c.id
+        AND c.is_deleted = 0
+        <where>
+            g.is_deleted = 0
+            <if test="gunName != null and gunName != ''">
+               and (
+                g.title LIKE CONCAT('%', #{gunName}, '%')
+                OR c.name LIKE CONCAT('%', #{gunName}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY g.id ASC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <update id="updateImageUrl" parameterType="com.example.demo3.common.entity.Gun">
+        update gun
+        <set>
+            <if test="url!= null and url != ''" >,images = #{url}</if>
+        </set>
+        where id = #{gunId} and is_deleted=0
+
+    </update>
+    <select id="getGunsByCategoryIds" parameterType="com.example.demo3.common.entity.Gun" resultType="com.example.demo3.common.entity.Gun">
+        select * FROM gun
+        <where>
+            is_deleted=0
+                <if test="categoryIds != null and categoryIds != ''">
+                     and gun.category_id in(${categoryIds})
+                </if>
+        </where>
+
+    </select>
+
+</mapper>

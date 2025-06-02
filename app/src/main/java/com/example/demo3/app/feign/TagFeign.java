@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
 
-@FeignClient(name = "module",contextId = "TagFeign")
+@FeignClient(name = "tag",contextId = "TagFeign")
 public interface TagFeign {
     @RequestMapping("/tag/edit")
      BigInteger edit(@RequestParam(name ="name")String name);
 
     @RequestMapping("/tag/byId")
      Tag getById(@RequestParam(name ="id")BigInteger id) ;
+    @RequestMapping("/tag/byName")
+    Tag getByName(@RequestParam(name ="name")String name);
 }

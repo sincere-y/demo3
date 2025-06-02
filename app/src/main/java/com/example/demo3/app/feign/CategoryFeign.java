@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigInteger;
 import java.util.List;
 
-@FeignClient(name = "module",contextId = "CategoryFeign")
+@FeignClient(name = "category",contextId = "CategoryFeign")
 public interface CategoryFeign {
     @RequestMapping("/category/idList")
      List<Integer> getCategoryId(@RequestParam(name ="gunName")String gunName);

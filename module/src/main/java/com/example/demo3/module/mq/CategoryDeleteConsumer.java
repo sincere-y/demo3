@@ -1,7 +1,7 @@
 package com.example.demo3.module.mq;
 
 import com.example.demo3.common.entity.Gun;
-import com.example.demo3.module.service.GunFeign;
+import com.example.demo3.module.service.GunService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
@@ -12,7 +12,7 @@ import java.util.List;
 public class CategoryDeleteConsumer {
 
     @Resource
-    private GunFeign gunService;
+    private GunService gunService;
 
     @RabbitListener(queues = "category.delete.queue")
     public void handleCategoryDelete(String categoryIdStr) {
